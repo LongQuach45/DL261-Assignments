@@ -30,34 +30,59 @@
         <ul class="meta-list">
           <li><span class="label">Instructor</span>Le Thanh Sach</li>
           <li><span class="label">Group Members</span>TODO: List all registered members</li>
+          <li><span class="label">Repository Location</span><a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1">assignments/assignment-1</a></li>
           <li><span class="label">Main Dataset</span>Fashion-MNIST for primary results; MNIST only for development/debugging</li>
-          <li><span class="label">Required Models</span>Linear/softmax classifier, MLP, CNN, LSTM or GRU, Transformer</li>
+          <li><span class="label">Current Source Status</span>Partial implementation: Linear/softmax classifier, MLP, and CNN are present. LSTM/GRU and Transformer are still TODO.</li>
         </ul>
       </section>
 
       <section>
         <h2>Problem Statement</h2>
-        <p>TODO: Define the image-classification input, output classes, prediction unit, motivation, and main difficulties.</p>
+        <p>The current source implements an image-classification pipeline for Fashion-MNIST. Inputs are 28x28 grayscale images, and outputs are logits over the 10 Fashion-MNIST classes.</p>
+        <p>TODO: Add the final motivation, mathematical formulation, main difficulties, and any completed analysis text.</p>
       </section>
 
       <section>
         <h2>Dataset Description and EDA</h2>
-        <p>TODO: Report dataset source, version, license, split, seed, stratification policy, sample counts, class distribution, input size, imbalance analysis, and representative samples.</p>
+        <p>The current code uses <code>torchvision.datasets.FashionMNIST</code> as the default dataset, downloaded at runtime into a local <code>data/</code> directory. It also includes a CIFAR-10 branch in the data loader, but the current main script uses the default Fashion-MNIST path.</p>
+        <ul class="checklist">
+          <li>Current split in source: 50,000 training samples, 10,000 validation samples, and the official 10,000-sample test set.</li>
+          <li>Split seed in source: <code>42</code>, using <code>torch.Generator().manual_seed(seed)</code>.</li>
+          <li>Preprocessing in source: <code>ToTensor()</code> and normalization with mean/std <code>(0.5,)</code> for Fashion-MNIST.</li>
+          <li>EDA helper present: prints total training samples, image shape, class counts, and representative class samples.</li>
+        </ul>
+        <p>TODO: Add final license/source citation, stratification policy, leakage discussion, saved EDA outputs, and imbalance analysis.</p>
       </section>
 
       <section>
         <h2>Methodology</h2>
-        <p>TODO: Describe preprocessing, augmentation, Dataset/DataLoader design, model architectures, losses, optimizer, parameter counts, and the raw-data-to-evaluation pipeline.</p>
+        <p>The current source defines three implemented model families: a linear classifier over flattened pixels, an MLP over flattened pixels, and a CNN for one-channel Fashion-MNIST images.</p>
+        <ul class="checklist">
+          <li>Linear classifier: flatten image, then one linear layer to class logits.</li>
+          <li>MLP: flatten image, two hidden linear stages with BatchNorm/ReLU/Dropout, then class logits.</li>
+          <li>CNN: two Conv2d + BatchNorm + ReLU + MaxPool blocks, followed by a linear classifier head.</li>
+          <li>Loss in source: <code>CrossEntropyLoss</code>; no softmax is applied before the loss.</li>
+          <li>Optimizer in source: Adam.</li>
+        </ul>
+        <p>TODO: Add parameter counts, final architecture diagrams, LSTM/GRU, Transformer, and any methodology text not yet implemented.</p>
       </section>
 
       <section>
         <h2>Experimental Setup</h2>
-        <p>TODO: State hardware, software versions, seeds, batch size, epochs, learning rate, scheduler, checkpoint criterion, and fairness constraints shared by all main models.</p>
+        <ul class="checklist">
+          <li>Seed in source: <code>42</code> for Python, NumPy, PyTorch, and CUDA when available.</li>
+          <li>Device selection in source: CUDA if available, otherwise CPU.</li>
+          <li>Batch size in current main script: <code>64</code>.</li>
+          <li>Epochs in current main script: <code>5</code> per implemented model.</li>
+          <li>Learning rate default in trainer: <code>1e-3</code>.</li>
+          <li>Validation metrics currently tracked: loss, accuracy, and macro-F1.</li>
+        </ul>
+        <p>TODO: Add actual hardware, software versions, checkpoint criterion, scheduler if any, and final fairness constraints.</p>
       </section>
 
       <section>
         <h2>Results</h2>
-        <p>TODO: Add accuracy, macro-F1, parameter count, training time, inference time, curves, confusion matrix, and correct/incorrect examples.</p>
+        <p>TODO: Add measured accuracy, macro-F1, parameter count, training time, inference time, curves, confusion matrix, and correct/incorrect examples after the experiments are run and verified.</p>
       </section>
 
       <section>
@@ -72,7 +97,8 @@
 
       <section>
         <h2>Limitations and Conclusion</h2>
-        <p>TODO: Summarize limits in data, methods, compute, generalization, and answer the main research question.</p>
+        <p>Current known limitation: the imported source is partial and currently includes only Linear, MLP, and CNN implementations. The required LSTM/GRU and Transformer comparisons are not yet present in the source.</p>
+        <p>TODO: Add final data, method, compute, and generalization limitations plus the conclusion after experiments are completed.</p>
       </section>
 
       <section>
