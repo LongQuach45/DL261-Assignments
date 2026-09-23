@@ -2,7 +2,7 @@
 
 Public course-project repository for **CO3133 - Deep Learning and Its Applications**, Semester-261.
 
-This repository hosts the GitHub Pages site and will contain reproducible code, reports, slides, checkpoints or reconstruction instructions, and AI-use disclosures for Assignments 1-3.
+This repository hosts the GitHub Pages site and assignment deliverables for **CO3133 - Deep Learning and Its Applications**, Semester-261.
 
 ## GitHub Pages
 
@@ -11,11 +11,7 @@ This repository hosts the GitHub Pages site and will contain reproducible code, 
 - Assignment 2: `docs/assignments/a2.html`
 - Assignment 3: `docs/assignments/a3.html`
 
-After publishing, replace this placeholder with the live Pages URL:
-
-```text
-TODO: https://LongQuach45.github.io/DL261-Assignments/
-```
+Live Pages URL: <https://LongQuach45.github.io/DL261-Assignments/>
 
 ## Repository Layout
 
@@ -23,6 +19,22 @@ TODO: https://LongQuach45.github.io/DL261-Assignments/
 .
 ├── AI_USAGE.md
 ├── README.md
+├── assignments/
+│   ├── assignment-1/
+│   │   ├── source/
+│   │   ├── report/
+│   │   ├── slide/
+│   │   └── video/
+│   ├── assignment-2/
+│   │   ├── source/
+│   │   ├── report/
+│   │   ├── slide/
+│   │   └── video/
+│   └── assignment-3/
+│       ├── source/
+│       ├── report/
+│       ├── slide/
+│       └── video/
 ├── config/
 │   └── deliverables.yml
 ├── checkpoints/
@@ -34,20 +46,16 @@ TODO: https://LongQuach45.github.io/DL261-Assignments/
 │       ├── a1.html
 │       ├── a2.html
 │       └── a3.html
-├── reports/
-└── slides/
 ```
 
 ## Installation
 
-TODO: Add exact environment setup once implementation begins.
-
-Example placeholder:
+Assignment 1 currently has a partial source implementation. Install its dependencies with:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r assignments/assignment-1/source/requirements.txt
 ```
 
 ## Dataset Preparation
@@ -61,7 +69,8 @@ TODO: Add reproducible training commands for each assignment.
 Example placeholder:
 
 ```bash
-python -m src.train --config config/a1_linear.yml
+cd assignments/assignment-1/source
+python main.py
 ```
 
 ## Evaluation
@@ -71,7 +80,7 @@ TODO: Add evaluation commands, checkpoint paths, expected metrics, and links to 
 Example placeholder:
 
 ```bash
-python -m src.evaluate --config config/a1_linear.yml --checkpoint checkpoints/a1_linear.pt
+TODO: Add evaluation command after the evaluation script is implemented.
 ```
 
 ## Reproducibility Checklist
@@ -81,9 +90,9 @@ python -m src.evaluate --config config/a1_linear.yml --checkpoint checkpoints/a1
 - TODO: Dependency versions.
 - TODO: Hardware information.
 - TODO: Checkpoint access or reconstruction instructions.
-- TODO: Links to reports, slides, videos, and assignment pages.
+- TODO: Links to source, reports, slides, videos, and assignment pages.
 - TODO: Commit/tag mapping for final reported results.
 
 ## AI Usage
 
-See [AI_USAGE.md](AI_USAGE.md). Complete the disclosure before submission and keep it consistent with the landing page, assignment pages, and reports.
+See [AI_USAGE.md](AI_USAGE.md). Complete the disclosure before submission and keep it consistent with the landing page, assignment pages, reports, slides, and videos.
