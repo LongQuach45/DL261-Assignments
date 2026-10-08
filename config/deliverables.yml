@@ -42,6 +42,7 @@ assignments:
     page: "docs/assignments/a2.html"
     source: "assignments/assignment-2/source"
     dataset_proposal: "assignments/assignment-2/proposal/assignment-2-dataset-proposal.pdf"
+    dataset_proposal_markdown: "assignments/assignment-2/proposal/dataset.md"
     approval_status: "Pending instructor approval"
     report: "assignments/assignment-2/report"
     slide: "assignments/assignment-2/slide"
