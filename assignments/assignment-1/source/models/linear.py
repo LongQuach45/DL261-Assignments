@@ -1,12 +1,10 @@
 import torch.nn as nn
 
 class LinearClassifier(nn.Module):
-    def __init__(self, input_dim=28*28, num_classes=10):
+    def __init__(self, in_channels=1, img_size=28, num_classes=10):
         super(LinearClassifier, self).__init__()
         self.flatten = nn.Flatten()
-        self.linear = nn.Linear(input_dim, num_classes)
+        self.linear = nn.Linear(in_channels * img_size * img_size, num_classes)
 
     def forward(self, x):
-        x = self.flatten(x)
-        logits = self.linear(x)
-        return logits
+        return self.linear(self.flatten(x))
