@@ -1,0 +1,20 @@
+# Dataset directory (automatically downloaded by main.py)
+data/
+results/
+checkpoints/
+
+# Python byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbsumbs.db
