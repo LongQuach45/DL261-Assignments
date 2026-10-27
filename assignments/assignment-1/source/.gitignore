@@ -1,6 +1,5 @@
 # Dataset directory (automatically downloaded by main.py)
 data/
-results/
 checkpoints/
 
 # Python byte-compiled / cache files

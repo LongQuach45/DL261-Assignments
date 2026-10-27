@@ -7,28 +7,6 @@
 **Course:** Deep Learning and Its Applications (`CO3133`) — Semester 261  
 **Instructor:** Dr. Lê Thành Sách  
 
----
-
-## 1. Group Information & Deliverables
-
-* **Group Name:** `[Insert Group Name]`
-
-| Full Name | Student ID | Role & Contribution | GitHub Profile |
-| :--- | :--- | :--- | :--- |
-| Lê Quốc Bình | `[Insert ID]` | Pipeline architecture, CNN & ViT implementation, Bonus extensions | [@harbinger-ux](https://github.com/harbinger-ux) |
-| `[Member 2 Name]` | `[Insert ID]` | Data pipeline, EDA, Linear & MLP baselines | `[Link]` |
-| `[Member 3 Name]` | `[Insert ID]` | Sequence models (LSTM & GRU), Robustness evaluation | `[Link]` |
-| `[Member 4 Name]` | `[Insert ID]` | Error analysis, Interpretability study, Report & GitHub Pages | `[Link]` |
-
-### Quick Links to Deliverables
-* **Course Landing Page:** `[Insert Landing Page URL]`
-* **Assignment 1 Web Page:** `[Insert Assignment 1 Page URL]`
-* **Final PDF Report:** [`report.tex`](./report.tex) / `[Link to compiled <GroupName>_A1_Report.pdf]`
-* **Presentation Slides:** `[Insert Link to Slides]`
-* **YouTube Presentation Video:** `[Insert YouTube URL (CO3133-Semester-261 Group [ID] Assignment 1)]`
-* **AI Usage Disclosure Log:** [`AI_USAGE.md`](./AI_USAGE.md)
-
----
 
 ## 2. Project Structure
 
