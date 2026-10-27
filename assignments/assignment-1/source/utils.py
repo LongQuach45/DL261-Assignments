@@ -74,17 +74,19 @@ def plot_prediction_examples(images, targets, preds, classes, model_name, save_d
     incorrect_idx = [i for i, (t, p) in enumerate(zip(targets, preds)) if t != p][:5]
 
     fig, axes = plt.subplots(2, 5, figsize=(14, 6))
-    for col, idx in enumerate(correct_idx):
-        img = images[idx].squeeze() * 0.5 + 0.5
-        axes[0, col].imshow(img, cmap='gray')
-        axes[0, col].set_title(f"True: {classes[targets[idx]]}\nPred: {classes[preds[idx]]}", color='green', fontsize=9)
-        axes[0, col].axis('off')
-
-    for col, idx in enumerate(incorrect_idx):
-        img = images[idx].squeeze() * 0.5 + 0.5
-        axes[1, col].imshow(img, cmap='gray')
-        axes[1, col].set_title(f"True: {classes[targets[idx]]}\nPred: {classes[preds[idx]]}", color='red', fontsize=9)
-        axes[1, col].axis('off')
+    for row, idx_list in enumerate([correct_idx, incorrect_idx]):
+        color = 'green' if row == 0 else 'red'
+        for col, idx in enumerate(idx_list):
+            img = images[idx] * 0.5 + 0.5
+            if img.shape[0] == 1:
+                img = img.squeeze()
+                cmap = 'gray'
+            else:
+                img = np.transpose(img, (1, 2, 0))
+                cmap = None
+            axes[row, col].imshow(np.clip(img, 0.0, 1.0), cmap=cmap)
+            axes[row, col].set_title(f"True: {classes[targets[idx]]}\nPred: {classes[preds[idx]]}", color=color, fontsize=9)
+            axes[row, col].axis('off')
 
     plt.suptitle(f"{model_name}: Top Row = Correct | Bottom Row = Incorrect")
     plt.tight_layout()

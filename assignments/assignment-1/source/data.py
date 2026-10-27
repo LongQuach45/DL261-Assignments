@@ -47,7 +47,10 @@ def get_dataloaders(dataset_name="fashion_mnist", batch_size=64, seed=42, save_d
 
     full_train_dataset = dataset_class(root='./data', train=True, download=True, transform=transform)
 
-    train_size = 50000
+    if dataset_name.lower() == "cifar10":
+        train_size = 45000
+    else:
+        train_size = 50000
     val_size = len(full_train_dataset) - train_size
     train_dataset, val_dataset = random_split(
         full_train_dataset,
@@ -67,8 +70,17 @@ def get_dataloaders(dataset_name="fashion_mnist", batch_size=64, seed=42, save_d
 
     fig, axes = plt.subplots(1, 8, figsize=(14, 2))
     for i in range(8):
-        img = sample_imgs[i].squeeze().numpy() * 0.5 + 0.5
-        axes[i].imshow(img, cmap='gray' if sample_imgs.shape[1] == 1 else None)
+        img = sample_imgs[i].numpy() * 0.5 + 0.5
+        
+        # Handle 1-channel (grayscale) vs 3-channel (RGB) formatting for matplotlib
+        if img.shape[0] == 1:
+            img = img.squeeze()
+            cmap = 'gray'
+        else:
+            img = np.transpose(img, (1, 2, 0))  # Convert [C, H, W] to [H, W, C]
+            cmap = None
+            
+        axes[i].imshow(img, cmap=cmap)
         axes[i].set_title(full_train_dataset.classes[sample_labels[i].item()], fontsize=9)
         axes[i].axis('off')
     plt.tight_layout()

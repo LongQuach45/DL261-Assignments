@@ -102,11 +102,9 @@ def run_interpretability_study(trained_models, test_loader, classes, device, sav
 
     for idx, name in enumerate(model_names):
         model = trained_models[name]
-        was_training = model.training
-        if name in ["LSTM", "GRU"]:
-            model.train()
-        else:
-            model.eval()
+        model.eval()
+        if hasattr(model, "rnn"):
+            model.rnn.train()
 
         inp = img.clone().detach().requires_grad_(True)
         model.zero_grad()
@@ -119,8 +117,7 @@ def run_interpretability_study(trained_models, test_loader, classes, device, sav
         axes[idx + 1].set_title(f"{name} Saliency")
         axes[idx + 1].axis('off')
 
-        if not was_training:
-            model.eval()
+        model.eval()
 
     plt.tight_layout()
     plt.savefig(os.path.join(save_dir, "interp_saliency.png"), dpi=150)
@@ -129,11 +126,11 @@ def run_interpretability_study(trained_models, test_loader, classes, device, sav
 def run_matched_budget_experiment(train_loader, val_loader, test_loader, device, epochs=10, lr=1e-3, seed=42, save_dir="./results"):
     os.makedirs(save_dir, exist_ok=True)
     matched_builders = {
-        "MLP_105k": lambda: MLPClassifier(in_channels=1, img_size=28, hidden_dim=124, num_classes=10),
-        "CNN_105k": lambda: CNNClassifier(in_channels=1, img_size=28, base_channels=12, fc_dim=86, num_classes=10),
-        "LSTM_105k": lambda: RNNClassifier(in_channels=1, img_size=28, hidden_size=92, num_layers=2, num_classes=10, rnn_type="LSTM"),
-        "GRU_105k": lambda: RNNClassifier(in_channels=1, img_size=28, hidden_size=108, num_layers=2, num_classes=10, rnn_type="GRU"),
-        "ViT_105k": lambda: TransformerClassifier(img_size=28, patch_size=4, in_channels=1, embed_dim=48, num_heads=4, num_layers=3, mlp_dim=96, num_classes=10)
+        "MLP_105k": lambda: MLPClassifier(in_channels=1, img_size=28, hidden_dim=124, num_classes=10),          # 105,968 params
+        "CNN_105k": lambda: CNNClassifier(in_channels=1, img_size=28, base_channels=12, fc_dim=86, num_classes=10), # 104,900 params
+        "LSTM_105k": lambda: RNNClassifier(in_channels=1, img_size=28, hidden_size=88, num_layers=2, num_classes=10, rnn_type="LSTM"), # 105,874 params
+        "GRU_105k": lambda: RNNClassifier(in_channels=1, img_size=28, hidden_size=102, num_layers=2, num_classes=10, rnn_type="GRU"),  # 104,968 params
+        "ViT_105k": lambda: TransformerClassifier(img_size=28, patch_size=4, in_channels=1, embed_dim=64, num_heads=4, num_layers=3, mlp_dim=128, num_classes=10) # 105,546 params
     }
 
     rows = []
