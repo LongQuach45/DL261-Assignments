@@ -1,7 +1,9 @@
 ---
 import { CodeXml, Menu, Moon, Sun, WavesHorizontal } from "@lucide/astro";
+import { Image } from "astro:assets";
 import "../styles/global.css";
 import { site } from "../data/site";
+import bachKhoaLogo from "../assets/bachkhoa-logo.png";
 
 interface Props { title: string; description: string; current?: string; }
 const { title, description, current } = Astro.props;
@@ -44,7 +46,7 @@ const nav = [
       </div>
     </header>
     <main id="main"><slot /></main>
-    <footer class="site-footer"><div class="shell footer-row"><div><strong>{site.institution}</strong><p>{site.faculty} · {site.code} · {site.semester}</p></div><nav aria-label="Footer navigation">{nav.slice(0, 4).map((item) => <a href={item.href}>{item.label}</a>)}</nav></div></footer>
+    <footer class="site-footer"><div class="shell footer-row"><div class="footer-identity"><Image class="footer-logo" src={bachKhoaLogo} alt="Ho Chi Minh City University of Technology logo" width={56} height={56} /><div><strong>{site.institution}</strong><p>{site.faculty} · {site.code} · {site.semester}</p></div></div><nav aria-label="Footer navigation">{nav.slice(0, 4).map((item) => <a href={item.href}>{item.label}</a>)}</nav></div></footer>
     <script is:inline>
       document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
         const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
