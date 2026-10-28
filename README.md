@@ -1,4 +1,4 @@
-# DL261 Assignments — MobyDick
+# DL261 Assignments — Group MobyDick
 
 Public course-project repository for **CO3133: Deep Learning and Its Applications**, Semester-261, Faculty of Computer Science and Engineering, Ho Chi Minh City University of Technology – VNU-HCM.
 

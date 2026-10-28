@@ -26,7 +26,7 @@ for (const file of pages) {
 }
 
 const index = readFileSync(resolve(root, "dist/index.html"), "utf8");
-for (const item of ["MobyDick", "CO3133", "Lê Thành Sách", "Le Quoc Binh", "Quach Kien Long", "Le Thanh Lam", "To Nha Vy"]) {
+for (const item of ["Group MobyDick", "Group name", "CO3133", "Lê Thành Sách", "Le Quoc Binh", "Quach Kien Long", "Le Thanh Lam", "To Nha Vy"]) {
   if (!index.includes(item)) throw new Error(`Landing page is missing: ${item}`);
 }
 if (index.includes("/DL261-Assignmentsassignments")) throw new Error("Malformed GitHub Pages base-path link");

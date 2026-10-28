@@ -1,5 +1,6 @@
 export const site = {
-  name: "MobyDick",
+  name: "Group MobyDick",
+  groupName: "MobyDick",
   url: "https://longquach45.github.io/DL261-Assignments/",
   repository: "https://github.com/LongQuach45/DL261-Assignments",
   course: "Deep Learning and Its Applications",
