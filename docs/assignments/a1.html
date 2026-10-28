@@ -1,122 +1,15 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assignment 1 | DL261 Assignments</title>
-    <link rel="stylesheet" href="../assets/styles.css">
-  </head>
-  <body>
-    <header class="site-header">
-      <nav class="nav" aria-label="Main navigation">
-        <a class="brand" href="../index.html">DL261 Assignments</a>
-        <div class="nav-links">
-          <a href="../index.html">Home</a>
-          <a href="a1.html" aria-current="page">A1</a>
-          <a href="a2.html">A2</a>
-          <a href="a3.html">A3</a>
-          <a href="../ai-usage.html">AI Usage</a>
-        </div>
-      </nav>
-    </header>
-
-    <main class="content">
-      <p class="eyebrow">Assignment 1</p>
-      <h1>Foundations of Deep Learning Pipelines and Architectures</h1>
-      <p class="lead">From Linear Models to Modern Sequence Models: A Comparative Study for Image Classification.</p>
-
-      <section>
-        <h2>Overview</h2>
-        <ul class="meta-list">
-          <li><span class="label">Instructor</span>Le Thanh Sach</li>
-          <li><span class="label">Group Members</span><a href="https://github.com/harbinger-ux">Le Quoc Binh</a> (2352117), <a href="https://github.com/LongQuach45">Quach Kien Long</a> (2352698), <a href="https://github.com/lamlethanh5555">Le Thanh Lam</a> (2252421), and <a href="https://github.com/vy175">To Nha Vy</a> (2353360)</li>
-          <li><span class="label">Repository Location</span><a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1">assignments/assignment-1</a></li>
-          <li><span class="label">Main Dataset</span>Fashion-MNIST for primary results; MNIST only for development/debugging</li>
-          <li><span class="label">Implementation Status</span>Complete source implementation and experiment artifacts; final report, slides, and video pending.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Problem Statement</h2>
-        <p>The current source implements an image-classification pipeline for Fashion-MNIST. Inputs are 28x28 grayscale images, and outputs are logits over the 10 Fashion-MNIST classes.</p>
-        <p>Fashion-MNIST image classification with five mandatory architectures: Linear, MLP, CNN, LSTM, and Transformer. The source and reproduction commands are documented in the <a href="https://github.com/LongQuach45/DL261-Assignments/blob/main/assignments/assignment-1/source/README.md">Assignment 1 README</a>.</p>
-      </section>
-
-      <section>
-        <h2>Dataset Description and EDA</h2>
-        <p>The current code uses <code>torchvision.datasets.FashionMNIST</code> as the default dataset, downloaded at runtime into a local <code>data/</code> directory. It also includes a CIFAR-10 branch in the data loader, but the current main script uses the default Fashion-MNIST path.</p>
-        <ul class="checklist">
-          <li>Current split in source: 50,000 training samples, 10,000 validation samples, and the official 10,000-sample test set.</li>
-          <li>Split seed in source: <code>42</code>, using <code>torch.Generator().manual_seed(seed)</code>.</li>
-          <li>Preprocessing in source: <code>ToTensor()</code> and normalization with mean/std <code>(0.5,)</code> for Fashion-MNIST.</li>
-          <li>EDA helper present: prints total training samples, image shape, class counts, and representative class samples.</li>
-        </ul>
-        <p>EDA outputs, deterministic splits, preprocessing artifacts, and dataset policy are documented in the source README and stored under <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source/results">source/results</a>.</p>
-      </section>
-
-      <section>
-        <h2>Methodology</h2>
-        <p>The current source defines three implemented model families: a linear classifier over flattened pixels, an MLP over flattened pixels, and a CNN for one-channel Fashion-MNIST images.</p>
-        <ul class="checklist">
-          <li>Linear classifier: flatten image, then one linear layer to class logits.</li>
-          <li>MLP: flatten image, two hidden linear stages with BatchNorm/ReLU/Dropout, then class logits.</li>
-          <li>CNN: two Conv2d + BatchNorm + ReLU + MaxPool blocks, followed by a linear classifier head.</li>
-          <li>Loss in source: <code>CrossEntropyLoss</code>; no softmax is applied before the loss.</li>
-          <li>Optimizer in source: Adam.</li>
-        </ul>
-        <p>The completed source compares Linear, MLP, CNN, row-sequence LSTM/GRU, and patch-based Transformer models, with matched-budget and CIFAR-10 extensions.</p>
-      </section>
-
-      <section>
-        <h2>Experimental Setup</h2>
-        <ul class="checklist">
-          <li>Seed in source: <code>42</code> for Python, NumPy, PyTorch, and CUDA when available.</li>
-          <li>Device selection in source: CUDA if available, otherwise CPU.</li>
-          <li>Batch size in current main script: <code>64</code>.</li>
-          <li>Epochs in current main script: <code>5</code> per implemented model.</li>
-          <li>Learning rate default in trainer: <code>1e-3</code>.</li>
-          <li>Validation metrics currently tracked: loss, accuracy, and macro-F1.</li>
-        </ul>
-        <p>Seeds, device selection, batch size, epochs, optimizer settings, and reproduction commands are documented in the source README.</p>
-      </section>
-
-      <section>
-        <h2>Results</h2>
-        <p>Measured summaries, curves, confusion matrices, examples, robustness results, and matched-budget results are available under <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source/results">source/results</a>. The narrative final report will be added later.</p>
-      </section>
-
-      <section>
-        <h2>Comparison and Discussion</h2>
-        <p>Comparison tables and visualizations are available in the result artifacts. Written discussion will be included in the final report.</p>
-      </section>
-
-      <section>
-        <h2>Error Analysis</h2>
-        <p>Confusion matrices, robustness curves, saliency visualizations, and representative examples support the planned error analysis. The written analysis will be added to the final report.</p>
-      </section>
-
-      <section>
-        <h2>Limitations and Conclusion</h2>
-        <p>Limitations and conclusions will be documented in the final report. The current source and generated artifacts are available for inspection and reproduction.</p>
-      </section>
-
-      <section>
-        <h2>Deliverables</h2>
-        <ul class="checklist">
-          <li>Source code: <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source">assignments/assignment-1/source</a></li>
-          <li>Checkpoint(s): Pending</li>
-          <li>Report: Pending</li>
-          <li>Slides: Pending</li>
-          <li>Video: Pending</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Assignment-Specific AI Usage Disclosure</h2>
-        <div class="placeholder">
-          AI usage details are recorded in <a href="https://github.com/LongQuach45/DL261-Assignments/blob/main/assignments/assignment-1/source/AI_USAGE.md"><code>source/AI_USAGE.md</code></a>; the final webpage and report disclosures will be updated with the remaining deliverables.
-        </div>
-      </section>
-    </main>
-  </body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Assignment 1 | MobyDick</title><link rel="stylesheet" href="../assets/styles.css"></head>
+<body><header class="site-header"><nav class="nav" aria-label="Main navigation"><a class="brand" href="../index.html"><span class="brand-mark">MD</span><span>MobyDick</span></a><div class="nav-links"><a href="../index.html">Home</a><a href="a1.html" aria-current="page">A1</a><a href="a2.html">A2</a><a href="a3.html">A3</a><a href="../ai-usage.html">AI disclosure</a></div></nav></header>
+<main class="content assignment-page"><div class="page-hero"><p class="eyebrow">Assignment 1 · Foundations</p><div class="card-topline"><span class="status status-progress">Implementation complete</span><span class="muted">Final report, slides, and video pending</span></div><h1>Foundations of Deep Learning Pipelines and Architectures</h1><p class="lead">From linear models to modern sequence models: a comparative study for image classification.</p></div><section class="quick-facts"><div><span>Instructor</span><strong>Lê Thành Sách</strong></div><div><span>Dataset</span><strong>Fashion-MNIST</strong></div><div><span>Group</span><strong>MobyDick</strong></div><div><span>Seed</span><strong>42</strong></div></section><div class="page-layout"><div class="article-column">
+<section><h2>Problem statement</h2><p>We study image classification on Fashion-MNIST using five mandatory architecture families: Linear, MLP, CNN, LSTM/GRU, and Transformer. The same data policy and evaluation metrics are used for the main comparison.</p></section>
+<section><h2>Dataset description and EDA</h2><p>Fashion-MNIST contains 28×28 grayscale images across 10 classes. The source uses 50,000 training images, 10,000 validation images, and the official 10,000-image test set, with seed 42 and normalization by mean and standard deviation 0.5.</p><p>EDA outputs and preprocessing examples are available in <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source/results/fashion_mnist">the Fashion-MNIST results directory</a>.</p></section>
+<section><h2>Methodology</h2><p>The main comparison implements a linear classifier, MLP, CNN, row-sequence LSTM/GRU, and patch-based Transformer. All models use cross-entropy loss and are trained with Adam under a matched reproducibility policy.</p></section>
+<section><h2>Experimental setup</h2><p>Runs use seed 42, batch size 64, 10 epochs, and CUDA when available. The best checkpoint is selected by validation Macro-F1 before final test evaluation. Detailed commands and dependencies are documented in the <a href="https://github.com/LongQuach45/DL261-Assignments/blob/main/assignments/assignment-1/source/README.md">source README</a>.</p></section>
+<section><h2>Results</h2><p>Comparison summaries, learning curves, confusion matrices, representative predictions, robustness plots, and interpretability outputs are available in <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source/results">source/results</a>. The narrative final report will be published when provided.</p></section>
+<section><h2>Comparison and discussion</h2><p>The result artifacts support comparison by accuracy, Macro-F1, parameter count, training behavior, inference cost, robustness, and matched parameter budget. The final written discussion is pending the report deliverable.</p></section>
+<section><h2>Error analysis</h2><p>Confusion matrices, representative examples, robustness curves, and saliency visualizations provide evidence for class confusion, noise sensitivity, and representation differences. Detailed error interpretation will be included in the final report.</p></section>
+<section><h2>Limitations and conclusion</h2><p>Current limitations include the short training budget and the pending final report analysis. The repository contains the implementation and generated artifacts required to reproduce the current study.</p></section>
+<section><h2>Assignment-specific AI Usage Disclosure</h2><p>The assignment disclosure is maintained in <a href="../ai-usage.html">the public AI Usage page</a> and the repository’s <a href="https://github.com/LongQuach45/DL261-Assignments/blob/main/assignments/assignment-1/source/AI_USAGE.md">Assignment 1 AI_USAGE.md</a>.</p></section>
+</div><aside class="side-column"><section class="deliverables"><p class="eyebrow">Deliverables</p><h2>Assignment links</h2><a class="side-link" href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source"><span>Source code</span><b>Available ↗</b></a><div class="side-link"><span>Checkpoints</span><b class="pending-text">Pending</b></div><div class="side-link"><span>Final report</span><b class="pending-text">Pending</b></div><div class="side-link"><span>Slides</span><b class="pending-text">Pending</b></div><div class="side-link"><span>YouTube video</span><b class="pending-text">Pending</b></div><a class="side-link" href="../ai-usage.html"><span>AI disclosure</span><b>Open ↗</b></a></section><section class="people"><p class="eyebrow">Contributors</p><p><a href="https://github.com/harbinger-ux">Le Quoc Binh</a> · <a href="https://github.com/LongQuach45">Quach Kien Long</a> · <a href="https://github.com/lamlethanh5555">Le Thanh Lam</a> · <a href="https://github.com/vy175">To Nha Vy</a></p></section></aside></div></main>
+<footer class="footer"><p>CO3133 · Assignment 1 · Group MobyDick</p><a href="../index.html">Back to project home</a></footer></body></html>
