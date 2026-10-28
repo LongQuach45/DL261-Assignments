@@ -3,4 +3,4 @@ import { Image } from "astro:assets";
 interface Props { src: ImageMetadata; alt: string; caption: string; }
 const { src, alt, caption } = Astro.props;
 ---
-<figure class="result-figure"><Image src={src} alt={alt} widths={[480, 960, 1440]} sizes="(max-width: 760px) 100vw, 50vw" /><figcaption>{caption}</figcaption></figure>
+<figure class="result-figure"><Image src={src} alt={alt} widths={[480, 960, 1440]} sizes="(max-width: 900px) calc(100vw - 2rem), 800px" /><figcaption>{caption}</figcaption></figure>
