@@ -4,7 +4,7 @@ This repository keeps course-level AI-use information here and detailed assignme
 
 ## Shared Course-Level Summary
 
-- Assignment 1: four verified Google Gemini-assisted visualization, CSV, robustness, and report-formatting tasks are documented in [assignment-1/source/AI_USAGE.md](assignments/assignment-1/source/AI_USAGE.md).
+- Assignment 1: four Google Gemini-assisted visualization, CSV, robustness, and report-formatting tasks plus one OpenAI Codex-assisted final-report consistency review are documented in [assignment-1/source/AI_USAGE.md](assignments/assignment-1/source/AI_USAGE.md).
 - Assignment 2: four verified Google Gemini-assisted integrity-audit, CUDA-measurement, Grad-CAM, qualitative-analysis, and report-formatting tasks are documented in [assignment-2/source/AI_USAGE.md](assignments/assignment-2/source/AI_USAGE.md).
 - Assignment 3: not started; no assignment-specific AI record exists yet.
 

@@ -23,6 +23,8 @@ export const external = {
   a1Readme: `${site.repository}/blob/main/assignments/assignment-1/source/README.md`,
   a1Results: `${site.repository}/tree/main/assignments/assignment-1/source/results`,
   a1Ai: `${site.repository}/blob/main/assignments/assignment-1/source/AI_USAGE.md`,
+  a1Report: `${site.repository}/blob/main/assignments/assignment-1/report/assignment-1-final-report.pdf`,
+  a1Slides: `${site.repository}/blob/main/assignments/assignment-1/slide/assignment-1-presentation-slides.pdf`,
   a2Source: `${site.repository}/tree/main/assignments/assignment-2/source`,
   a2Readme: `${site.repository}/blob/main/assignments/assignment-2/source/README.md`,
   a2Results: `${site.repository}/tree/main/assignments/assignment-2/source/results`,
@@ -35,9 +37,9 @@ export const external = {
 export const aiSummaries = [
   {
     assignment: "Assignment 1",
-    tool: "Google Gemini (2026 release)",
-    summary: "Four documented uses: EDA grids, confusion-matrix and CSV formatting, saliency and robustness visualizations, and report typesetting.",
-    verification: "Verified against official Matplotlib, PyTorch, and scikit-learn documentation plus generated outputs.",
+    tool: "Google Gemini + OpenAI Codex",
+    summary: "Four documented Gemini uses supported visualizations, CSV formatting, robustness analysis, and report typesetting; Codex assisted with final-report consistency and publication review.",
+    verification: "Verified against official documentation, generated outputs, committed result CSVs, and the rendered final report.",
     href: external.a1Ai
   },
   {

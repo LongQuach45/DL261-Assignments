@@ -33,8 +33,8 @@ assignments:
     title: "Foundations of Deep Learning Pipelines and Architectures"
     page: "docs/assignments/a1.html"
     source: "assignments/assignment-1/source"
-    report: "assignments/assignment-1/report"
-    slide: "assignments/assignment-1/slide"
+    report: "assignments/assignment-1/report/assignment-1-final-report.pdf"
+    slide: "assignments/assignment-1/slide/assignment-1-presentation-slides.pdf"
     video: "assignments/assignment-1/video"
     checkpoints: "TODO"
   a2:

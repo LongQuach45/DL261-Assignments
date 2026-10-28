@@ -41,6 +41,11 @@ for (const page of ["a1", "a2", "a3"]) {
   }
 }
 
+const a1 = readFileSync(resolve(root, "dist/assignments/a1.html"), "utf8");
+for (const artifact of ["assignment-1-final-report.pdf", "assignment-1-presentation-slides.pdf"]) {
+  if (!a1.includes(artifact)) throw new Error(`Assignment 1 page is missing deliverable: ${artifact}`);
+}
+
 for (const file of pages) {
   const html = readFileSync(resolve(root, file), "utf8");
   if (/\bTODO\b/i.test(html)) throw new Error(`Visible TODO in ${file}`);

@@ -32,7 +32,6 @@ BTL1/
 ├── utils.py                     # Seed fixing, parameter counting, plotting, and CSV logging
 ├── main.py                      # Master entry point to reproduce all experiments end-to-end
 ├── requirements.txt             # Python package dependencies
-├── report.tex                   # Complete LaTeX source for the Assignment 1 Final Report
 ├── AI_USAGE.md                  # Detailed generative AI usage disclosure and verification logs
 └── README.md                    # Reproduction instructions and documentation
 
