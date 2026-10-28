@@ -42,7 +42,7 @@ for (const page of ["a1", "a2", "a3"]) {
 }
 
 const a1 = readFileSync(resolve(root, "dist/assignments/a1.html"), "utf8");
-for (const artifact of ["assignment-1-final-report.pdf", "assignment-1-presentation-slides.pdf"]) {
+for (const artifact of ["assignment-1-final-report.pdf", "assignment-1-presentation-slides.pdf", "https://youtu.be/Wbq5g0MIwDk"]) {
   if (!a1.includes(artifact)) throw new Error(`Assignment 1 page is missing deliverable: ${artifact}`);
 }
 

@@ -25,6 +25,7 @@ export const external = {
   a1Ai: `${site.repository}/blob/main/assignments/assignment-1/source/AI_USAGE.md`,
   a1Report: `${site.repository}/blob/main/assignments/assignment-1/report/assignment-1-final-report.pdf`,
   a1Slides: `${site.repository}/blob/main/assignments/assignment-1/slide/assignment-1-presentation-slides.pdf`,
+  a1Video: "https://youtu.be/Wbq5g0MIwDk",
   a2Source: `${site.repository}/tree/main/assignments/assignment-2/source`,
   a2Readme: `${site.repository}/blob/main/assignments/assignment-2/source/README.md`,
   a2Results: `${site.repository}/tree/main/assignments/assignment-2/source/results`,

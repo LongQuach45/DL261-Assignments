@@ -35,7 +35,7 @@ assignments:
     source: "assignments/assignment-1/source"
     report: "assignments/assignment-1/report/assignment-1-final-report.pdf"
     slide: "assignments/assignment-1/slide/assignment-1-presentation-slides.pdf"
-    video: "assignments/assignment-1/video"
+    video: "https://youtu.be/Wbq5g0MIwDk"
     checkpoints: "TODO"
   a2:
     title: "Deep Learning on Large-Scale Data and Specialized Tasks"
