@@ -1,0 +1,4 @@
+Model,Backbone_Policy,Total_Params,Trainable_Params,Best_Epoch,Best_Val_Acc,Best_Val_F1,Test_Acc,Test_Macro_F1,Train_Time_s,Test_Eval_Time_s,Latency_ms_Batch64,Latency_ms_Per_Img,Peak_VRAM_MB
+Custom_CNN,Trained from scratch,1242090,1242090,15,0.6147,0.618,0.6336,0.6335,219.32,2.88,57.22,0.894,2093.38
+ResNet50_Frozen,Frozen pretrained backbone (head only),23528522,20490,8,0.7653,0.7653,0.8024,0.8022,223.42,3.95,91.27,1.426,855.49
+ResNet50_Full_Finetune,2-Stage: 5 ep frozen head + 10 ep full fine-tune,23528522,23528522,14,0.868,0.8673,0.888,0.8877,267.71,4.12,91.93,1.436,3218.35

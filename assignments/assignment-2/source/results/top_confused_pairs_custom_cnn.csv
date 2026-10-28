@@ -1,0 +1,16 @@
+True_Class,Predicted_Class,Count,Rate_Within_True_Class,Hypothesized_Error_Category
+bread pudding,apple pie,70,0.28,Visual similarity & presentation variation (baked pastry / powdered topping)
+beef carpaccio,beef tartare,60,0.24,Visual similarity (raw red texture / garnish overlap)
+apple pie,breakfast burrito,44,0.176,Multi-ingredient clutter / occlusion & framing variation
+baklava,apple pie,41,0.164,Visual similarity & presentation variation (baked pastry / powdered topping)
+apple pie,baklava,37,0.148,Visual similarity & presentation variation (baked pastry / powdered topping)
+beet salad,baby back ribs,33,0.132,Lighting / dark glaze contrast & close-up framing
+beet salad,breakfast burrito,31,0.124,Multi-ingredient clutter / occlusion & framing variation
+beet salad,beef tartare,29,0.116,Visual similarity (raw red texture / garnish overlap)
+bread pudding,baby back ribs,29,0.116,Lighting / dark glaze contrast & close-up framing
+baklava,breakfast burrito,28,0.112,Multi-ingredient clutter / occlusion & framing variation
+bibimbap,breakfast burrito,28,0.112,Multi-ingredient clutter / occlusion & framing variation
+breakfast burrito,apple pie,27,0.108,Multi-ingredient clutter / occlusion & framing variation
+bread pudding,breakfast burrito,26,0.104,Multi-ingredient clutter / occlusion & framing variation
+apple pie,bread pudding,24,0.096,Visual similarity & presentation variation (baked pastry / powdered topping)
+beef tartare,breakfast burrito,23,0.092,Multi-ingredient clutter / occlusion & framing variation
