@@ -1,0 +1,11 @@
+---
+import { members, site } from "../data/site";
+---
+<section class="shell assignment-identity" aria-labelledby="assignment-identity-title">
+  <p class="eyebrow" id="assignment-identity-title">Project identity</p>
+  <div class="assignment-identity-grid">
+    <div><span>Group</span><strong>Group {site.groupName}</strong></div>
+    <div><span>Instructor</span><strong>{site.instructor}</strong></div>
+    <div class="assignment-members"><span>Members</span><p>{members.map((member, index) => <><a href={member.github}>{member.name}</a>{index < members.length - 1 && <span aria-hidden="true"> · </span>}</>)}</p></div>
+  </div>
+</section>

@@ -31,15 +31,16 @@ group:
 assignments:
   a1:
     title: "Foundations of Deep Learning Pipelines and Architectures"
-    page: "docs/assignments/a1.html"
+    page: "https://longquach45.github.io/DL261-Assignments/assignments/a1.html"
     source: "assignments/assignment-1/source"
     report: "assignments/assignment-1/report/assignment-1-final-report.pdf"
     slide: "assignments/assignment-1/slide/assignment-1-presentation-slides.pdf"
     video: "https://youtu.be/Wbq5g0MIwDk"
-    checkpoints: "TODO"
+    checkpoints: "Reconstruct with python main.py; see assignments/assignment-1/source/README.md"
+    reproducibility_metadata: "assignments/assignment-1/source/reproducibility.json"
   a2:
     title: "Deep Learning on Large-Scale Data and Specialized Tasks"
-    page: "docs/assignments/a2.html"
+    page: "https://longquach45.github.io/DL261-Assignments/assignments/a2.html"
     source: "assignments/assignment-2/source"
     dataset_proposal: "assignments/assignment-2/proposal/assignment-2-dataset-proposal.pdf"
     dataset_proposal_markdown: "assignments/assignment-2/proposal/dataset.md"
@@ -47,7 +48,8 @@ assignments:
     report: "assignments/assignment-2/report"
     slide: "assignments/assignment-2/slide"
     video: "assignments/assignment-2/video"
-    checkpoints: "TODO"
+    checkpoints: "Reconstruct with python main.py --milestone m2 or --milestone m3; see assignments/assignment-2/source/README.md"
+    reproducibility_metadata: "assignments/assignment-2/source/reproducibility.json"
   a3:
     title: "Multimodal Deep Learning"
     page: "docs/assignments/a3.html"

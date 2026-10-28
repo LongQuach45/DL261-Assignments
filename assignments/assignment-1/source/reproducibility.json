@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "assignment": "CO3133 Assignment 1",
+  "repository": "https://github.com/LongQuach45/DL261-Assignments",
+  "recorded_on": "2026-10-28",
+  "provenance": {
+    "source_last_changed_commit": "7574a8900246d0205b43f904d2f115e18ea7f2a0",
+    "fashion_mnist_summary_last_changed_commit": "e95d9a3a9d11499ef69690d7470273d12b4e6070",
+    "published_report_commit": "2c1dffa117475f8c3e9d6c6cb52b0664aa469c64",
+    "interpretation": "These commits identify the repository revisions that last changed the tracked source, result summary, and report. They are not original training-run IDs."
+  },
+  "dataset": {
+    "primary": "Fashion-MNIST",
+    "train_samples": 50000,
+    "validation_samples": 10000,
+    "test_samples": 10000,
+    "split_method": "torch.utils.data.random_split of the official 60000-image training partition",
+    "split_seed": 42,
+    "stratified": false,
+    "test_partition": "Official Fashion-MNIST test split"
+  },
+  "training": {
+    "seed": 42,
+    "epochs": 10,
+    "batch_size": 64,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "loss": "CrossEntropyLoss",
+    "checkpoint_selection": "Highest validation Macro-F1",
+    "models": ["Linear", "MLP", "CNN", "LSTM", "GRU", "Transformer"]
+  },
+  "environment": {
+    "cpu": "Intel Core Ultra 9 275HX",
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "ram": "32 GB",
+    "os": "Linux (WSL2 Kali Linux on Windows 11)",
+    "dependency_specification": "requirements.txt"
+  },
+  "artifacts": {
+    "main_summary": "results/fashion_mnist/comparison_summary.csv",
+    "matched_budget_summary": "results/fashion_mnist/matched_budget_summary.csv",
+    "robustness_summary": "results/fashion_mnist/robustness_summary.csv",
+    "extension_summary": "results/cifar10/comparison_summary.csv",
+    "reconstruction_command": "python main.py",
+    "checkpoint_binaries_committed": false,
+    "checkpoint_output_pattern": "checkpoints/<dataset>/<dataset>_<model>_best.pth",
+    "per_epoch_logs_committed": false,
+    "original_training_run_id_available": false,
+    "checkpoint_hashes_available": false
+  }
+}

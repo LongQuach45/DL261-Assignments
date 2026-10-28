@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "assignment": "CO3133 Assignment 2",
+  "repository": "https://github.com/LongQuach45/DL261-Assignments",
+  "recorded_on": "2026-10-28",
+  "provenance": {
+    "source_last_changed_commit": "1f6599b6e0a9acb9b3f007cd9a719d16beef7337",
+    "comparison_summary_last_changed_commit": "1f6599b6e0a9acb9b3f007cd9a719d16beef7337",
+    "interpretation": "This commit identifies the repository revision that introduced the tracked source and result summary. It is not claimed as the original training-run ID."
+  },
+  "dataset": {
+    "name": "Food-101",
+    "scope": "First 10 class labels alphabetically",
+    "classes": 10,
+    "train_samples": 6750,
+    "validation_samples": 750,
+    "test_samples": 2500,
+    "split_seed": 42,
+    "split_unit": "Individual image record",
+    "stratified": true,
+    "manifest": "manifests/split_manifest.csv",
+    "archive_metadata": "manifests/reproducibility_metadata.json"
+  },
+  "training": {
+    "seed": 42,
+    "epochs": 15,
+    "batch_size": 64,
+    "optimizer": "AdamW",
+    "loss": "CrossEntropyLoss",
+    "checkpoint_selection": "Highest validation Macro-F1",
+    "configurations": [
+      "Custom_CNN trained from scratch",
+      "ResNet50_Frozen with classifier head training",
+      "ResNet50_Full_Finetune with 5 frozen epochs and 10 full fine-tuning epochs",
+      "ResNet50_Full_Finetune without augmentation"
+    ]
+  },
+  "environment": {
+    "python": "3.13.13",
+    "pytorch": "2.12.1+cu130",
+    "cpu": "Intel Core Ultra 9 275HX",
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU (8 GB VRAM)",
+    "ram": "32 GB",
+    "os": "Linux (WSL2 Kali Linux on Windows 11)",
+    "dependency_specification": "requirements.txt"
+  },
+  "artifacts": {
+    "main_summary": "results/comparison_summary.csv",
+    "augmentation_ablation": "results/ablation_augmentation_summary.csv",
+    "reconstruction_commands": [
+      "python main.py --milestone m2",
+      "python main.py --milestone m3"
+    ],
+    "checkpoint_binaries_committed": false,
+    "checkpoint_output_pattern": "checkpoints/<configuration>_best.pth",
+    "per_epoch_logs_committed": false,
+    "original_training_run_id_available": false,
+    "checkpoint_hashes_available": false
+  }
+}

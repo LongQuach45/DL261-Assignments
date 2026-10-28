@@ -39,6 +39,19 @@ for (const page of ["a1", "a2", "a3"]) {
   for (const heading of assignmentHeadings) {
     if (!html.includes(`>${heading}<`)) throw new Error(`${page} is missing required heading: ${heading}`);
   }
+  for (const identity of ["Group MobyDick", "Le Thanh Sach", "Le Quoc Binh", "Quach Kien Long", "Le Thanh Lam", "To Nha Vy"]) {
+    if (!html.includes(identity)) throw new Error(`${page} is missing assignment identity: ${identity}`);
+  }
+}
+
+for (const file of [
+  "assignments/assignment-1/source/reproducibility.json",
+  "assignments/assignment-2/source/reproducibility.json"
+]) {
+  const record = JSON.parse(readFileSync(resolve(root, file), "utf8"));
+  if (!record.provenance || !record.dataset || !record.training || !record.environment || !record.artifacts) {
+    throw new Error(`Incomplete reproducibility metadata: ${file}`);
+  }
 }
 
 const a1 = readFileSync(resolve(root, "dist/assignments/a1.html"), "utf8");

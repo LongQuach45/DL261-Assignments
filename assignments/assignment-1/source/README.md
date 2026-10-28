@@ -1,5 +1,3 @@
-
-```markdown
 # CO3133 — Assignment 1: Foundations of Deep Learning Pipelines and Architectures
 
 **Topic:** From Linear Models to Modern Sequence Models: A Comparative Study for Image Classification  
@@ -11,7 +9,7 @@
 ## 2. Project Structure
 
 ```text
-BTL1/
+assignment-1/source/
 ├── checkpoints/                 # Generated automatically: stores best model weights (.pth)
 │   ├── fashion_mnist/           # Best checkpoints on Fashion-MNIST (selected by Val Macro-F1)
 │   └── cifar10/                 # Best checkpoints on CIFAR-10 extension
@@ -32,6 +30,7 @@ BTL1/
 ├── utils.py                     # Seed fixing, parameter counting, plotting, and CSV logging
 ├── main.py                      # Master entry point to reproduce all experiments end-to-end
 ├── requirements.txt             # Python package dependencies
+├── reproducibility.json         # Machine-readable configuration and artifact provenance
 ├── AI_USAGE.md                  # Detailed generative AI usage disclosure and verification logs
 └── README.md                    # Reproduction instructions and documentation
 
@@ -122,6 +121,7 @@ All reported tables and figures in our report map directly to deterministic file
 * `./checkpoints/fashion_mnist/fashion_mnist_<model>_best.pth`
 * `./checkpoints/cifar10/cifar10_<model>_best.pth`
 * To evaluate an existing checkpoint without retraining, call `evaluate_test_set(model, ckpt_path, test_loader, device)` from `trainer.py`.
+* No pretrained checkpoint binaries are committed. Run `python main.py` to reconstruct checkpoints and reproduce the recorded evaluation pipeline.
 
 
 * **Quantitative CSV Logs:**
@@ -136,14 +136,21 @@ All reported tables and figures in our report map directly to deterministic file
 * `cm_<model>.png`: Test set confusion matrices for each architecture.
 * `examples_<model>.png`: 5 correct and 5 incorrect test predictions per model.
 
+### Reproducibility record
+
+[`reproducibility.json`](./reproducibility.json) records the fixed dataset split, seed, model configurations, checkpoint rule, result artifacts, hardware, and the repository commits that last changed the source and tracked result summaries. Those commit identifiers document repository provenance; they are not claimed as original training-run IDs. Original checkpoint hashes and per-epoch run logs were not retained.
+
+### Published deliverables
+
+* [Assignment page](https://longquach45.github.io/DL261-Assignments/assignments/a1.html)
+* [Final report](../report/assignment-1-final-report.pdf)
+* [Presentation slides](../slide/assignment-1-presentation-slides.pdf)
+* [Presentation video](https://youtu.be/Wbq5g0MIwDk)
+
 
 
 ---
 
 ## 7. Academic Integrity & AI Usage Disclosure
 
-In compliance with Section 5 of the Course Project Handbook, all generative AI usage is documented in [`AI_USAGE.md`](https://www.google.com/search?q=./AI_USAGE.md), detailing the tool version, responsible group member, development stage, prompt summary, affected files, and verification method against official PyTorch/scikit-learn documentation and local execution logs.
-
-```
-
-```
+In compliance with Section 5 of the Course Project Handbook, all generative AI usage is documented in [`AI_USAGE.md`](./AI_USAGE.md), detailing the tool version, responsible group member, development stage, prompt summary, affected files, and verification method against official PyTorch/scikit-learn documentation and local execution logs.
