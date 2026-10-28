@@ -1,0 +1,3 @@
+Configuration,Total_Params,Trainable_Params,Best_Val_Acc,Best_Val_F1,Test_Acc,Test_Macro_F1,Train_Time_s
+ResNet50_Full_Finetune (With Augmentation),23528522,23528522,0.868,0.8673,0.888,0.8877,267.71
+ResNet50_Full_Finetune (Without Augmentation),23528522,23528522,0.872,0.8721,0.9024,0.9021,229.87

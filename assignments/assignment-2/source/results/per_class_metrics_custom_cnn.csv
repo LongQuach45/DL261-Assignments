@@ -1,0 +1,11 @@
+Class_ID,Class_Name,Precision,Recall,F1_Score,Support,Error_Rate
+1,apple pie,0.4122,0.488,0.4469,250,0.512
+2,baby back ribs,0.6116,0.8,0.6932,250,0.2
+3,baklava,0.6652,0.596,0.6287,250,0.404
+4,beef carpaccio,0.9074,0.588,0.7136,250,0.412
+5,beef tartare,0.5842,0.68,0.6285,250,0.32
+6,beet salad,0.9722,0.42,0.5866,250,0.58
+7,beignets,0.871,0.864,0.8675,250,0.136
+8,bibimbap,0.7585,0.804,0.7806,250,0.196
+9,bread pudding,0.4947,0.372,0.4247,250,0.628
+10,breakfast burrito,0.4629,0.724,0.5647,250,0.276

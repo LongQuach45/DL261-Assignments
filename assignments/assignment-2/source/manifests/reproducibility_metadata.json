@@ -1,0 +1,37 @@
+{
+  "total_audited_images": 10000,
+  "total_valid_images": 10000,
+  "corrupted_or_exact_duplicates_excluded": 0,
+  "perceptual_near_duplicate_pairs_flagged": 17,
+  "channel_modes": {
+    "RGB": 9999,
+    "L": 1
+  },
+  "width_min": 287,
+  "width_median": 512.0,
+  "width_mean": 498.56,
+  "width_max": 512,
+  "height_min": 231,
+  "height_median": 512.0,
+  "height_mean": 476.23,
+  "height_max": 512,
+  "aspect_ratio_min": 0.56,
+  "aspect_ratio_median": 1.0,
+  "aspect_ratio_mean": 1.075,
+  "aspect_ratio_max": 2.216,
+  "max_side_max": 512,
+  "download_url": "https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/food-101.tar.gz",
+  "archive_filename": "food-101.tar.gz",
+  "archive_sha256": "d97d15e438b7f4498f96086a4f7e2fa42a32f2712e87d3295441b2b6314053a4",
+  "imagenet_mean": [
+    0.48500001430511475,
+    0.4560000002384186,
+    0.4059999883174896
+  ],
+  "imagenet_std": [
+    0.2290000021457672,
+    0.2240000069141388,
+    0.22499999403953552
+  ],
+  "seed": 42
+}

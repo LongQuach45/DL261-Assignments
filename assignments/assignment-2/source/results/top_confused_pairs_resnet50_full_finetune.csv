@@ -1,0 +1,16 @@
+True_Class,Predicted_Class,Count,Rate_Within_True_Class,Hypothesized_Error_Category
+apple pie,bread pudding,39,0.156,Visual similarity & presentation variation (baked pastry / powdered topping)
+bread pudding,apple pie,36,0.144,Visual similarity & presentation variation (baked pastry / powdered topping)
+apple pie,baklava,15,0.06,Visual similarity & presentation variation (baked pastry / powdered topping)
+beet salad,beef carpaccio,12,0.048,Visual similarity (raw red texture / garnish overlap)
+beef tartare,beef carpaccio,11,0.044,Visual similarity (raw red texture / garnish overlap)
+bread pudding,baklava,11,0.044,Visual similarity & presentation variation (baked pastry / powdered topping)
+baklava,apple pie,10,0.04,Visual similarity & presentation variation (baked pastry / powdered topping)
+beignets,apple pie,9,0.036,Visual similarity & presentation variation (baked pastry / powdered topping)
+apple pie,beignets,8,0.032,Visual similarity & presentation variation (baked pastry / powdered topping)
+bread pudding,baby back ribs,8,0.032,Lighting / dark glaze contrast & close-up framing
+beef tartare,breakfast burrito,7,0.028,Multi-ingredient clutter / occlusion & framing variation
+breakfast burrito,apple pie,7,0.028,Multi-ingredient clutter / occlusion & framing variation
+beet salad,breakfast burrito,6,0.024,Multi-ingredient clutter / occlusion & framing variation
+beef carpaccio,beef tartare,5,0.02,Visual similarity (raw red texture / garnish overlap)
+beef tartare,beet salad,5,0.02,Visual similarity (raw red texture / garnish overlap)
