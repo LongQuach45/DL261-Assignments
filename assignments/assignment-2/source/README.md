@@ -4,7 +4,7 @@
 **Track:** Image Classification  
 **Institution:** Ho Chi Minh City University of Technology (HCMUT), VNU-HCM — Faculty of Computer Science and Engineering  
 **Course:** Deep Learning and Its Applications (`CO3133`) — Semester 261  
-**Instructor:** Dr. Lê Thành Sách  
+**Instructor:** Dr. Le Thanh Sach
 
 
 ## 2. Project Structure

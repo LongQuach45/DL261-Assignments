@@ -3,63 +3,63 @@
 
 ## Record 1: Matplotlib Visualization & Grid Formatting (M1 Draft)
 - **Tool name and version:** Google Gemini (2026 release)
-- **Member who used it:** Member 1 (Lê Quốc Bình)
+- **Member who used it:** Member 1 (Le Quoc Binh)
 - **Time or development stage:** Week 4–5 (M1 Draft stage)
 - **Purpose:** Generating boilerplate Matplotlib subplot grid layouts for saving 2x5 EDA class sample grids and 1x8 denormalized batch previews without overlapping axis titles.
 - **Affected assignment section(s):** `data.py` (`run_eda`), Report Section 1.3 (EDA Figures)
 - **Representative prompt example:** "How to arrange a 2x5 subplot grid in matplotlib with tight_layout and hide axes for grayscale 28x28 tensors."
 - **How AI output was edited and verified:** Adjusted tensor `.squeeze()` indexing and denormalization arithmetic (`img * 0.5 + 0.5`) to match our Torchvision `Normalize((0.5,), (0.5,))` pipeline.
-- **Member responsible for final verification:** Member 1 (Lê Quốc Bình)
+- **Member responsible for final verification:** Member 1 (Le Quoc Binh)
 - **Sources used for verification:** Official Matplotlib `pyplot.subplots` documentation and visual inspection of generated PNG files in `./results/`.
 
 ---
 
 ## Record 2: CSV Logging & Confusion Matrix Display Formatting (M2 Final)
 - **Tool name and version:** Google Gemini (2026 release)
-- **Member who used it:** Member 2 (Quách Kiến Long)
+- **Member who used it:** Member 2 (Quach Kien Long)
 - **Time or development stage:** Week 7–8 (M2 Final stage)
 - **Purpose:** Formatting `scikit-learn` `ConfusionMatrixDisplay` tick rotations and exporting dictionary lists to structured CSV files via Python's built-in `csv.DictWriter`.
 - **Affected assignment section(s):** `utils.py` (`plot_confusion_matrix`, `save_summary_table`), Report Section 3.2
 - **Representative prompt example:** "Format ConfusionMatrixDisplay in sklearn with 45-degree rotated x-axis labels and integer formatting."
 - **How AI output was edited and verified:** Integrated the plotting snippet into our evaluation pipeline and verified that row/column sums in the confusion matrix matched the exact 10,000 test split sample count (1,000 per class).
-- **Member responsible for final verification:** Member 2 (Quách Kiến Long)
+- **Member responsible for final verification:** Member 2 (Quach Kien Long)
 - **Sources used for verification:** `scikit-learn` `metrics.ConfusionMatrixDisplay` API reference and local test split verification.
 
 ---
 
 ## Record 3: Saliency Map & Noise Perturbation Plotting Helpers (M2 Extensions)
 - **Tool name and version:** Google Gemini (2026 release)
-- **Member who used it:** Member 3 (Lê Thanh Lâm)
+- **Member who used it:** Member 3 (Le Thanh Lam)
 - **Time or development stage:** Week 8–9 (M2 Final stage)
 - **Purpose:** Assisting with multi-column Matplotlib subplot rendering for input-gradient saliency maps and multi-line accuracy degradation curves across noise levels.
 - **Affected assignment section(s):** `extensions.py` (`run_robustness_study`, `run_interpretability_study`), Report Section 3.6
 - **Representative prompt example:** "Plot multiple accuracy curves over sigma=[0.0, 0.1, 0.2, 0.3, 0.5] in matplotlib and render side-by-side hot colormaps for saliency tensors."
 - **How AI output was edited and verified:** Added explicit CuDNN training mode handling for RNN backward passes (`model.train()` during gradient computation with dropout disabled/zeroed gradients) and verified gradient tensor shapes against PyTorch autograd rules.
-- **Member responsible for final verification:** Member 3 (Lê Thanh Lâm)
+- **Member responsible for final verification:** Member 3 (Le Thanh Lam)
 - **Sources used for verification:** PyTorch `torch.autograd` documentation and local execution on Fashion-MNIST test batches.
 
 ---
 
 ## Record 4: LaTeX Table Typesetting & Grammar Check (M2 Final Report)
 - **Tool name and version:** Google Gemini (2026 release)
-- **Member who used it:** Member 4 (Tô Nhã Vy)
+- **Member who used it:** Member 4 (To Nha Vy)
 - **Time or development stage:** Week 9 (M2 Final report preparation)
 - **Purpose:** Converting CSV experimental outputs into LaTeX `booktabs` tables, formatting TikZ pipeline diagrams, and proofreading English grammar in the final report and `README.md`.
 - **Affected assignment section(s):** `report.tex`, `README.md`
 - **Representative prompt example:** "Convert this CSV table of model parameters, accuracy, macro-F1, and inference times into a LaTeX booktabs table and check grammar."
 - **How AI output was edited and verified:** Cross-checked every numerical cell in the LaTeX tables against `./results/fashion_mnist/comparison_summary.csv` and `./results/cifar10/comparison_summary.csv` to guarantee zero discrepancy between code outputs and reported metrics.
-- **Member responsible for final verification:** Member 4 (Tô Nhã Vy)
+- **Member responsible for final verification:** Member 4 (To Nha Vy)
 - **Sources used for verification:** Raw CSV logs generated by `main.py` and Overleaf PDF compilation checks.
 
 ---
 
 ## Record 5: Final Report Consistency and Layout Review
 - **Tool name and version:** OpenAI Codex (model/version not recorded)
-- **Member who used it:** Quách Kiến Long
+- **Member who used it:** Quach Kien Long
 - **Time or development stage:** Final report review and repository publication
 - **Purpose:** Checking report tables and narrative claims against repository CSV outputs, identifying stale values and provenance notes, reviewing PDF layout, and preparing consistent public deliverable links.
 - **Affected assignment section(s):** Final report quantitative tables and discussion; AI Usage Disclosure; Assignment 1 public webpage and deliverable metadata
 - **Representative prompt example:** "Verify this report version against the current repository for conflicts and inconsistencies."
 - **How AI output was edited and verified:** Every proposed numerical correction was checked against the committed Fashion-MNIST, matched-budget, robustness, and CIFAR-10 CSV files. The final PDF was re-extracted and compared with those files before publication. No model training or new experiment was performed during report editing.
-- **Member responsible for final verification:** Quách Kiến Long
+- **Member responsible for final verification:** Quach Kien Long
 - **Sources used for verification:** Repository result CSVs, experiment source code, Assignment 1 README, rendered final-report PDF, and the course handbook.

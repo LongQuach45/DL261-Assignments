@@ -6,7 +6,7 @@ export const site = {
   course: "Deep Learning and Its Applications",
   code: "CO3133",
   semester: "Semester-261",
-  instructor: "Lê Thành Sách",
+  instructor: "Le Thanh Sach",
   institution: "Ho Chi Minh City University of Technology – VNU-HCM",
   faculty: "Faculty of Computer Science and Engineering"
 } as const;
@@ -52,7 +52,7 @@ export const aiSummaries = [
   {
     assignment: "Course website",
     tool: "OpenAI Codex (model/version not recorded)",
-    summary: "Used by Quach Kien Long for website structure, content presentation, and static-site implementation assistance.",
+    summary: "Supported website structure, content presentation, and static-site implementation.",
     verification: "Student review against the handbook, repository artifacts, local builds, and deployed-page checks.",
     href: external.rootAi
   }
