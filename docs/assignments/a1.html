@@ -32,14 +32,14 @@
           <li><span class="label">Group Members</span>TODO: List all registered members</li>
           <li><span class="label">Repository Location</span><a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1">assignments/assignment-1</a></li>
           <li><span class="label">Main Dataset</span>Fashion-MNIST for primary results; MNIST only for development/debugging</li>
-          <li><span class="label">Current Source Status</span>Partial implementation: Linear/softmax classifier, MLP, and CNN are present. LSTM/GRU and Transformer are still TODO.</li>
+          <li><span class="label">Implementation Status</span>Complete source implementation and experiment artifacts; final report, slides, and video pending.</li>
         </ul>
       </section>
 
       <section>
         <h2>Problem Statement</h2>
         <p>The current source implements an image-classification pipeline for Fashion-MNIST. Inputs are 28x28 grayscale images, and outputs are logits over the 10 Fashion-MNIST classes.</p>
-        <p>TODO: Add the final motivation, mathematical formulation, main difficulties, and any completed analysis text.</p>
+        <p>Fashion-MNIST image classification with five mandatory architectures: Linear, MLP, CNN, LSTM, and Transformer. The source and reproduction commands are documented in the <a href="https://github.com/LongQuach45/DL261-Assignments/blob/main/assignments/assignment-1/source/README.md">Assignment 1 README</a>.</p>
       </section>
 
       <section>
@@ -51,7 +51,7 @@
           <li>Preprocessing in source: <code>ToTensor()</code> and normalization with mean/std <code>(0.5,)</code> for Fashion-MNIST.</li>
           <li>EDA helper present: prints total training samples, image shape, class counts, and representative class samples.</li>
         </ul>
-        <p>TODO: Add final license/source citation, stratification policy, leakage discussion, saved EDA outputs, and imbalance analysis.</p>
+        <p>EDA outputs, deterministic splits, preprocessing artifacts, and dataset policy are documented in the source README and stored under <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source/results">source/results</a>.</p>
       </section>
 
       <section>
@@ -64,7 +64,7 @@
           <li>Loss in source: <code>CrossEntropyLoss</code>; no softmax is applied before the loss.</li>
           <li>Optimizer in source: Adam.</li>
         </ul>
-        <p>TODO: Add parameter counts, final architecture diagrams, LSTM/GRU, Transformer, and any methodology text not yet implemented.</p>
+        <p>The completed source compares Linear, MLP, CNN, row-sequence LSTM/GRU, and patch-based Transformer models, with matched-budget and CIFAR-10 extensions.</p>
       </section>
 
       <section>
@@ -77,45 +77,44 @@
           <li>Learning rate default in trainer: <code>1e-3</code>.</li>
           <li>Validation metrics currently tracked: loss, accuracy, and macro-F1.</li>
         </ul>
-        <p>TODO: Add actual hardware, software versions, checkpoint criterion, scheduler if any, and final fairness constraints.</p>
+        <p>Seeds, device selection, batch size, epochs, optimizer settings, and reproduction commands are documented in the source README.</p>
       </section>
 
       <section>
         <h2>Results</h2>
-        <p>TODO: Add measured accuracy, macro-F1, parameter count, training time, inference time, curves, confusion matrix, and correct/incorrect examples after the experiments are run and verified.</p>
+        <p>Measured summaries, curves, confusion matrices, examples, robustness results, and matched-budget results are available under <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source/results">source/results</a>. The narrative final report will be added later.</p>
       </section>
 
       <section>
         <h2>Comparison and Discussion</h2>
-        <p>TODO: Compare methods using metrics beyond accuracy, then discuss representation choices and inductive bias.</p>
+        <p>Comparison tables and visualizations are available in the result artifacts. Written discussion will be included in the final report.</p>
       </section>
 
       <section>
         <h2>Error Analysis</h2>
-        <p>TODO: Group common failures, estimate frequency when possible, show examples, hypothesize causes, and propose improvements.</p>
+        <p>Confusion matrices, robustness curves, saliency visualizations, and representative examples support the planned error analysis. The written analysis will be added to the final report.</p>
       </section>
 
       <section>
         <h2>Limitations and Conclusion</h2>
-        <p>Current known limitation: the imported source is partial and currently includes only Linear, MLP, and CNN implementations. The required LSTM/GRU and Transformer comparisons are not yet present in the source.</p>
-        <p>TODO: Add final data, method, compute, and generalization limitations plus the conclusion after experiments are completed.</p>
+        <p>Limitations and conclusions will be documented in the final report. The current source and generated artifacts are available for inspection and reproduction.</p>
       </section>
 
       <section>
         <h2>Deliverables</h2>
         <ul class="checklist">
           <li>Source code: <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/source">assignments/assignment-1/source</a></li>
-          <li>Checkpoint(s): TODO link or reconstruction instructions</li>
-          <li>Report: <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/report">assignments/assignment-1/report</a></li>
-          <li>Slides: <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/slide">assignments/assignment-1/slide</a></li>
-          <li>YouTube video: <a href="https://github.com/LongQuach45/DL261-Assignments/tree/main/assignments/assignment-1/video">assignments/assignment-1/video</a>; TODO public or unlisted link titled CO3133-Semester-261 - Group [ID] - Assignment 1</li>
+          <li>Checkpoint(s): Pending</li>
+          <li>Report: Pending</li>
+          <li>Slides: Pending</li>
+          <li>Video: Pending</li>
         </ul>
       </section>
 
       <section>
         <h2>Assignment-Specific AI Usage Disclosure</h2>
         <div class="placeholder">
-          <strong>TODO:</strong> Complete the Assignment 1 AI disclosure here and in the report. Keep detailed logs in <code>AI_USAGE.md</code>.
+          AI usage details are recorded in <a href="https://github.com/LongQuach45/DL261-Assignments/blob/main/assignments/assignment-1/source/AI_USAGE.md"><code>source/AI_USAGE.md</code></a>; the final webpage and report disclosures will be updated with the remaining deliverables.
         </div>
       </section>
     </main>
