@@ -1,98 +1,44 @@
-# DL261 Assignments
+# DL261 Assignments — MobyDick
 
-Public course-project repository for **CO3133 - Deep Learning and Its Applications**, Semester-261.
+Public course-project repository for **CO3133: Deep Learning and Its Applications**, Semester-261, Faculty of Computer Science and Engineering, Ho Chi Minh City University of Technology – VNU-HCM.
 
-This repository hosts the GitHub Pages site and assignment deliverables for **CO3133 - Deep Learning and Its Applications**, Semester-261.
+Live website: <https://longquach45.github.io/DL261-Assignments/>
 
-## GitHub Pages
+## Website
 
-- Landing page: `docs/index.html`
-- Assignment 1: `docs/assignments/a1.html`
-- Assignment 2: `docs/assignments/a2.html`
-- Assignment 3: `docs/assignments/a3.html`
+The GitHub Pages site is an Astro static project with Tailwind CSS. It presents the required course, group, assignment, deliverable, and AI-use information while importing verified experiment figures and metrics from the repository.
 
-Live Pages URL: <https://LongQuach45.github.io/DL261-Assignments/>
+```bash
+npm ci
+npm run dev
+npm run verify
+```
 
-## Repository Layout
+`npm run verify` performs Astro type checking, creates the production build, and checks handbook-required page content. GitHub Actions deploys `dist/` to GitHub Pages after a push to `main`.
+
+## Project Layout
 
 ```text
 .
-├── AI_USAGE.md
-├── README.md
 ├── assignments/
-│   ├── assignment-1/
-│   │   ├── source/
-│   │   ├── report/
-│   │   ├── slide/
-│   │   └── video/
-│   ├── assignment-2/
-│   │   ├── source/
-│   │   ├── report/
-│   │   ├── slide/
-│   │   └── video/
-│   └── assignment-3/
-│       ├── source/
-│       ├── report/
-│       ├── slide/
-│       └── video/
-├── config/
-│   └── deliverables.yml
-├── checkpoints/
-├── docs/
-│   ├── index.html
-│   ├── assets/
-│   │   └── styles.css
-│   └── assignments/
-│       ├── a1.html
-│       ├── a2.html
-│       └── a3.html
+│   ├── assignment-1/     # Fashion-MNIST architecture comparison
+│   ├── assignment-2/     # Food-101 specialized image classification
+│   └── assignment-3/     # Multimodal deep learning, planned
+├── config/deliverables.yml
+├── src/                  # Astro pages, components, metadata, and styles
+├── scripts/check-handbook.mjs
+├── .github/workflows/    # GitHub Pages deployment
+└── AI_USAGE.md
 ```
 
-## Installation
+## Assignment Reproduction
 
-Assignment 1 currently has a partial source implementation. Install its dependencies with:
+Each completed assignment contains its own installation, data preparation, training, evaluation, checkpoint, environment, and result-traceability instructions:
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r assignments/assignment-1/source/requirements.txt
-```
-
-## Dataset Preparation
-
-TODO: Add dataset download, storage paths, licenses, preprocessing commands, split seeds, and leakage-prevention rules for each assignment.
-
-## Training
-
-TODO: Add reproducible training commands for each assignment.
-
-Example placeholder:
-
-```bash
-cd assignments/assignment-1/source
-python main.py
-```
-
-## Evaluation
-
-TODO: Add evaluation commands, checkpoint paths, expected metrics, and links to logs or experiment IDs.
-
-Example placeholder:
-
-```bash
-TODO: Add evaluation command after the evaluation script is implemented.
-```
-
-## Reproducibility Checklist
-
-- TODO: Configuration files for every reported run.
-- TODO: Fixed seed settings.
-- TODO: Dependency versions.
-- TODO: Hardware information.
-- TODO: Checkpoint access or reconstruction instructions.
-- TODO: Links to source, reports, slides, videos, and assignment pages.
-- TODO: Commit/tag mapping for final reported results.
+- [Assignment 1 source README](assignments/assignment-1/source/README.md)
+- [Assignment 2 source README](assignments/assignment-2/source/README.md)
+- [Assignment 2 Dataset Proposal](assignments/assignment-2/proposal/dataset.md)
 
 ## AI Usage
 
-See [AI_USAGE.md](AI_USAGE.md). Complete the disclosure before submission and keep it consistent with the landing page, assignment pages, reports, slides, and videos.
+See [AI_USAGE.md](AI_USAGE.md) for course-level disclosure and the assignment source folders for the detailed records.

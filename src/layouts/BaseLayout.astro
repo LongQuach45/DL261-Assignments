@@ -1,0 +1,56 @@
+---
+import { CodeXml, Menu, Moon, Sun, WavesHorizontal } from "@lucide/astro";
+import "../styles/global.css";
+import { site } from "../data/site";
+
+interface Props { title: string; description: string; current?: string; }
+const { title, description, current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const at = (path: string) => `${base}/${path}`;
+const nav = [
+  { label: "Overview", href: base, key: "home" },
+  { label: "Assignment 1", href: at("assignments/a1.html"), key: "a1" },
+  { label: "Assignment 2", href: at("assignments/a2.html"), key: "a2" },
+  { label: "Assignment 3", href: at("assignments/a3.html"), key: "a3" },
+  { label: "AI usage", href: at("ai-usage.html"), key: "ai" }
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#061a34" />
+    <title>{title} | {site.name}</title>
+    <script is:inline>
+      const savedTheme = localStorage.getItem("mobydick-theme");
+      document.documentElement.dataset.theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="shell header-row">
+        <a class="brand" href={base} aria-label="MobyDick course-project home"><span class="brand-mark"><WavesHorizontal size={18} stroke-width={2.5} /></span><span>MobyDick</span></a>
+        <nav class="desktop-nav" aria-label="Main navigation">
+          {nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a>)}
+        </nav>
+        <div class="header-actions">
+          <a class="icon-button desktop-only" href={site.repository} aria-label="Open the GitHub repository"><CodeXml size={18} /></a>
+          <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle colour theme"><Sun class="theme-sun" size={17} /><Moon class="theme-moon" size={17} /></button>
+          <details class="mobile-nav"><summary class="icon-button" aria-label="Open navigation"><Menu size={19} /></summary><nav aria-label="Mobile navigation">{nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a>)}<a href={site.repository}>GitHub repository</a></nav></details>
+        </div>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer"><div class="shell footer-row"><div><strong>{site.institution}</strong><p>{site.faculty} · {site.code} · {site.semester}</p></div><nav aria-label="Footer navigation">{nav.slice(0, 4).map((item) => <a href={item.href}>{item.label}</a>)}</nav></div></footer>
+    <script is:inline>
+      document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("mobydick-theme", next);
+      });
+    </script>
+  </body>
+</html>

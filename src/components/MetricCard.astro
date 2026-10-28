@@ -1,0 +1,5 @@
+---
+interface Props { label: string; value: string; detail: string; accent?: boolean; }
+const { label, value, detail, accent = false } = Astro.props;
+---
+<article class:list={["metric-card", { "metric-card-accent": accent }]}><p>{label}</p><strong>{value}</strong><span>{detail}</span></article>
