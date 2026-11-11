@@ -60,7 +60,7 @@ for (const artifact of ["assignment-1-final-report.pdf", "assignment-1-presentat
 }
 
 const a2 = readFileSync(resolve(root, "dist/assignments/a2.html"), "utf8");
-for (const artifact of ["assignment-2-dataset-proposal.pdf", "assignment-2-final-report.pdf"]) {
+for (const artifact of ["assignment-2-dataset-proposal.pdf", "assignment-2-final-report.pdf", "assignment-2-presentation-slides.pdf"]) {
   if (!a2.includes(artifact)) throw new Error(`Assignment 2 page is missing deliverable: ${artifact}`);
 }
 if (!a2.includes(">Approved</span>")) {

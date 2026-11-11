@@ -46,7 +46,7 @@ assignments:
     dataset_proposal_markdown: "assignments/assignment-2/proposal/dataset.md"
     approval_status: "Approved"
     report: "assignments/assignment-2/report/assignment-2-final-report.pdf"
-    slide: "assignments/assignment-2/slide"
+    slide: "assignments/assignment-2/slide/assignment-2-presentation-slides.pdf"
     video: "assignments/assignment-2/video"
     checkpoints: "Reconstruct with python main.py --milestone m2 or --milestone m3; see assignments/assignment-2/source/README.md"
     reproducibility_metadata: "assignments/assignment-2/source/reproducibility.json"
