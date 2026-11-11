@@ -35,6 +35,7 @@ export const external = {
   a2ProposalPdf: `${site.repository}/blob/main/assignments/assignment-2/proposal/assignment-2-dataset-proposal.pdf`,
   a2Report: `${site.repository}/blob/main/assignments/assignment-2/report/assignment-2-final-report.pdf`,
   a2Slides: `${site.repository}/blob/main/assignments/assignment-2/slide/assignment-2-presentation-slides.pdf`,
+  a2Video: "https://www.youtube.com/watch?v=HHNRGS3sljo",
   rootAi: `${site.repository}/blob/main/AI_USAGE.md`
 } as const;
 
