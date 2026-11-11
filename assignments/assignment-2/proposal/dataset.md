@@ -3,7 +3,7 @@
 **Course:** CO3133 — Deep Learning and Its Applications, Semester 261<br>
 **Track:** Image classification<br>
 **Dataset:** Food-101, ten-class subset<br>
-**Status:** Pending instructor approval
+**Status:** Approved
 
 > The [PDF proposal](assignment-2-dataset-proposal.pdf) is the formatted version. This file is the concise review specification; no experimental results are reported.
 
@@ -150,7 +150,7 @@ For every reported experiment, record hypothesis, changed and fixed factors, met
 | Storage | Approximately 5 GB archive plus subset, manifests, logs, and checkpoints |
 | Inference | Warmed-up latency for a fixed batch of 64; record hardware |
 
-Record software versions, hardware, configurations, seeds, manifests, checkpoints, logs, and repository commit/tag for final results. Main implementation begins only after approval or conditional approval.
+Record software versions, hardware, configurations, seeds, manifests, checkpoints, logs, and repository commit/tag for final results. The implementation follows the approved dataset scope and experimental plan.
 
 ## References
 

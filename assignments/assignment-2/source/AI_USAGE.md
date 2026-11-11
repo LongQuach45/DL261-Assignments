@@ -1,6 +1,8 @@
 # AI Usage Disclosure — Assignment 2 (CO3133)
 ---
 
+Google Gemini (2026 release) was used during M1, M2, and M3, as confirmed by the group. Records 1–4 below describe the documented M2/M3 tasks; separate M1 prompts and task details have not been supplied.
+
 ## Record 1: Pre-Split File Hash Auditing & EDA Histogram Formatting (M2 Draft)
 - **Tool name and version:** Google Gemini (2026 release)
 - **Member who used it:** Member 1 (Quach Kien Long)
@@ -8,7 +10,7 @@
 - **Purpose:** Generating Python `hashlib.sha256` chunked file-reading boilerplate and Matplotlib 1x3 subplot formatting for plotting image width, height, and aspect-ratio distributions during Exploratory Data Analysis.
 - **Affected assignment section(s):** `data.py` (`compute_file_sha256`, `build_or_load_manifests`), Report Section 1.3 & 1.4 (EDA & Split Integrity)
 - **Representative prompt example:** "Write a helper function in Python to compute SHA-256 of image files in chunks and plot a 1x3 matplotlib histogram of image widths, heights, and aspect ratios."
-- **How AI output was edited and verified:** Integrated the SHA-256 helper with our custom PIL `img.verify()` check and 64-bit `aHash` perceptual duplicate detector before executing `StratifiedShuffleSplit(test_size=0.10, random_state=42)`. Verified that the generated `manifests/split_manifest.csv` contained exactly 6,750 training, 750 validation, and 2,500 test records (750/75/250 per class).
+- **How AI output was edited and verified:** Integrated the SHA-256 helper with our custom PIL `img.verify()` check and 64-bit `aHash` perceptual duplicate detector before executing `StratifiedShuffleSplit(test_size=0.10, random_state=42)`. Verified that the generated `manifests/split_manifest.csv` contained exactly 6,750 training, 750 validation, and 2,500 test records (675/75/250 per class).
 - **Member responsible for final verification:** Member 1 (Quach Kien Long)
 - **Sources used for verification:** Python standard library `hashlib` and `PIL.Image` documentation, `scikit-learn` `StratifiedShuffleSplit` reference, and direct inspection of `./manifests/split_manifest.csv` and `./results/eda_class_counts.csv`.
 
@@ -50,3 +52,16 @@
 - **How AI output was edited and verified:** Verified the `np.argsort` indexing logic on softmax probabilities so that Row 1 strictly selects high-confidence correct predictions, Row 2 selects borderline correct predictions (lowest confidence margin), and Row 3 selects high-confidence errors. Cross-checked every cell in `report.tex` against `./results/comparison_summary.csv`, `./results/ablation_augmentation_summary.csv`, and `./results/top_confused_pairs_*.csv`.
 - **Member responsible for final verification:** Member 4 (To Nha Vy)
 - **Sources used for verification:** `scikit-learn` `precision_recall_fscore_support` documentation, generated CSV logs in `./results/`, and Overleaf PDF compilation checks.
+
+---
+
+## Record 5: Final Report Consistency and Layout Review
+- **Tool name and version:** OpenAI Codex (model/version not recorded)
+- **Member who used it:** Quach Kien Long
+- **Time or development stage:** Final report review and deliverable preparation
+- **Purpose:** Supporting academic editing and consistent template, table, and figure formatting; checking report tables and narrative claims against repository outputs; reviewing disclosure and PDF layout; and recommending corrections for the report author.
+- **Affected assignment section(s):** Final report quantitative tables and discussion; AI Usage Disclosure; dataset-proposal approval metadata; Assignment 2 public webpage and deliverable metadata
+- **Representative prompt example:** "Check report content against official repo; repo takes precedence."
+- **How AI output was edited and verified:** Report values and claims were compared with the committed comparison, augmentation-ablation, per-class, class-count, and confused-pair CSVs, manifests, implementation, and reproducibility metadata at repository revision `df8608bbd248d6fa346beec5a45566679ff05db6`. A separate local working copy was compiled for layout review. The report author reviewed the recommendations and selected the supplied report version for the repository; that PDF was copied without editing and its byte identity was verified. No model training or new experiment was performed during review.
+- **Member responsible for final verification:** Quach Kien Long
+- **Sources used for verification:** Repository result CSVs, manifests, experiment source code, Assignment 2 README, reproducibility metadata, dataset proposal, supplied report PDF, and the course handbook.
