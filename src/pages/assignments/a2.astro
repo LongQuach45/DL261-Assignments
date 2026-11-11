@@ -6,18 +6,111 @@ import Figure from "../../components/Figure.astro";
 import AssignmentIdentity from "../../components/AssignmentIdentity.astro";
 import { external } from "../../data/site";
 import { percent, readCsv } from "../../lib/csv";
-import food101 from "../../../assignments/assignment-2/proposal/food-101.jpg";
+import metadata from "../../../assignments/assignment-2/source/reproducibility.json";
+import audit from "../../../assignments/assignment-2/source/manifests/reproducibility_metadata.json";
 import eda from "../../../assignments/assignment-2/source/results/eda_samples.png";
+import dimensions from "../../../assignments/assignment-2/source/results/eda_dimensions.png";
 import curves from "../../../assignments/assignment-2/source/results/all_models_curves.png";
 import confusion from "../../../assignments/assignment-2/source/results/cm_resnet50_full_finetune.png";
+import examples from "../../../assignments/assignment-2/source/results/examples_resnet50_full_finetune.png";
 import gradcam from "../../../assignments/assignment-2/source/results/gradcam_comparison.png";
 
-const results = readCsv("assignments/assignment-2/source/results/comparison_summary.csv", ["Model", "Total_Params", "Trainable_Params", "Test_Acc", "Test_Macro_F1", "Train_Time_s", "Latency_ms_Per_Img"]);
-const ablation = readCsv("assignments/assignment-2/source/results/ablation_augmentation_summary.csv", ["Configuration", "Test_Acc", "Test_Macro_F1", "Train_Time_s"]);
+const results = readCsv("assignments/assignment-2/source/results/comparison_summary.csv", ["Model", "Total_Params", "Trainable_Params", "Best_Epoch", "Best_Val_F1", "Test_Acc", "Test_Macro_F1", "Train_Time_s", "Latency_ms_Per_Img", "Peak_VRAM_MB"]);
+const ablation = readCsv("assignments/assignment-2/source/results/ablation_augmentation_summary.csv", ["Configuration", "Best_Val_F1", "Test_Acc", "Test_Macro_F1", "Train_Time_s"]);
+const counts = readCsv("assignments/assignment-2/source/results/eda_class_counts.csv", ["Class_Name", "Train", "Val", "Test"]);
+const fineTuned = results.find((row) => row.Model === "ResNet50_Full_Finetune")!;
+const integer = (value: string) => Number(value).toLocaleString("en-US");
+const seconds = (value: string) => value + " s";
 ---
 <BaseLayout title="Assignment 2" description="Food-101 specialized image classification for CO3133 Assignment 2." current="a2">
-  <section class="shell page-hero"><p class="eyebrow">Assignment 2 · Specialized vision</p><div class="page-status"><span class="status status-active">Proposal + implementation available</span><small>Dataset approval, final report, slides, and YouTube video remain pending.</small></div><h1>Deep Learning on Large-Scale Data and Specialized Tasks</h1><p class="page-lead">Fine-grained Food-101 image classification using a reproducible ten-class subset, a custom CNN baseline, and two-stage ResNet-50 transfer learning.</p></section>
+  <section class="shell page-hero">
+    <p class="eyebrow">Assignment 2 · Specialized vision</p>
+    <div class="page-status"><span class="status status-complete">Implementation and final report available</span><small>Dataset proposal approved · Presentation slides and video pending</small></div>
+    <h1>Deep Learning on Large-Scale Data and Specialized Tasks</h1>
+    <p class="page-lead">Fine-grained Food-101 classification: a custom CNN baseline, a frozen ResNet-50, and two-stage full fine-tuning under a shared evaluation protocol.</p>
+  </section>
   <AssignmentIdentity />
-  <section class="shell"><div class="metric-grid"><MetricCard label="Full fine-tuning" value="88.80%" detail="ResNet-50 test accuracy" accent={true} /><MetricCard label="Frozen backbone" value="80.24%" detail="ResNet-50 test accuracy" /><MetricCard label="Custom CNN" value="63.36%" detail="Trained-from-scratch test accuracy" /></div></section>
-  <section class="shell article-layout"><article><section class="article-section"><h2>Problem statement</h2><p>Given one RGB food image, predict one category from a fixed ten-class Food-101 subset. The study evaluates the performance and compute trade-offs between a self-implemented CNN and pretrained ResNet-50 under controlled data and evaluation conditions.</p></section><section class="article-section"><h2>Dataset description and EDA</h2><p>The alphabetical ten-class subset contains 7,500 official training images and 2,500 official test images. The official test split remains untouched; the official training split is stratified into 6,750 training and 750 validation images with seed 42. EDA covers class balance, dimensions, representative images, readability, exact hashing, and perceptual-duplicate auditing.</p><div class="result-grid"><Figure src={food101} alt="Food-101 food-image montage" caption="Food-101 illustration from the dataset website." /><Figure src={eda} alt="Representative Food-101 samples from the selected classes" caption="Selected Food-101 subset: representative images used in EDA." /></div></section><section class="article-section"><h2>Methodology</h2><p>The baseline is a four-block custom CNN trained from scratch. The transfer-learning comparison uses ImageNet-pretrained ResNet-50 with a new ten-class classifier, evaluated first with a frozen backbone and then with a five-epoch warm-up followed by full fine-tuning. Inputs are 224×224 RGB tensors normalized with ImageNet statistics.</p></section><section class="article-section"><h2>Experimental setup</h2><p>All comparisons use the same fixed classes, image-level split, seed, preprocessing, metrics, and validation-Macro-F1 checkpoint rule. The implementation records parameter counts, training time, latency, and peak GPU memory alongside accuracy and Macro-F1.</p></section><section class="article-section"><h2>Results</h2><p>Full ResNet-50 fine-tuning produces the strongest primary result. The table below is read directly from the experiment summary CSV.</p><ResultTable caption="Food-101 ten-class controlled comparison" rows={results} columns={[{key:"Model",label:"Model"},{key:"Total_Params",label:"Total parameters"},{key:"Trainable_Params",label:"Trainable"},{key:"Test_Acc",label:"Test accuracy",format:percent},{key:"Test_Macro_F1",label:"Macro-F1",format:percent},{key:"Latency_ms_Per_Img",label:"Latency / image",format:(value) => `${value} ms`}]} /><div class="result-grid"><Figure src={curves} alt="Training and validation curves for Assignment 2 models" caption="Training behavior for the custom CNN and ResNet-50 configurations." /><Figure src={confusion} alt="Confusion matrix for fully fine-tuned ResNet-50" caption="Fine-tuned ResNet-50 confusion matrix on the untouched official test split." /></div></section><section class="article-section"><h2>Comparison and discussion</h2><p>Transfer learning substantially improves the specialized classification result over the custom baseline. The secondary augmentation ablation records a higher result without augmentation in this single configuration; it is an observed result, not a general claim that augmentation is harmful.</p><ResultTable caption="Secondary augmentation ablation" rows={ablation} columns={[{key:"Configuration",label:"Configuration"},{key:"Test_Acc",label:"Test accuracy",format:percent},{key:"Test_Macro_F1",label:"Macro-F1",format:percent},{key:"Train_Time_s",label:"Train time",format:(value) => `${value}s`}]} /></section><section class="article-section"><h2>Error analysis</h2><p>Per-class metrics, top-confused pairs, qualitative prediction grids, and Grad-CAM overlays support analysis of visually similar categories and model attention. The final report will consolidate the written taxonomy and examples.</p><div class="result-grid"><Figure src={gradcam} alt="Grad-CAM comparison across custom CNN and ResNet-50 models" caption="Grad-CAM comparison of the completed model configurations." /></div></section><section class="article-section"><h2>Limitations and conclusion</h2><p>All conclusions apply only to the selected ten Food-101 classes. Relevant limitations include noisy labels, class similarity, the fixed image-resolution pipeline, and the available compute budget for fine-tuning.</p></section><section class="article-section"><h2>Assignment-specific AI Usage Disclosure</h2><p>Four documented Google Gemini uses supported integrity auditing, hardware measurements, Grad-CAM, qualitative-analysis figures, and report formatting. Each use records responsible member, verification, and source material. <a href={external.a2Ai}>Read the complete Assignment 2 log.</a></p></section></article><aside class="side-stack"><section class="resource-card"><p class="eyebrow">Resources</p><h2>Deliverables</h2><a class="resource-link" href={external.a2Source}><span>Source code</span><b>Open ↗</b></a><a class="resource-link" href={external.a2Readme}><span>Reproduction & checkpoints</span><b>Open ↗</b></a><a class="resource-link" href={external.a2Results}><span>All result artifacts</span><b>Open ↗</b></a><a class="resource-link" href={external.a2Proposal}><span>Dataset proposal</span><b>Open ↗</b></a><a class="resource-link" href={external.a2ProposalPdf}><span>Formatted proposal PDF</span><b>Open ↗</b></a><div class="pending">Instructor approval · pending</div><div class="pending">Final report · pending</div><div class="pending">Slides · pending</div><div class="pending">YouTube video · pending</div><a class="resource-link" href={external.a2Ai}><span>AI disclosure</span><b>Open ↗</b></a></section></aside></section>
+  <section class="shell"><div class="metric-grid">
+    <MetricCard label="Primary comparison" value={percent(fineTuned.Test_Acc)} detail="Full fine-tuning test accuracy" accent={true} />
+    <MetricCard label="Primary Macro-F1" value={percent(fineTuned.Test_Macro_F1)} detail="Full fine-tuning on the official test split" />
+    <MetricCard label="Fixed split" value="6,750 / 750 / 2,500" detail="Train / validation / official test · seed 42" />
+  </div></section>
+  <section class="shell article-layout">
+    <article>
+      <section class="article-section">
+        <h2>Problem statement</h2>
+        <p>Given one RGB food image, predict one label from ten predefined Food-101 classes. The study compares training a custom CNN from scratch with adapting an ImageNet-pretrained ResNet-50, measuring predictive quality alongside training and inference cost.</p>
+      </section>
+      <section class="article-section">
+        <h2>Dataset description and EDA</h2>
+        <p>The approved subset uses the first ten Food-101 labels alphabetically. The official 2014 release provides 7,500 training images and 2,500 test images for these classes. A stratified 90/10 split of the official training partition produces 6,750 training and 750 validation images with seed 42.</p>
+        <ResultTable caption="Food-101 subset and split counts" rows={counts} columns={[{key:"Class_Name",label:"Class"},{key:"Train",label:"Train",format:integer},{key:"Val",label:"Validation",format:integer},{key:"Test",label:"Test",format:integer}]} />
+        <p>The audit retained all {integer(String(audit.total_valid_images))} images with {audit.corrupted_or_exact_duplicates_excluded} corrupt or exact-duplicate exclusions. It recorded {integer(String(audit.channel_modes.RGB))} RGB images, one grayscale image converted to RGB, and {audit.perceptual_near_duplicate_pairs_flagged} perceptual-hash candidate pairs. Some candidates span partitions; these flags require review and do not establish that every pair is a true duplicate.</p>
+        <div class="result-grid">
+          <Figure src={eda} alt="Representative images from the ten selected Food-101 classes" caption="Representative samples from the selected Food-101 subset." />
+          <Figure src={dimensions} alt="Food-101 image width, height, and aspect-ratio distributions" caption="Measured image dimensions and aspect ratios before preprocessing." />
+        </div>
+        <p>Source: <a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/">ETH Zurich Food-101</a>, introduced by Bossard, Guillaumin, and Van Gool (ECCV 2014). Dataset version, usage terms, scope, and approval are documented in the <a href={external.a2Proposal}>Dataset Proposal</a>.</p>
+      </section>
+      <section class="article-section">
+        <h2>Methodology</h2>
+        <p>The baseline is a four-block custom CNN trained from scratch. ResNet-50 uses ImageNet-pretrained weights and a new ten-class classifier. The frozen configuration trains the head for 15 epochs; full fine-tuning uses five head-only epochs followed by ten epochs with all parameters trainable.</p>
+        <p>Training applies random resized crops, horizontal flips, and color jitter. Validation and test images use resize to 256 followed by center crop to 224. All branches produce 3×224×224 tensors normalized with ImageNet statistics.</p>
+      </section>
+      <section class="article-section">
+        <h2>Experimental setup</h2>
+        <p>All primary runs use seed {metadata.training.seed}, batch size {metadata.training.batch_size}, 15 epochs, cross-entropy loss, AdamW, and checkpoint selection by highest validation Macro-F1. The backbone policy is the primary controlled factor. Full fine-tuning lowers the backbone learning rate to 0.0001 and sets the head learning rate to 0.0005 after the initial head-only stage at 0.001.</p>
+        <p>Recorded hardware: {metadata.environment.gpu}, {metadata.environment.cpu}, and {metadata.environment.ram} RAM. The environment record lists Python {metadata.environment.python} and PyTorch {metadata.environment.pytorch}. CUDA mixed precision is used when available; inference measurements use a warmed-up batch of 64.</p>
+        <p><a href={external.a2Readme}>Reconstruction instructions</a> cover installation, a separate debug subset, and the M2/M3 commands. Checkpoint binaries are reconstructed by running the pipeline; <a href={external.a2Metadata}>reproducibility metadata</a> records configurations and artifact provenance.</p>
+      </section>
+      <section class="article-section">
+        <h2>Results</h2>
+        <p>Full fine-tuning achieves the strongest primary result, ahead of the frozen backbone and custom CNN. These tables are generated from the committed experiment CSVs.</p>
+        <ResultTable caption="Food-101 ten-class primary comparison" rows={results} columns={[{key:"Model",label:"Model"},{key:"Best_Epoch",label:"Selected epoch"},{key:"Best_Val_F1",label:"Val Macro-F1",format:percent},{key:"Test_Acc",label:"Test accuracy",format:percent},{key:"Test_Macro_F1",label:"Test Macro-F1",format:percent}]} />
+        <ResultTable caption="Recorded compute cost · batch-64 inference" rows={results} columns={[{key:"Model",label:"Model"},{key:"Total_Params",label:"Parameters",format:integer},{key:"Trainable_Params",label:"Trainable",format:integer},{key:"Train_Time_s",label:"Train time",format:seconds},{key:"Latency_ms_Per_Img",label:"Latency / image",format:(value) => value + " ms"},{key:"Peak_VRAM_MB",label:"Peak allocated memory",format:(value) => value + " MiB"}]} />
+        <div class="result-grid">
+          <Figure src={curves} alt="Training loss, validation accuracy, and validation Macro-F1 for the three primary models" caption="Primary model learning curves, including the fine-tuning stage transition." />
+          <Figure src={confusion} alt="Full fine-tuning ResNet-50 confusion matrix on the Food-101 test subset" caption="Fine-tuned ResNet-50 predictions on the 2,500-image official test subset." />
+        </div>
+      </section>
+      <section class="article-section">
+        <h2>Comparison and discussion</h2>
+        <p>Full fine-tuning improves test accuracy by 8.56 percentage points over the frozen model and 25.44 points over the custom CNN. It takes longer to train and records higher peak allocated memory. The ResNet variants have similar, separately measured inference latency.</p>
+        <ResultTable caption="Secondary augmentation ablation" rows={ablation} columns={[{key:"Configuration",label:"Configuration"},{key:"Best_Val_F1",label:"Val Macro-F1",format:percent},{key:"Test_Acc",label:"Test accuracy",format:percent},{key:"Test_Macro_F1",label:"Test Macro-F1",format:percent},{key:"Train_Time_s",label:"Train time",format:seconds}]} />
+        <p>The no-augmentation run records the highest available test accuracy, 90.24%, and Macro-F1, 90.21%. This is a single-run ablation; initialization was not explicitly reseeded between configurations, so it does not isolate a general causal benefit from removing augmentation.</p>
+      </section>
+      <section class="article-section">
+        <h2>Error analysis</h2>
+        <p>Per-class metrics, confused-pair counts, prediction grids, and Grad-CAM support inspection of failed predictions. The report discusses red-food similarity, baked-dessert ambiguity, mixed ingredients and occlusion, lighting and framing, and presentation variation or suspected label noise. These are hypotheses about error mechanisms rather than independently validated causal categories.</p>
+        <div class="result-grid">
+          <Figure src={examples} alt="High-confidence correct, difficult correct, and failed fine-tuned ResNet-50 predictions" caption="Fine-tuned model examples: confident correct, difficult correct, and failed predictions." />
+          <Figure src={gradcam} alt="Grad-CAM overlays comparing the custom CNN, frozen ResNet-50, and fine-tuned ResNet-50" caption="Qualitative Grad-CAM comparison across the three primary models." />
+        </div>
+        <p>Detailed counts and representative cases are available in the <a href={external.a2Results}>result artifacts</a> and <a href={external.a2Report}>final report</a>.</p>
+      </section>
+      <section class="article-section">
+        <h2>Limitations and conclusion</h2>
+        <p>Transfer learning improves the primary comparison on the selected ten classes. Results cover one seed, one pretrained backbone family, and 224×224 inputs. Perceptual-hash candidates span partitions, and frozen-backbone normalization buffers can still update during training. Peak memory can include earlier models retained in GPU memory.</p>
+        <p>The repository provides source, manifests, aggregate CSVs, figures, and reconstruction instructions. Original run identifiers, checkpoint hashes, serialized epoch histories, and a locked environment were not retained. Epoch diagnostics in the report remain author-provided; agreement with aggregate CSVs does not independently reproduce the experiments.</p>
+      </section>
+      <section class="article-section">
+        <h2>Assignment-specific AI Usage Disclosure</h2>
+        <p>Google Gemini was used during M1, M2, and M3. Four detailed M2/M3 records cover auditing, CUDA measurements, Grad-CAM, qualitative analysis, and report formatting. OpenAI Codex supported final-report editing, consistency checks, and layout review. <a href={external.a2Ai}>Read the complete Assignment 2 log.</a></p>
+      </section>
+    </article>
+    <aside class="side-stack"><section class="resource-card">
+      <p class="eyebrow">Resources</p><h2>Deliverables</h2>
+      <a class="resource-link" href={external.a2Source}><span>Source code</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a2Readme}><span>Reproduction & checkpoints</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a2Metadata}><span>Reproducibility metadata</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a2Results}><span>All result artifacts</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a2Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a2ProposalPdf}><span>Formatted proposal PDF</span><b>Open ↗</b></a>
+      <p><span class="status status-complete">Instructor approval · Approved</span></p>
+      <a class="resource-link" href={external.a2Report}><span>Final report</span><b>Open ↗</b></a>
+      <div class="pending">Presentation slides · pending</div>
+      <div class="pending">Presentation video · pending</div>
+      <a class="resource-link" href={external.a2Ai}><span>AI disclosure</span><b>Open ↗</b></a>
+    </section></aside>
+  </section>
 </BaseLayout>

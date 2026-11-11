@@ -28,10 +28,12 @@ export const external = {
   a1Video: "https://youtu.be/Wbq5g0MIwDk",
   a2Source: `${site.repository}/tree/main/assignments/assignment-2/source`,
   a2Readme: `${site.repository}/blob/main/assignments/assignment-2/source/README.md`,
+  a2Metadata: `${site.repository}/blob/main/assignments/assignment-2/source/reproducibility.json`,
   a2Results: `${site.repository}/tree/main/assignments/assignment-2/source/results`,
   a2Ai: `${site.repository}/blob/main/assignments/assignment-2/source/AI_USAGE.md`,
   a2Proposal: `${site.repository}/blob/main/assignments/assignment-2/proposal/dataset.md`,
   a2ProposalPdf: `${site.repository}/blob/main/assignments/assignment-2/proposal/assignment-2-dataset-proposal.pdf`,
+  a2Report: `${site.repository}/blob/main/assignments/assignment-2/report/assignment-2-final-report.pdf`,
   rootAi: `${site.repository}/blob/main/AI_USAGE.md`
 } as const;
 
@@ -45,9 +47,9 @@ export const aiSummaries = [
   },
   {
     assignment: "Assignment 2",
-    tool: "Google Gemini (2026 release)",
-    summary: "Four documented uses: integrity auditing, CUDA measurements, Grad-CAM visualization, and qualitative/error-analysis figures.",
-    verification: "Verified against official Python, PIL, PyTorch, and scikit-learn documentation plus manifests and result CSVs.",
+    tool: "Google Gemini + OpenAI Codex",
+    summary: "Gemini use is confirmed across M1–M3, with four detailed M2/M3 records for implementation and analysis. Codex assisted with final-report editing, consistency checks, and layout review.",
+    verification: "Verified against official documentation, manifests, committed result CSVs, repository metadata, and the rendered final report.",
     href: external.a2Ai
   },
   {
