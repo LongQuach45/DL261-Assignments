@@ -6,6 +6,8 @@
 **Course:** Deep Learning and Its Applications (`CO3133`) — Semester 261  
 **Instructor:** Dr. Le Thanh Sach
 
+**Presentation video:** [Watch Assignment 2 on YouTube](https://www.youtube.com/watch?v=HHNRGS3sljo)
+
 
 ## 2. Project Structure
 

@@ -31,6 +31,11 @@ npm run verify
 └── AI_USAGE.md
 ```
 
+## Presentation Videos
+
+- [Assignment 1 — Watch on YouTube](https://youtu.be/Wbq5g0MIwDk)
+- [Assignment 2 — Watch on YouTube](https://www.youtube.com/watch?v=HHNRGS3sljo)
+
 ## Assignment Reproduction
 
 Each completed assignment contains its own installation, data preparation, training, evaluation, checkpoint, environment, and result-traceability instructions:
