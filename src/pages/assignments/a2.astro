@@ -104,11 +104,8 @@ const seconds = (value: string) => value + " s";
       <a class="resource-link" href={external.a2Readme}><span>Reproduction & checkpoints</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a2Metadata}><span>Reproducibility metadata</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a2Results}><span>All result artifacts</span><b>Open ↗</b></a>
-      <div class="proposal-resources" role="group" aria-label="Approved dataset proposal">
-        <a class="resource-link" href={external.a2Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
-        <a class="resource-link" href={external.a2ProposalPdf}><span>Formatted proposal PDF</span><b>Open ↗</b></a>
-        <p><span class="status status-complete">Instructor approval · Approved</span></p>
-      </div>
+      <a class="resource-link" href={external.a2Proposal}><span class="proposal-label">Dataset proposal <span class="status status-complete">Approved</span></span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a2ProposalPdf}><span>Formatted proposal PDF</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a2Report}><span>Final report</span><b>Open ↗</b></a>
       <div class="pending">Presentation slides · pending</div>
       <div class="pending">Presentation video · pending</div>
@@ -118,7 +115,5 @@ const seconds = (value: string) => value + " s";
 </BaseLayout>
 
 <style>
-  .proposal-resources { border-bottom: 1px solid var(--line); padding-bottom: .75rem; }
-  .proposal-resources > .resource-link:last-of-type { border-bottom: 0; }
-  .proposal-resources p { margin: .25rem 0 0; }
+  .proposal-label { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; }
 </style>

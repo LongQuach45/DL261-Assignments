@@ -63,7 +63,7 @@ const a2 = readFileSync(resolve(root, "dist/assignments/a2.html"), "utf8");
 for (const artifact of ["assignment-2-dataset-proposal.pdf", "assignment-2-final-report.pdf"]) {
   if (!a2.includes(artifact)) throw new Error(`Assignment 2 page is missing deliverable: ${artifact}`);
 }
-if (!a2.includes("Instructor approval · Approved")) {
+if (!a2.includes(">Approved</span>")) {
   throw new Error("Assignment 2 page does not show the approved dataset status");
 }
 
