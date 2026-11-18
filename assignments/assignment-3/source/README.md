@@ -2,7 +2,9 @@
 
 **Group:** MobyDick · **Milestone:** M1 proposal available · **Approval:** Pending instructor approval
 
-Proposed task: six-class intended-emotion classification from paired speech and silent video in CREMA-D. The pinned metadata audit identifies 7,438 eligible recording pairs and actor-disjoint train/validation/test counts of 5,965/735/738. Raw-media integrity checks remain pending.
+Proposed task: **image–text news classification** using N24News article headlines and their associated images. The six categories are Food, Health, Science, Sports, Technology, and Travel.
+
+The provisional metadata selection contains 7,500 pairs: 6,000 training, 750 validation, and 750 test, with balanced classes. Duplicate article/image/headline components are filtered before deterministic selection. Image validation and applicable usage-permission confirmation remain pending.
 
 - [Dataset Proposal](../proposal/dataset.md)
 - [Preliminary evidence and handbook mapping](../proposal/README.md)
@@ -11,14 +13,14 @@ Proposed task: six-class intended-emotion classification from paired speech and 
 
 ## Reproduce M1 evidence
 
-Install Python 3 and GitHub CLI, authenticate with `gh auth login` if necessary, and run from the repository root:
+Install Python 3 and GitHub CLI, authenticate with `gh auth login` if needed, then run from the repository root:
 
 ```bash
 python3 assignments/assignment-3/proposal/audit_metadata.py
 ```
 
-This checks public metadata against committed evidence; it does not retrieve media or train models. See the evidence notes for prerequisites and regeneration instructions.
+This verifies pinned public metadata against committed evidence; it does not download image bodies or train models. See the evidence notes for regeneration and optional HEAD probes.
 
 ## Implementation and final deliverables
 
-Main experiments await instructor approval. Training/evaluation code, a locked environment, actual hardware details, checkpoints or reconstruction instructions, report, slides, and YouTube video are pending. No training commands or measured model results are available at M1.
+Main experiments await instructor approval, confirmation of applicable usage permissions, and image/pair validation. Training/evaluation code, locked dependencies, actual hardware details, checkpoints or reconstruction instructions, report, slides, and YouTube video are pending. No training commands or measured model results are available at M1.

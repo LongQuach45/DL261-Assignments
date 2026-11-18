@@ -1,4 +1,4 @@
-split,actors,paired_samples,ANG,DIS,FEA,HAP,NEU,SAD
-train,73,5965,1019,1018,1019,1019,872,1018
-validation,9,735,126,126,126,126,106,125
-test,9,738,126,126,126,126,108,126
+split,paired_samples,Food,Health,Science,Sports,Technology,Travel
+train,6000,1000,1000,1000,1000,1000,1000
+validation,750,125,125,125,125,125,125
+test,750,125,125,125,125,125,125

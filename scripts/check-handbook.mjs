@@ -68,7 +68,7 @@ if (!a2.includes(">Approved</span>")) {
 }
 
 const a3 = readFileSync(resolve(root, "dist/assignments/a3.html"), "utf8");
-for (const field of ["M1 proposal available", "Pending instructor approval", "CREMA-D", "7,438", "5,965 / 735 / 738", "No experimental results", "Final report · pending", "Slides · pending", "YouTube video · pending"]) {
+for (const field of ["M1 proposal available", "Pending instructor approval", "N24News", "7,500", "6,000 / 750 / 750", "Usage terms remain unresolved", "DistilBERT", "No experimental results", "Final report · pending", "Slides · pending", "YouTube video · pending"]) {
   if (!a3.includes(field)) throw new Error(`Assignment 3 M1 page is missing: ${field}`);
 }
 const repository = "https://github.com/LongQuach45/DL261-Assignments/blob/main/";
@@ -89,31 +89,58 @@ for (const file of ["dist/index.html", "dist/ai-usage.html"]) {
 
 const evidenceDir = "assignments/assignment-3/proposal";
 const audit = JSON.parse(readFileSync(resolve(root, evidenceDir, "metadata-audit.json"), "utf8"));
-const actors = JSON.parse(readFileSync(resolve(root, evidenceDir, "actors.json"), "utf8"));
-const allActors = Object.values(actors).flat();
-if (new Set(allActors).size !== allActors.length || allActors.length !== audit.actors) {
-  throw new Error("Assignment 3 actor lists overlap or omit actors");
+const readCsv = (file) => {
+  const lines = readFileSync(resolve(root, evidenceDir, file), "utf8").trimEnd().split("\n");
+  const header = lines.shift().split(",");
+  return lines.map((line) => {
+    const values = line.split(",");
+    if (values.length !== header.length) throw new Error(`Unexpected evidence CSV layout: ${file}`);
+    return Object.fromEntries(header.map((key, i) => [key, values[i]]));
+  });
+};
+const records = readCsv("manifest.csv");
+const groups = readCsv("groups.csv");
+const exclusions = readCsv("exclusions.csv");
+const classRows = readCsv("class-counts.csv");
+const splitRows = readCsv("split-counts.csv");
+if (records.length !== audit.metadata_selected_pairs || records.length !== 7500) throw new Error("A3 provisional selection count differs");
+if (audit.dataset !== "N24News" || audit.selected_categories.length !== 6) throw new Error("A3 dataset/task metadata differs");
+for (const key of ["image_id", "source_row_index", "group_id", "article_url_sha256", "image_url_sha256", "headline_normalized_sha256"]) {
+  if (new Set(records.map((r) => r[key])).size !== records.length) throw new Error(`A3 duplicate selected ${key}`);
 }
-const manifestLines = readFileSync(resolve(root, evidenceDir, "manifest.csv"), "utf8").trimEnd().split("\n");
-const manifestHeader = manifestLines.shift().split(",");
-const records = manifestLines.map((line) => Object.fromEntries(line.split(",").map((value, i) => [manifestHeader[i], value])));
-if (new Set(records.map((r) => r.recording_id)).size !== audit.matched_recording_ids) throw new Error("A3 manifest recording IDs differ from audit");
 for (const record of records) {
-  if (!actors[record.split]?.includes(record.actor_id)) throw new Error(`A3 actor leakage: ${record.recording_id}`);
+  if (!audit.selected_categories.includes(record.category) || record.status !== "selected_pending_media") throw new Error("A3 manifest claims unexpected eligibility/category");
+  if (!["train", "validation", "test"].includes(record.split)) throw new Error("A3 manifest has invalid partition");
 }
-const eligible = records.filter((r) => r.status === "eligible");
-if (eligible.length !== audit.eligible_pairs || records.length - eligible.length !== audit.excluded_known_defects) throw new Error("A3 eligibility totals differ from audit");
+if (groups.length !== audit.selected_category_records || new Set(groups.map((r) => r.image_id)).size !== groups.length) throw new Error("A3 source grouping coverage differs");
+const selectedIds = new Set(records.map((r) => r.image_id));
+const selectedGroups = groups.filter((r) => r.status === "selected_pending_media");
+if (selectedGroups.length !== records.length || selectedGroups.some((r) => !selectedIds.has(r.image_id))) throw new Error("A3 grouping ledger and manifest differ");
+if (exclusions.length !== audit.duplicate_records_removed + audit.conflicting_label_records) throw new Error("A3 exclusion counts differ");
 for (const split of audit.splits) {
-  const members = eligible.filter((r) => r.split === split.split);
-  if (members.length !== split.paired_samples || actors[split.split].length !== split.actors) throw new Error(`A3 split count differs: ${split.split}`);
-  for (const code of Object.keys(audit.class_counts)) {
-    if (members.filter((r) => r.emotion_code === code).length !== split[code]) throw new Error(`A3 class count differs: ${split.split}/${code}`);
+  const members = records.filter((r) => r.split === split.split);
+  const csv = splitRows.find((r) => r.split === split.split);
+  if (members.length !== split.paired_samples || Number(csv?.paired_samples) !== members.length) throw new Error(`A3 split count differs: ${split.split}`);
+  for (const category of audit.selected_categories) {
+    const n = members.filter((r) => r.category === category).length;
+    if (n !== split[category] || n !== Number(csv[category])) throw new Error(`A3 class count differs: ${split.split}/${category}`);
   }
 }
-if (Object.keys(audit.class_counts).length < 5 || eligible.length < 5000) throw new Error("A3 does not meet default classification thresholds");
-for (const artifact of ["class-counts.csv", "split-counts.csv", "exclusions.csv", "audit_metadata.py"]) {
-  if (!existsSync(resolve(root, evidenceDir, artifact))) throw new Error(`A3 missing evidence: ${artifact}`);
+for (const category of audit.selected_categories) {
+  const csv = classRows.find((r) => r.category === category);
+  if (records.filter((r) => r.category === category).length !== audit.class_counts[category] ||
+      Number(csv?.metadata_selected_pairs) !== audit.class_counts[category] ||
+      Number(csv?.candidate_representatives) !== audit.candidate_counts[category]) throw new Error(`A3 class summary differs: ${category}`);
 }
+if (audit.selected_categories.length < 5 || records.length < 5000) throw new Error("A3 metadata-selected target is below default thresholds");
+if (existsSync(resolve(root, evidenceDir, "actors.json"))) throw new Error("Obsolete A3 actor split artifact remains");
+const probes = JSON.parse(readFileSync(resolve(root, evidenceDir, "image-probes.json"), "utf8"));
+if (probes.source_commit !== audit.source_commit || probes.probes.length !== 6 ||
+    new Set(probes.probes.map((r) => r.category)).size !== 6) throw new Error("A3 source-image probe coverage differs");
+for (const probe of probes.probes) {
+  if (probe.method !== "HEAD" || !selectedIds.has(probe.image_id)) throw new Error("A3 probe is not a selected metadata record");
+}
+if (/CREMA-D|actor-disjoint|7,438|5,965/.test(a3)) throw new Error("A3 page retains the superseded task");
 
 for (const file of pages) {
   const html = readFileSync(resolve(root, file), "utf8");

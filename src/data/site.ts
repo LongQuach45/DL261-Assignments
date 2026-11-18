@@ -60,8 +60,8 @@ export const aiSummaries = [
   {
     assignment: "Assignment 3",
     tool: "OpenAI Codex (model/version not recorded)",
-    summary: "Assisted with CREMA-D research, preliminary metadata auditing, the M1 Dataset Proposal, and experiment planning.",
-    verification: "Automated checks against pinned source metadata and the handbook; student review, media checks, and instructor approval remain pending.",
+    summary: "Assisted with N24News research, duplicate-aware metadata selection, the image–text M1 Dataset Proposal, and experiment planning.",
+    verification: "Automated checks against pinned metadata and six image-header probes; student review, usage permissions, full image validation, and instructor approval remain pending.",
     href: external.a3Ai
   },
   {

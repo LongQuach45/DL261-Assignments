@@ -52,6 +52,9 @@ assignments:
     reproducibility_metadata: "assignments/assignment-2/source/reproducibility.json"
   a3:
     title: "Multimodal Deep Learning"
+    task: "Image–text news classification"
+    dataset: "N24News six-category subset"
+    usage_permissions: "Pending confirmation"
     page: "https://longquach45.github.io/DL261-Assignments/assignments/a3.html"
     source: "assignments/assignment-3/source"
     dataset_proposal: "assignments/assignment-3/proposal/dataset.md"

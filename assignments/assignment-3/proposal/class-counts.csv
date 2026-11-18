@@ -1,7 +1,7 @@
-emotion_code,label,paired_samples
-ANG,anger,1271
-DIS,disgust,1270
-FEA,fear,1271
-HAP,happy,1271
-NEU,neutral,1086
-SAD,sad,1269
+category,source_pairs,candidate_representatives,metadata_selected_pairs,train,validation,test
+Food,3000,2616,1250,1000,125,125
+Health,3000,2997,1250,1000,125,125
+Science,3000,2998,1250,1000,125,125
+Sports,3000,2984,1250,1000,125,125
+Technology,3000,2977,1250,1000,125,125
+Travel,3000,2960,1250,1000,125,125
