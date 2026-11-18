@@ -5,7 +5,7 @@
 **Dataset:** Food-101, ten-class subset<br>
 **Status:** Approved
 
-> The [PDF proposal](assignment-2-dataset-proposal.pdf) is the formatted version. This file is the concise review specification; no experimental results are reported.
+This file is the approved Dataset Proposal record; no experimental results are reported.
 
 ![Illustrative Food-101 image grid](food-101.jpg)
 

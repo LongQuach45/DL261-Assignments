@@ -1,0 +1,5 @@
+recording_id,reason
+1064_IEO_DIS_MD,"Author reports one-minute compilation, not the named utterance."
+1064_TIE_SAD_XX,Author reports video with no duration.
+1076_MTI_NEU_XX,Author reports very short video with no audio.
+1076_MTI_SAD_XX,"Author reports error picture, missing audio, very short video."

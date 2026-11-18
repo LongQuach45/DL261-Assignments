@@ -1,0 +1,7 @@
+emotion_code,label,paired_samples
+ANG,anger,1271
+DIS,disgust,1270
+FEA,fear,1271
+HAP,happy,1271
+NEU,neutral,1086
+SAD,sad,1269

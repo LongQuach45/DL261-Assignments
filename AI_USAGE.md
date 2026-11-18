@@ -6,7 +6,7 @@ This repository keeps course-level AI-use information here and detailed assignme
 
 - Assignment 1: four Google Gemini-assisted visualization, CSV, robustness, and report-formatting tasks plus one OpenAI Codex-assisted final-report consistency review are documented in [assignment-1/source/AI_USAGE.md](assignments/assignment-1/source/AI_USAGE.md).
 - Assignment 2: Google Gemini use during M1, M2, and M3 is confirmed. Four detailed M2/M3 records cover integrity auditing, CUDA measurements, Grad-CAM, qualitative analysis, and report formatting; an additional OpenAI Codex record covers final-report editing and consistency review. See [assignment-2/source/AI_USAGE.md](assignments/assignment-2/source/AI_USAGE.md).
-- Assignment 3: not started; no assignment-specific AI record exists yet.
+- Assignment 3: OpenAI Codex assisted with M1 dataset research, metadata auditing, proposal/experiment planning, and repository/webpage updates. Automated source checks are documented; student verification and instructor approval remain pending. See [assignment-3/source/AI_USAGE.md](assignments/assignment-3/source/AI_USAGE.md).
 
 ## Course Website Record
 
@@ -24,7 +24,7 @@ This repository keeps course-level AI-use information here and detailed assignme
 
 - Assignment 1: [detailed record](assignments/assignment-1/source/AI_USAGE.md)
 - Assignment 2: [detailed record](assignments/assignment-2/source/AI_USAGE.md)
-- Assignment 3: pending only because the assignment has not started.
+- Assignment 3: [detailed M1 record](assignments/assignment-3/source/AI_USAGE.md)
 
 ## No-AI Declaration Template
 

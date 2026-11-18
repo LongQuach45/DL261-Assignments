@@ -23,7 +23,7 @@ npm run verify
 ├── assignments/
 │   ├── assignment-1/     # Fashion-MNIST architecture comparison
 │   ├── assignment-2/     # Food-101 specialized image classification
-│   └── assignment-3/     # Multimodal deep learning, planned
+│   └── assignment-3/     # CREMA-D M1 proposal; instructor approval pending
 ├── config/deliverables.yml
 ├── src/                  # Astro pages, components, metadata, and styles
 ├── scripts/check-handbook.mjs
@@ -43,6 +43,8 @@ Each completed assignment contains its own installation, data preparation, train
 - [Assignment 1 source README](assignments/assignment-1/source/README.md)
 - [Assignment 2 source README](assignments/assignment-2/source/README.md)
 - [Assignment 2 Dataset Proposal](assignments/assignment-2/proposal/dataset.md)
+- [Assignment 3 M1 Dataset Proposal](assignments/assignment-3/proposal/dataset.md) — pending instructor approval
+- [Assignment 3 metadata audit and evidence](assignments/assignment-3/proposal/README.md)
 
 ## AI Usage
 

@@ -1,0 +1,80 @@
+{
+  "source_repository": "https://github.com/CheyneyComputerScience/CREMA-D",
+  "source_commit": "1658cd342dff90010aa843eaeebd53610a08b1dc",
+  "annotation_file": "processedResults/summaryTable.csv",
+  "annotation_sha256": "fb0e382700d32c0d9adc0c6815292215a36bcf912f2657048862c91e3bd2b317",
+  "evidence_scope": "Upstream file paths and annotations only; media bytes not downloaded or decoded.",
+  "original_audio_files": 7442,
+  "original_video_files": 7442,
+  "matched_recording_ids": 7442,
+  "audio_without_video_path": 0,
+  "video_without_audio_path": 0,
+  "actors": 91,
+  "excluded_known_defects": 4,
+  "eligible_pairs": 7438,
+  "seed": 42,
+  "actor_assignment": "Sort all actor IDs, random.Random(42).shuffle, then take 73/9/9 actors; retain assignment after exclusions.",
+  "class_counts": {
+    "ANG": 1271,
+    "DIS": 1270,
+    "FEA": 1271,
+    "HAP": 1271,
+    "NEU": 1086,
+    "SAD": 1269
+  },
+  "splits": [
+    {
+      "split": "train",
+      "actors": 73,
+      "paired_samples": 5965,
+      "ANG": 1019,
+      "DIS": 1018,
+      "FEA": 1019,
+      "HAP": 1019,
+      "NEU": 872,
+      "SAD": 1018
+    },
+    {
+      "split": "validation",
+      "actors": 9,
+      "paired_samples": 735,
+      "ANG": 126,
+      "DIS": 126,
+      "FEA": 126,
+      "HAP": 126,
+      "NEU": 106,
+      "SAD": 125
+    },
+    {
+      "split": "test",
+      "actors": 9,
+      "paired_samples": 738,
+      "ANG": 126,
+      "DIS": 126,
+      "FEA": 126,
+      "HAP": 126,
+      "NEU": 108,
+      "SAD": 126
+    }
+  ],
+  "pair_quality": {
+    "eligible_annotation_rows": 7438,
+    "empty_votes": {
+      "VoiceVote": 0,
+      "FaceVote": 0,
+      "MultiModalVote": 0
+    },
+    "single_valued_voice_face_pairs": 6379,
+    "voice_face_disagreements": 3020,
+    "tied_or_other_voice_face_pairs": 1059
+  },
+  "pending_media_checks": [
+    "LFS payload retrieval",
+    "decoding",
+    "silence",
+    "duration",
+    "synchronization",
+    "content duplicates",
+    "representative playback"
+  ]
+}

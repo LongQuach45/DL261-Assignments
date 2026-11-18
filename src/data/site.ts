@@ -32,10 +32,13 @@ export const external = {
   a2Results: `${site.repository}/tree/main/assignments/assignment-2/source/results`,
   a2Ai: `${site.repository}/blob/main/assignments/assignment-2/source/AI_USAGE.md`,
   a2Proposal: `${site.repository}/blob/main/assignments/assignment-2/proposal/dataset.md`,
-  a2ProposalPdf: `${site.repository}/blob/main/assignments/assignment-2/proposal/assignment-2-dataset-proposal.pdf`,
   a2Report: `${site.repository}/blob/main/assignments/assignment-2/report/assignment-2-final-report.pdf`,
   a2Slides: `${site.repository}/blob/main/assignments/assignment-2/slide/assignment-2-presentation-slides.pdf`,
   a2Video: "https://www.youtube.com/watch?v=HHNRGS3sljo",
+  a3Readme: `${site.repository}/blob/main/assignments/assignment-3/source/README.md`,
+  a3Proposal: `${site.repository}/blob/main/assignments/assignment-3/proposal/dataset.md`,
+  a3Evidence: `${site.repository}/blob/main/assignments/assignment-3/proposal/README.md`,
+  a3Ai: `${site.repository}/blob/main/assignments/assignment-3/source/AI_USAGE.md`,
   rootAi: `${site.repository}/blob/main/AI_USAGE.md`
 } as const;
 
@@ -53,6 +56,13 @@ export const aiSummaries = [
     summary: "Gemini use is confirmed across M1–M3, with four detailed M2/M3 records for implementation and analysis. Codex assisted with final-report editing, consistency checks, and layout review.",
     verification: "Verified against official documentation, manifests, committed result CSVs, repository metadata, and the rendered final report.",
     href: external.a2Ai
+  },
+  {
+    assignment: "Assignment 3",
+    tool: "OpenAI Codex (model/version not recorded)",
+    summary: "Assisted with CREMA-D research, preliminary metadata auditing, the M1 Dataset Proposal, and experiment planning.",
+    verification: "Automated checks against pinned source metadata and the handbook; student review, media checks, and instructor approval remain pending.",
+    href: external.a3Ai
   },
   {
     assignment: "Course website",

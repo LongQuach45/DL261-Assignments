@@ -1,9 +1,91 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AssignmentIdentity from "../../components/AssignmentIdentity.astro";
+import { external } from "../../data/site";
 ---
-<BaseLayout title="Assignment 3" description="Planned multimodal deep-learning course project." current="a3">
-  <section class="shell page-hero"><p class="eyebrow">Assignment 3 · Multimodal deep learning</p><div class="page-status"><span class="status status-planned">Planned</span><small>Proposal and implementation have not started.</small></div><h1>Multimodal Deep Learning</h1><p class="page-lead">Representation, fusion, and evaluation using at least two genuinely related modalities.</p></section>
+<BaseLayout title="Assignment 3" description="CREMA-D audio–visual emotion classification: M1 proposal, preliminary metadata evidence, and planned experiments." current="a3">
+  <section class="shell page-hero">
+    <p class="eyebrow">Assignment 3 · Multimodal deep learning</p>
+    <div class="page-status"><span class="status status-planned">M1 proposal available</span><small>Pending instructor approval</small></div>
+    <h1>Emotion through<br />voice and expression.</h1>
+    <p class="page-lead">CREMA-D audio–visual emotion classification: paired utterances, unseen actors, and a planned comparison of unimodal and fusion models.</p>
+    <div class="button-row"><a class="button" href={external.a3Proposal}>Read Dataset Proposal ↗</a><a class="text-link" href={external.a3Evidence}>Inspect preliminary evidence ↗</a></div>
+  </section>
   <AssignmentIdentity />
-  <section class="shell article-layout"><article><div class="notice"><strong>Planned assignment record.</strong><p>This page retains each required handbook section without claiming an unselected dataset, method, experiment, or result.</p></div><section class="article-section"><h2>Problem statement</h2><p>The task, modalities, input, output, prediction unit, motivation, and alignment challenge will be stated in the approved Dataset Proposal.</p></section><section class="article-section"><h2>Dataset description and EDA</h2><p>Dataset source, version, license, paired sample count, annotations, missing-modality rate, pair quality, split unit, leakage prevention, and distributions will be added after proposal approval.</p></section><section class="article-section"><h2>Methodology</h2><p>Modality encoders, representations, alignment, fusion, losses, training procedure, missing-modality handling, and pretraining choices will be documented with the implementation.</p></section><section class="article-section"><h2>Experimental setup</h2><p>Hypotheses, controls, metrics, hardware, software versions, seeds, checkpoint rule, and compute plan will be published before final experiments.</p></section><section class="article-section"><h2>Results</h2><p>Unimodal baselines, simple fusion, improved multimodal results, qualitative examples, ablations, and compute measurements will be published after execution.</p></section><section class="article-section"><h2>Comparison and discussion</h2><p>The final comparison will explain when modalities support or conflict with one another and how fusion changes the result.</p></section><section class="article-section"><h2>Error analysis</h2><p>Support cases, conflict cases, failure groups, examples, rates, causes, and improvements will be added with final analysis.</p></section><section class="article-section"><h2>Limitations and conclusion</h2><p>Data, alignment, method, compute, and generalization limitations will be summarized in the final report.</p></section><section class="article-section"><h2>Assignment-specific AI Usage Disclosure</h2><p>The assignment-specific disclosure will be added when Assignment 3 work begins. The course-level disclosure is available from the site navigation.</p></section></article><aside class="side-stack"><section class="resource-card"><p class="eyebrow">Resources</p><h2>Deliverables</h2><div class="pending">Source code · pending</div><div class="pending">Dataset proposal and approval · pending</div><div class="pending">Checkpoints · pending</div><div class="pending">Final report · pending</div><div class="pending">Slides · pending</div><div class="pending">YouTube video · pending</div></section></aside></section>
+  <section class="shell article-layout">
+    <article>
+      <div class="notice"><strong>M1 proposal record · Pending instructor approval.</strong><p>The proposal and metadata audit are available for review. Main experiments await approval; raw-media checks, trained models, and experimental results are pending.</p></div>
+      <section class="article-section">
+        <h2>Problem statement</h2>
+        <p>Predict one of six intended emotions from speech and silent video of the same utterance: anger, disgust, fear, happy, neutral, or sad. Each prediction concerns a complete paired recording. The project will examine when vocal and facial evidence support or conflict with each other.</p>
+        <p>Filename annotations identify the actor's intended emotion. Crowd-perceived emotions are supplementary analysis, not alternative training targets. Fixed sentence text is not a third modality.</p>
+      </section>
+      <section class="article-section">
+        <h2>Dataset description and EDA</h2>
+        <p><a href="https://github.com/CheyneyComputerScience/CREMA-D">CREMA-D</a> provides 7,442 recordings from 91 actors. The proposal pins source revision <a href="https://github.com/CheyneyComputerScience/CREMA-D/tree/1658cd342dff90010aa843eaeebd53610a08b1dc"><code>1658cd3</code></a>. The database is licensed under ODbL 1.0, with individual contents under DbCL 1.0.</p>
+        <div class="table-wrap"><table><caption>Verified source metadata · before raw-media validation</caption><thead><tr><th scope="col">Finding</th><th scope="col">Count</th></tr></thead><tbody>
+          <tr><td>Matched WAV/video recording IDs</td><td>7,442</td></tr>
+          <tr><td>Missing counterpart paths</td><td>0</td></tr>
+          <tr><td>Author-documented defective pairs excluded</td><td>4</td></tr>
+          <tr><td>Planned eligible pairs</td><td>7,438</td></tr>
+          <tr><td>Eligible pairs per class</td><td>1,086–1,271 across six classes</td></tr>
+          <tr><td>Actor-disjoint train / validation / test</td><td>5,965 / 735 / 738</td></tr>
+        </tbody></table></div>
+        <p>Among 6,379 eligible recordings with single-valued voice and face crowd votes, 3,020 disagree. Another 1,059 contain tied or other non-single votes. This describes perceptual conflict, not a measured file-mismatch rate. Decoding, silence, duration, synchronization, content duplicates, and representative playback remain unverified.</p>
+        <p>The <a href={external.a3Proposal}>proposal</a> includes class counts, known exclusions, source citations, and subset rules. The <a href={external.a3Evidence}>evidence record</a> provides the audit script, actor lists, manifest, aggregate CSVs, and annotation checksum.</p>
+      </section>
+      <section class="article-section">
+        <h2>Methodology</h2>
+        <p>Planned audio input is a masked 64-bin log-mel representation at 16 kHz. Planned visual input is eight uniformly sampled silent RGB frames per utterance at 224×224. Recording IDs align modalities; actor IDs, filenames, and crowd votes are not model features.</p>
+        <div class="table-wrap"><table><caption>Planned configurations · no training performed</caption><thead><tr><th scope="col">Configuration</th><th scope="col">Method</th></tr></thead><tbody>
+          <tr><td>Audio only</td><td>Custom CNN, masked pooling, 128-dimensional embedding, six-class head</td></tr>
+          <tr><td>Video only</td><td>Frozen ImageNet ResNet-18, temporal mean pooling, six-class head</td></tr>
+          <tr><td>Simple fusion</td><td>Concatenated frozen encoder embeddings and MLP</td></tr>
+          <tr><td>Improved fusion</td><td>Projected audio/video embeddings with learned gated weighting</td></tr>
+          <tr><td>Gate ablation</td><td>Same projection/classifier design with equal fixed modality weights</td></tr>
+        </tbody></table></div>
+        <p>Train unimodal models first with cross-entropy, then freeze selected encoders for fusion training. The visual backbone remains in evaluation mode. Missing raw modalities exclude the pair from the primary benchmark; inference-time modality removal is a separate diagnostic.</p>
+      </section>
+      <section class="article-section">
+        <h2>Experimental setup</h2>
+        <p>The split unit is the actor: shuffle sorted actor IDs with Python seed 42 and assign 73/9/9 actors. Keep all recordings and derived frames from each actor together. Use the same manifests, deterministic preprocessing, and seed across configurations; reserve test evaluation until selection is complete.</p>
+        <p>Initial budget: AdamW, learning rate 0.001, weight decay 0.0001, batch size 32, and at most 20 epochs per configuration. Select highest validation macro-F1, then lower validation loss and earlier epoch. Record exact software versions, actual hardware, configurations, logs, checkpoint hashes, run IDs, and commit/tag during implementation.</p>
+        <p>Planning estimate: one approximately 8 GB GPU, 20 GB free storage, and 2–6 GPU-hours including feature extraction. Hardware availability and runtime require confirmation and a pilot after approval. M1 is due 18 November, M2 on 25 November, and M3 on 2 December 2026, each at 23:59 GMT+7.</p>
+      </section>
+      <section class="article-section">
+        <h2>Results</h2>
+        <p>No experimental results are available at M1. Planned outputs include accuracy, macro-F1, per-class metrics, confusion matrices, learning curves, qualitative examples, parameters, training time, inference latency, and peak memory. Preliminary dataset counts above are metadata findings, not model results.</p>
+      </section>
+      <section class="article-section">
+        <h2>Comparison and discussion</h2>
+        <p>Compare audio-only and video-only baselines with concatenation and gated fusion. The mandatory gate ablation tests adaptive versus equal weighting with the same selected encoder features and training protocol. Report hypotheses, changed/fixed factors, validation selection criteria, capacity differences, and compute costs. Fusion is not assumed to outperform either modality.</p>
+      </section>
+      <section class="article-section">
+        <h2>Error analysis</h2>
+        <p>After approval and execution, examine support cases, conflicting predictions, low-intensity expressions, weak audio or facial cues, and intended/perceived emotion disagreements. Report representative examples and counts. Diagnostic modality removal will be labelled separately from independently trained unimodal models.</p>
+      </section>
+      <section class="article-section">
+        <h2>Limitations and conclusion</h2>
+        <p>CREMA-D contains acted English expressions from a limited actor pool and twelve fixed sentences. The actor-disjoint split targets unseen actors, not unseen sentences or spontaneous real-world emotion. Metadata correspondence does not establish successful media decoding or synchronization. The planned frozen visual encoder, single seed, and estimated compute budget constrain the later conclusions.</p>
+        <p>The M1 proposal is ready for group review and instructor consideration. Submission and approval are external actions; neither is claimed by this public record.</p>
+      </section>
+      <section class="article-section">
+        <h2>Assignment-specific AI Usage Disclosure</h2>
+        <p>OpenAI Codex assisted with dataset research, metadata auditing, proposal drafting, experiment planning, and repository/webpage updates. Automated checks used the pinned source metadata and handbook; student verification remains pending. No training or raw-media inspection was performed. <a href={external.a3Ai}>Read the complete Assignment 3 log.</a></p>
+      </section>
+    </article>
+    <aside class="side-stack"><section class="resource-card">
+      <p class="eyebrow">Resources</p><h2>Deliverables</h2>
+      <a class="resource-link" href={external.a3Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
+      <div class="pending">Pending instructor approval</div>
+      <a class="resource-link" href={external.a3Evidence}><span>Preliminary evidence</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a3Readme}><span>M1 README</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a3Ai}><span>AI disclosure</span><b>Open ↗</b></a>
+      <div class="pending">Training source code · pending approval</div>
+      <div class="pending">Checkpoints / reconstruction · pending implementation</div>
+      <div class="pending">Final report · pending</div>
+      <div class="pending">Slides · pending</div>
+      <div class="pending">YouTube video · pending</div>
+    </section></aside>
+  </section>
 </BaseLayout>
