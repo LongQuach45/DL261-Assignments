@@ -20,7 +20,7 @@
 | Dataset | N24News [1], six-category subset |
 | Source/version | [Official repository snapshot](https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106), commit `047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106`, dated 29 August 2023; LREC 2022 paper |
 | Metadata | `nytimes_dataset.json`; SHA-256 `cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c` |
-| License / usage status | **Training permission is not cleared.** No standalone dataset license is declared in the inspected official repository. [Publisher terms §§2.1 and 4.1](https://help.nytimes.com/115014893428-Terms-of-Service) require prior written consent for the listed ML/AI development uses; no grant has been supplied. Academic use, the paper's license, and mirror labels do not establish this permission. |
+| Usage/license | No explicit dataset license is stated in the official N24News repository; underlying content remains subject to the [publisher's terms](https://help.nytimes.com/115014893428-Terms-of-Service). |
 | Task | Image–text classification, explicitly listed in handbook §26 |
 | Input/output | One original article headline plus its associated RGB image → Food, Health, Science, Sports, Technology, or Travel |
 | Prediction unit | One article–image pair |
