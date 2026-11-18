@@ -72,7 +72,7 @@ for (const field of ["M1 proposal available", "Pending instructor approval", "N2
   if (!a3.includes(field)) throw new Error(`Assignment 3 M1 page is missing: ${field}`);
 }
 const repository = "https://github.com/LongQuach45/DL261-Assignments/blob/main/";
-for (const path of ["assignments/assignment-3/proposal/dataset.md", "assignments/assignment-3/proposal/README.md", "assignments/assignment-3/source/README.md", "assignments/assignment-3/source/AI_USAGE.md"]) {
+for (const path of ["assignments/assignment-3/proposal/dataset.md", "assignments/assignment-3/proposal/README.md", "assignments/assignment-3/proposal/pair-review.md", "assignments/assignment-3/proposal/usage-review.md", "assignments/assignment-3/source/README.md", "assignments/assignment-3/source/AI_USAGE.md"]) {
   if (!existsSync(resolve(root, path)) || !a3.includes(`href="${repository}${path}"`)) {
     throw new Error(`Missing Assignment 3 artifact or rendered repository link: ${path}`);
   }
@@ -141,6 +141,17 @@ for (const probe of probes.probes) {
   if (probe.method !== "HEAD" || !selectedIds.has(probe.image_id)) throw new Error("A3 probe is not a selected metadata record");
 }
 if (/CREMA-D|actor-disjoint|7,438|5,965/.test(a3)) throw new Error("A3 page retains the superseded task");
+const pairReview = JSON.parse(readFileSync(resolve(root, evidenceDir, "pair-review-summary.json"), "utf8"));
+const reviewRows = readCsv("pair-review.csv");
+if (pairReview.source_commit !== audit.source_commit || reviewRows.length !== pairReview.sample_pairs || reviewRows.length !== 18) throw new Error("A3 preliminary visual sample provenance differs");
+const expectedReview = audit.selected_categories.flatMap((category) => records.filter((r) => r.category === category && r.split === "train").slice(0, 3));
+for (const [i, row] of reviewRows.entries()) {
+  if (row.image_id !== expectedReview[i].image_id || row.split !== "train" || row.decoded !== "true") throw new Error("A3 reviewed pair does not match deterministic training sample");
+}
+for (const [label, n] of Object.entries(pairReview.semantic_assessments)) {
+  if (reviewRows.filter((r) => r.semantic_assessment === label).length !== n) throw new Error(`A3 semantic sample count differs: ${label}`);
+}
+if (!a3.includes("18 training pairs") || !a3.includes("training permission is not cleared")) throw new Error("A3 page omits visual review or permission limitation");
 
 for (const file of pages) {
   const html = readFileSync(resolve(root, file), "utf8");

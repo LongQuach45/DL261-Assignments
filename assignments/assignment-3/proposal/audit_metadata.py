@@ -152,9 +152,9 @@ def generate():
         "split_policy": "Within each selected category's hash order: first 1000 train, next 125 validation, final 125 test.",
         "metadata_selected_pairs": len(manifest), "class_counts": {c: 1250 for c in CLASSES}, "splits": splits,
         "status": "Provisional metadata selection; image integrity, usage permissions, and instructor approval pending.",
-        "license": "No standalone dataset license declared in the inspected official repository; paper licensing does not establish rights to underlying news content.",
-        "evidence_scope": "Pinned metadata only; HTTP HEAD probes are separately dated observations, not image decoding or pair-quality verification.",
-        "pending_checks": ["usage permission confirmation", "instructor approval", "student review", "all selected image availability and decoding", "exact/perceptual image duplicates", "semantic alignment and repeated-event review", "token lengths and truncation"],
+        "license": "Not cleared for main ML experiments. No standalone dataset license declared; publisher terms sections 2.1 and 4.1 require prior written consent for listed ML/AI uses. No applicable grant supplied; see usage-review.md.",
+        "evidence_scope": "Pinned metadata only; image-probes.json and pair-review-summary.json separately record sample HTTP and 18-pair decoding/visual observations.",
+        "pending_checks": ["usage permission confirmation or replacement dataset", "instructor approval", "student review of preliminary pair judgments", "all selected image availability and decoding", "exact/perceptual image duplicates", "full-dataset semantic alignment and repeated-event review", "publisher/text overlay assessment after preprocessing", "token lengths and truncation"],
     }
     class_rows = [dict(category=c, source_pairs=counts[c], candidate_representatives=len(by_class[c]),
                        metadata_selected_pairs=1250, train=1000, validation=125, test=125) for c in CLASSES]

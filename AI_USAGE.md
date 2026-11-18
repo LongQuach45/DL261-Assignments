@@ -6,7 +6,7 @@ This repository keeps course-level AI-use information here and detailed assignme
 
 - Assignment 1: four Google Gemini-assisted visualization, CSV, robustness, and report-formatting tasks plus one OpenAI Codex-assisted final-report consistency review are documented in [assignment-1/source/AI_USAGE.md](assignments/assignment-1/source/AI_USAGE.md).
 - Assignment 2: Google Gemini use during M1, M2, and M3 is confirmed. Four detailed M2/M3 records cover integrity auditing, CUDA measurements, Grad-CAM, qualitative analysis, and report formatting; an additional OpenAI Codex record covers final-report editing and consistency review. See [assignment-2/source/AI_USAGE.md](assignments/assignment-2/source/AI_USAGE.md).
-- Assignment 3: OpenAI Codex assisted with N24News research, duplicate-aware metadata selection, the image–text M1 proposal/experiment plan, and repository/webpage updates. The original audio–visual proposal record is retained as superseded history in the detailed log. Student verification, usage-permission confirmation, full image checks, and instructor approval remain pending. See [assignment-3/source/AI_USAGE.md](assignments/assignment-3/source/AI_USAGE.md).
+- Assignment 3: OpenAI Codex assisted with N24News research, metadata selection, proposal/experiment planning, publisher-term investigation, an 18-pair decoding/visual review, and public records. The original audio–visual proposal entry is retained as superseded history. Pair judgments await student verification; training permission is not cleared, and full image checks and instructor approval remain pending. See [assignment-3/source/AI_USAGE.md](assignments/assignment-3/source/AI_USAGE.md).
 
 ## Course Website Record
 

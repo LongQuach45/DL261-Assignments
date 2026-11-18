@@ -116,15 +116,16 @@
     }
   ],
   "status": "Provisional metadata selection; image integrity, usage permissions, and instructor approval pending.",
-  "license": "No standalone dataset license declared in the inspected official repository; paper licensing does not establish rights to underlying news content.",
-  "evidence_scope": "Pinned metadata only; HTTP HEAD probes are separately dated observations, not image decoding or pair-quality verification.",
+  "license": "Not cleared for main ML experiments. No standalone dataset license declared; publisher terms sections 2.1 and 4.1 require prior written consent for listed ML/AI uses. No applicable grant supplied; see usage-review.md.",
+  "evidence_scope": "Pinned metadata only; image-probes.json and pair-review-summary.json separately record sample HTTP and 18-pair decoding/visual observations.",
   "pending_checks": [
-    "usage permission confirmation",
+    "usage permission confirmation or replacement dataset",
     "instructor approval",
-    "student review",
+    "student review of preliminary pair judgments",
     "all selected image availability and decoding",
     "exact/perceptual image duplicates",
-    "semantic alignment and repeated-event review",
+    "full-dataset semantic alignment and repeated-event review",
+    "publisher/text overlay assessment after preprocessing",
     "token lengths and truncation"
   ]
 }

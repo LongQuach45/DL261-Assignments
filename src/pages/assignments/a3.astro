@@ -4,6 +4,7 @@ import AssignmentIdentity from "../../components/AssignmentIdentity.astro";
 import { external } from "../../data/site";
 import audit from "../../../assignments/assignment-3/proposal/metadata-audit.json";
 import imageProbes from "../../../assignments/assignment-3/proposal/image-probes.json";
+import pairReview from "../../../assignments/assignment-3/proposal/pair-review-summary.json";
 const count = (value: number) => value.toLocaleString("en-US");
 ---
 <BaseLayout title="Assignment 3" description="N24News image–text classification: six-category M1 proposal, preliminary metadata evidence, and planned fusion experiments." current="a3">
@@ -17,7 +18,7 @@ const count = (value: number) => value.toLocaleString("en-US");
   <AssignmentIdentity />
   <section class="shell article-layout">
     <article>
-      <div class="notice"><strong>M1 proposal record · Pending instructor approval.</strong><p>Metadata selection is available for review. Usage-permission confirmation, full image validation, student review, and instructor approval remain outstanding. No main experiments have begun.</p></div>
+      <div class="notice"><strong>M1 proposal record · Pending instructor approval.</strong><p>Preliminary metadata and an 18-pair visual review are available. Training-use permission is not cleared; student verification, full image validation, and instructor approval remain pending. No main experiments have begun.</p></div>
       <section class="article-section">
         <h2>Problem statement</h2>
         <p>Classify an original news headline and its associated RGB image into Food, Health, Science, Sports, Technology, or Travel. The prediction unit is one article–image pair. Image–text classification is explicitly listed in handbook Section 26.</p>
@@ -36,7 +37,9 @@ const count = (value: number) => value.toLocaleString("en-US");
         </tbody></table></div>
         <p>Every selected category starts with 3,000 source records; selection targets 1,250 per category. There are no empty headlines or image URLs in the 18,000 source records, and median headline length is nine whitespace-delimited words. The <a href={external.a3Evidence}>audit evidence</a> records class counts, exclusions, group IDs, source-row identifiers, and the provisional manifest.</p>
         <p>{imageProbes.probes.filter((probe) => probe.status === 200).length} sample image HEAD requests returned HTTP 200 on {imageProbes.checked_at_utc.slice(0, 10)} UTC. Headers reported JPEG content types. These observations do not establish image decoding, semantic alignment, or availability of all selected pairs.</p>
-        <p><strong>Usage terms remain unresolved.</strong> The inspected official repository declares no standalone dataset license. The paper's license and third-party mirror labels do not establish permission for underlying news content. Confirm applicable permissions before retrieving the selected images or starting main experiments; instructor approval is a separate prerequisite.</p>
+        <p>A separate <a href={external.a3PairReview}>preliminary visual review</a> decoded {pairReview.decoded_pairs} training pairs, three per category. AI-assisted inspection found {pairReview.semantic_assessments.directly_supportive} directly supportive, {pairReview.semantic_assessments.contextually_related} contextually related, and {pairReview.semantic_assessments.unclear} unclear pair. No apparent mismatch was identified in this small sample; it does not estimate the full dataset's mismatch rate. Student verification remains pending.</p>
+        <p>The decoded sample contains 17 JPEG images and one PNG. All 18 have publisher/year overlays, and some contain additional text. Inspect these artifacts after preprocessing before freezing the experiment protocol. Images, headlines, and contact sheets remain ignored local review files.</p>
+        <p><strong>Usage terms remain unresolved; training permission is not cleared.</strong> The official repository declares no standalone dataset license. The <a href="https://help.nytimes.com/115014893428-Terms-of-Service">publisher's terms, §§2.1 and 4.1</a>, require prior written consent for the listed ML/AI development uses; none has been supplied. Academic/non-commercial status is not itself a grant. The <a href={external.a3UsageReview}>usage review</a> records the finding and an unsent request draft. If permission will not be obtained, replace N24News before main experiments.</p>
       </section>
       <section class="article-section">
         <h2>Methodology</h2>
@@ -71,12 +74,12 @@ const count = (value: number) => value.toLocaleString("en-US");
       </section>
       <section class="article-section">
         <h2>Limitations and conclusion</h2>
-        <p>The scope is six editorial categories from one English-language publisher, headline-only text, frozen encoders, and one seed. Metadata deduplication cannot establish semantic agreement, detect every repeated event, or prove image validity. The 7,500-pair selection remains provisional until the image audit.</p>
-        <p>The proposal is available for review. Student verification, usage permissions, full image/pair validation, submission, and instructor approval remain outstanding. M1 is due 18 November, M2 on 25 November, and M3 on 2 December 2026, each at 23:59 GMT+7.</p>
+        <p>The scope is six editorial categories from one English-language publisher, headline-only text, frozen encoders, and one seed. Metadata deduplication and the small visual sample cannot establish full-dataset semantic agreement, detect every repeated event, or prove all images valid. The 7,500-pair selection remains provisional until full image checks.</p>
+        <p>The proposal and preliminary visual findings are available for review. Student verification, full image/pair validation, submission, and instructor approval remain pending. Training-use permission is not cleared; no grant or completed licensing compliance is claimed. M1 is due 18 November, M2 on 25 November, and M3 on 2 December 2026, each at 23:59 GMT+7.</p>
       </section>
       <section class="article-section">
         <h2>Assignment-specific AI Usage Disclosure</h2>
-        <p>OpenAI Codex assisted with N24News research, duplicate-aware selection, the image–text proposal/experiment plan, and public records. Source metadata and six image headers were checked automatically; student verification remains pending. The earlier task's disclosure is retained as superseded history. <a href={external.a3Ai}>Read the complete Assignment 3 log.</a></p>
+        <p>OpenAI Codex assisted with N24News research, duplicate-aware selection, the image–text proposal/experiment plan, and public records. Metadata and publisher terms were checked, and 18 decoded pairs were visually inspected by Codex; student verification remains pending. The earlier task's disclosure is retained as superseded history. <a href={external.a3Ai}>Read the complete Assignment 3 log.</a></p>
       </section>
     </article>
     <aside class="side-stack"><section class="resource-card">
@@ -84,6 +87,8 @@ const count = (value: number) => value.toLocaleString("en-US");
       <a class="resource-link" href={external.a3Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
       <div class="pending">Pending instructor approval</div>
       <a class="resource-link" href={external.a3Evidence}><span>Preliminary evidence</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a3PairReview}><span>Visual pair review</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a3UsageReview}><span>Usage-permission review</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a3Readme}><span>M1 README</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a3Ai}><span>AI disclosure</span><b>Open ↗</b></a>
       <div class="pending">Training source code · pending prerequisites</div>

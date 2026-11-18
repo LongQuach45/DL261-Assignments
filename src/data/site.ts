@@ -38,6 +38,8 @@ export const external = {
   a3Readme: `${site.repository}/blob/main/assignments/assignment-3/source/README.md`,
   a3Proposal: `${site.repository}/blob/main/assignments/assignment-3/proposal/dataset.md`,
   a3Evidence: `${site.repository}/blob/main/assignments/assignment-3/proposal/README.md`,
+  a3PairReview: `${site.repository}/blob/main/assignments/assignment-3/proposal/pair-review.md`,
+  a3UsageReview: `${site.repository}/blob/main/assignments/assignment-3/proposal/usage-review.md`,
   a3Ai: `${site.repository}/blob/main/assignments/assignment-3/source/AI_USAGE.md`,
   rootAi: `${site.repository}/blob/main/AI_USAGE.md`
 } as const;
@@ -61,7 +63,7 @@ export const aiSummaries = [
     assignment: "Assignment 3",
     tool: "OpenAI Codex (model/version not recorded)",
     summary: "Assisted with N24News research, duplicate-aware metadata selection, the image–text M1 Dataset Proposal, and experiment planning.",
-    verification: "Automated checks against pinned metadata and six image-header probes; student review, usage permissions, full image validation, and instructor approval remain pending.",
+    verification: "Pinned metadata and 18 decoded pairs inspected; semantic judgments await student review. Publisher-term research found training permission not cleared; full data checks and instructor approval remain pending.",
     href: external.a3Ai
   },
   {

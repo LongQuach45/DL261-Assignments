@@ -23,6 +23,8 @@ The script fetches `nytimes_dataset.json` at source commit `047a2bc3f4df0ea738b8
 | [split-counts.csv](split-counts.csv) | Balanced metadata-selected partition counts |
 | [exclusions.csv](exclusions.csv) | Filtered source identifiers, component IDs, and reason/status codes |
 | [image-probes.json](image-probes.json) | Six dated HEAD observations; availability evidence only |
+| [pair-review.md](pair-review.md), [pair-review.csv](pair-review.csv), [summary](pair-review-summary.json) | Actual decoding and AI-assisted visual inspection of 18 deterministic training pairs; student review pending |
+| [usage-review.md](usage-review.md) | Official publisher-term findings; permission not cleared; request draft not sent |
 
 Source row indices are zero-based positions in the pinned JSON array. Group IDs hash sorted member image IDs. Hashes identify URLs/headlines without republishing them. Source URLs are compared exactly; headline grouping uses Unicode NFKC, case folding, and whitespace collapsing.
 
@@ -36,12 +38,12 @@ Handbook: `handbook-ene-v2.pdf`, revision 14 September 2026, retained locally.
 |---|---|
 | §7.6 M1 modalities, pair validity, split unit, metrics, baselines | Sections 1–6 |
 | §26 explicitly listed task | Section 1: image–text classification |
-| §27 dataset name/source/version/license | Section 1: pinned N24News source; standalone license not declared, permissions unresolved |
+| §27 dataset name/source/version/license | Section 1 and usage review: source/version identified; standalone license absent and prior written consent not supplied; clearance remains unresolved |
 | §27 task/input/output, paired samples and annotations | Sections 1–2 |
-| §27 preliminary pair quality and distributions | Section 2; metadata audit, class counts, dated availability probes; decoding/alignment pending |
+| §27 preliminary pair quality and distributions | Section 2; metadata/count audit plus decoded 18-pair review with explicit semantic judgments; independent student verification pending |
 | §27 split/leakage unit, subset rules | Section 3; component ledger, exclusions, ranked manifest |
 | §27 metrics, baselines/models, compute | Sections 5–7 |
-| §28.1 genuine pairing; missing/noisy/mismatched inputs | Sections 1–4: original article–image association, missing fields, duplicate groups, pending media/pair audit |
+| §28.1 genuine pairing; missing/noisy/mismatched inputs | Sections 1–4: original association, missing fields, duplicate groups, decoded sample with one unclear pair; full-dataset validation pending |
 | §28.1 keep repeated records of an entity together | Section 3: article/duplicate component; additional identified event groups before freezing final splits |
 | §28.2 at least five classes and about 5,000 pairs | Six classes; 7,500 metadata-selected pairs, subject to image validation |
 | §29 unimodal A/B, simple/improved fusion, representations/loss/training/ablation | Sections 4–6: planned M2/M3 methods |
@@ -52,6 +54,6 @@ Handbook: `handbook-ene-v2.pdf`, revision 14 September 2026, retained locally.
 
 ## Outstanding prerequisites
 
-The group must review the proposal, confirm applicable news-content usage permissions, submit through the instructor's designated channel, and obtain/record approval or conditions. The inspected official repository does not declare a standalone dataset license; the paper's license does not establish rights to underlying news content. Repository checks cannot resolve these external actions.
+The group must review the proposal, submit through the instructor's designated channel, and obtain/record approval or conditions. The [publisher-term review](usage-review.md) found a prior-written-consent requirement for listed ML/AI uses and no applicable grant. Permission is **not cleared**; obtain applicable permission or replace the dataset. Instructor approval is separate. No request has been sent and repository checks cannot create a grant.
 
-All selected images still require availability, decoding, duplicate-content, and semantic/event checks. Metadata-selected counts are provisional. No model results or M2/M3 deliverables are claimed. The handbook does not require a proposal PDF; the final report PDF is a separate later deliverable.
+An 18-pair preliminary review now provides actual decoding and semantic observations, with a reproducible sample and hashes; the remaining selected images and population-level duplicates/events still require checks. Publisher/year overlays are flagged for preprocessing review. Metadata-selected counts remain provisional. No model results or M2/M3 deliverables are claimed. The handbook does not require a proposal PDF; the final report PDF is a separate later deliverable.

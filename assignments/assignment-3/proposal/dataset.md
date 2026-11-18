@@ -21,13 +21,13 @@
 | Source | [Official repository](https://github.com/billywzh717/N24News) and its `nytimes_dataset.json` |
 | Version | Snapshot [`047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106`](https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106), dated 29 August 2023; paper published at LREC 2022 |
 | Metadata SHA-256 | `cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c` |
-| License / usage status | No standalone dataset license is declared in the inspected official repository. The paper's CC-BY-NC license and third-party mirror labels do not establish permission for the underlying news text/images. Confirm applicable usage permissions before main experiments, separately from instructor approval. |
+| License / usage status | **Not cleared for main ML experiments.** The official repository declares no standalone dataset license. The publisher's terms (§§2.1, 4.1) require prior written consent for the listed ML/AI development uses; no grant has been supplied. Academic/non-commercial status, the paper's license, and mirror labels do not establish this permission. See the [source-backed usage review](usage-review.md). |
 | Task | Image–text classification, explicitly listed in handbook §26 |
 | Input | One original article headline and its associated RGB news image |
 | Output | One label: Food, Health, Science, Sports, Technology, or Travel |
 | Prediction unit | One article–image pair |
 | Annotations | Original `section` label; metadata also contains headline, abstract, caption, image/article URLs, and image ID |
-| Formats | UTF-8 JSON metadata; source-image URL references. All six sampled image responses reported JPEG content types. |
+| Formats | UTF-8 JSON metadata and source-image URLs. An 18-pair decoded sample contains 17 JPEG and one PNG; inspect content rather than trusting URL suffixes. |
 | Public artifacts | Article/source-row identifiers, hashes, grouping/selection decisions, aggregate statistics, and audit code; no raw headlines or images |
 
 N24News pairs each news article with its associated image, rather than combining independent text and image datasets. The proposed classifier uses the **headline only** as text. Abstracts, captions, article bodies, URLs, filenames, and category metadata are not model inputs. No article-body scraping or generated descriptions are needed.
@@ -37,6 +37,8 @@ The task asks whether an image helps classify short or ambiguous headlines and w
 ## 2. Preliminary distribution and pair quality
 
 The [audit](metadata-audit.json) reads pinned source metadata. Its published checks do not establish image decoding or semantic pair quality.
+
+A separate [preliminary visual review](pair-review.md) retrieved and decoded 18 deterministic training pairs, three per category. All 18 decoded with distinct byte hashes. AI-assisted inspection classified nine as directly supportive, eight as contextually related, and one as unclear; no apparent mismatch was identified in this sample. These judgments are not student-verified ground truth or a dataset-wide mismatch-rate estimate.
 
 | Finding | Verified result |
 |---|---:|
@@ -66,7 +68,9 @@ The metadata-selected subset is balanced and exceeds the handbook default of at 
 
 [Six dated HTTP HEAD probes](image-probes.json), one deterministic representative per category, returned HTTP 200 with `image/jpeg`. These observations establish response availability for those six URLs at the recorded time only. They do not establish decoding, semantic alignment, or availability of all selected images.
 
-**Pending image/pair audit:** retrieve selected images after usage-permission confirmation; record download failures, invalid/corrupt files, dimensions/aspect ratios, exact/perceptual duplicates, representative semantic alignment, and repeated-event evidence. Inspect informative, loosely related, and potentially mismatched image–headline pairs. Measure the actual missing-image rate. No complete media audit or experimental result is claimed at M1.
+Publisher/year overlays occur in all 18 reviewed images, and some contain additional text. Inspect artifact visibility after the prescribed preprocessing and define any uniform treatment before freezing the protocol; no overlay removal or OCR feature is currently added. A generic office portrait paired with an AI/workplace headline is flagged as unclear for student review, not silently excluded.
+
+**Pending full image/pair audit:** after usage-permission confirmation, validate all selected images for availability/decoding, dimensions/aspect ratios, exact/perceptual duplicates, semantic alignment, and repeated-event evidence. Measure the full missing-image rate. The 18-pair review supplies preliminary evidence only; no complete dataset audit or experimental result is claimed at M1.
 
 ## 3. Subset, split, and leakage prevention
 
@@ -161,11 +165,13 @@ python3 assignments/assignment-3/proposal/audit_metadata.py
 
 This fetches only the pinned JSON and verifies deterministic evidence files. `--write` regenerates evidence; `--probe-images` adds six HTTP HEAD observations, saved separately when combined with `--write`. Historical probe observations are not expected to be invariant. See [audit notes and handbook mapping](README.md).
 
+The [18-pair review](pair-review.md) has separate reproduction instructions, cached-image hashes, explicit semantic judgments, and validation limits. Images and headlines used for inspection remain ignored local artifacts.
+
 ## 8. Approval, limitations, and milestone boundaries
 
-**Pending instructor approval.** Student review, applicable usage-permission confirmation, and the full image/pair audit remain outstanding. Instructor approval does not replace content usage permissions. Main experiments begin only after **Approved** or **Approved with conditions**, applicable permissions are confirmed, and data checks are completed.
+**Pending instructor approval.** Preliminary 18-pair inspection is complete, with student verification and full-dataset checks pending. **Usage permission is not cleared:** no applicable written grant has been supplied. The [usage review](usage-review.md) records the publisher terms and an unsent request draft. If permission will not be obtained, replace N24News with a dataset whose published terms cover the intended use. Instructor approval does not replace content usage permissions; main experiments must not begin under the current permission status.
 
-The frozen encoders, one seed, single English-language publisher, selected topics, and headline-only input limit generalization. Images may illustrate rather than directly describe a headline; metadata deduplication cannot guarantee event independence or semantic agreement. No model result, completed media audit, submission, or approval is claimed.
+The frozen encoders, one seed, single English-language publisher, selected topics, and headline-only input limit generalization. Images may illustrate rather than directly describe a headline; metadata deduplication cannot guarantee event independence or semantic agreement. Publisher overlays may introduce shortcuts. No model result, completed full-dataset audit, submission, permission grant, or instructor approval is claimed.
 
 - **M1 — 18 November 2026:** Dataset Proposal, preliminary metadata evidence, split/model/compute plan, and AI disclosure for group/instructor review.
 - **M2 — 25 November 2026:** image-only, text-only, and simple fusion implementation and quantitative results after prerequisites.
@@ -175,7 +181,7 @@ All deadlines are 23:59 GMT+7. The handbook requires the proposal record and app
 
 ## AI Usage Disclosure
 
-OpenAI Codex assisted with N24News research, metadata auditing, proposal/experiment planning, and repository/webpage updates. The earlier audio–visual proposal was superseded at the user's request. Automated source checks do not establish student verification. Quach Kien Long requested the work; final student review remains pending. See the [detailed Assignment 3 record](../source/AI_USAGE.md).
+OpenAI Codex assisted with N24News research, metadata auditing, proposal/experiment planning, publisher-terms investigation, an 18-pair visual review, and repository/webpage updates. The earlier audio–visual proposal was superseded at the user's request. Automated checks and AI-assisted judgments do not establish student verification. Quach Kien Long requested the work; final student review remains pending. See the [detailed Assignment 3 record](../source/AI_USAGE.md).
 
 ## References
 
