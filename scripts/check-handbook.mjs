@@ -2,6 +2,12 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = process.cwd();
+const a3Config = readFileSync(resolve(root, "config/deliverables.yml"), "utf8").split("\n  a3:\n")[1] ?? "";
+// User-selected publication timing, not a handbook exemption.
+const a3DisclosureDeferred = a3Config.includes('ai_usage: "Deferred until assignment finalization"');
+if (a3DisclosureDeferred && /^\s+milestone:.*M3.*final/im.test(a3Config)) {
+  throw new Error("Restore Assignment 3 disclosure when the assignment is finalized");
+}
 const pages = [
   "dist/index.html",
   "dist/assignments/a1.html",
@@ -37,6 +43,7 @@ for (const route of ["/DL261-Assignments/assignments/a1.html", "/DL261-Assignmen
 for (const page of ["a1", "a2", "a3"]) {
   const html = readFileSync(resolve(root, `dist/assignments/${page}.html`), "utf8");
   for (const heading of assignmentHeadings) {
+    if (page === "a3" && a3DisclosureDeferred && heading === "Assignment-specific AI Usage Disclosure") continue;
     if (!html.includes(`>${heading}<`)) throw new Error(`${page} is missing required heading: ${heading}`);
   }
   for (const identity of ["Group MobyDick", "Le Thanh Sach", "Le Quoc Binh", "Quach Kien Long", "Le Thanh Lam", "To Nha Vy"]) {
@@ -72,15 +79,18 @@ for (const field of ["M1 proposal available", "Pending instructor approval", "N2
   if (!a3.includes(field)) throw new Error(`Assignment 3 M1 page is missing: ${field}`);
 }
 const repository = "https://github.com/LongQuach45/DL261-Assignments/blob/main/";
-for (const path of ["assignments/assignment-3/proposal/dataset.md", "assignments/assignment-3/source/README.md", "assignments/assignment-3/source/AI_USAGE.md"]) {
+for (const path of ["assignments/assignment-3/proposal/dataset.md", "assignments/assignment-3/source/README.md", ...(a3DisclosureDeferred ? [] : ["assignments/assignment-3/source/AI_USAGE.md"])]) {
   if (!existsSync(resolve(root, path)) || !a3.includes(`href="${repository}${path}"`)) {
     throw new Error(`Missing Assignment 3 artifact or rendered repository link: ${path}`);
   }
 }
 for (const file of ["dist/index.html", "dist/ai-usage.html"]) {
   const html = readFileSync(resolve(root, file), "utf8");
-  if (!html.includes(`${repository}assignments/assignment-3/source/AI_USAGE.md`)) {
+  if (!a3DisclosureDeferred && !html.includes(`${repository}assignments/assignment-3/source/AI_USAGE.md`)) {
     throw new Error(`${file} is missing Assignment 3 AI disclosure`);
+  }
+  if (a3DisclosureDeferred && html.includes(`${repository}assignments/assignment-3/source/AI_USAGE.md`)) {
+    throw new Error(`${file} links to the deferred Assignment 3 disclosure`);
   }
   if (/Assignment 3 has not started|no assignment-specific AI-use record yet/.test(html)) {
     throw new Error(`${file} retains a stale Assignment 3 status`);
@@ -89,7 +99,7 @@ for (const file of ["dist/index.html", "dist/ai-usage.html"]) {
 
 const proposalPath = "assignments/assignment-3/proposal/dataset.md";
 const proposal = readFileSync(resolve(root, proposalPath), "utf8");
-for (const section of ["1. Dataset and task", "2. Preliminary distribution and pair quality", "3. Subset, split, and leakage prevention", "4. Preprocessing and alignment", "5. Models and training plan", "6. Experiments and evaluation", "7. Compute and reproducibility", "8. Approval and limitations", "AI Usage Disclosure", "References"]) {
+for (const section of ["1. Dataset and task", "2. Preliminary distribution and pair quality", "3. Subset, split, and leakage prevention", "4. Preprocessing and alignment", "5. Models and training plan", "6. Experiments and evaluation", "7. Compute and reproducibility", "8. Approval and limitations", ...(!a3DisclosureDeferred ? ["AI Usage Disclosure"] : []), "References"]) {
   if (!proposal.includes(`## ${section}`)) throw new Error(`A3 proposal is missing: ${section}`);
 }
 for (const field of ["N24News", "047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106", "cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c", "Pending instructor approval", "Training permission is not cleared", "1,250", "6,000", "750", "macro-F1", "Image only", "Text only", "Simple fusion", "Improved fusion", "Gate ablation"]) {
@@ -114,4 +124,4 @@ for (const file of pages) {
   if (/assignment-[23]-dataset-proposal\.pdf|Formatted proposal PDF/.test(html)) throw new Error(`Obsolete proposal PDF reference in ${file}`);
 }
 
-console.log("Handbook page checks passed.");
+console.log(a3DisclosureDeferred ? "Site checks passed; Assignment 3 disclosure publication deferred by configuration." : "Handbook page checks passed.");

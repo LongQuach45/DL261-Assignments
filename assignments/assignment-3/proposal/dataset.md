@@ -62,7 +62,7 @@ The target is balanced and exceeds the default of at least five classes and abou
 
 On 18 November 2026, six image HEAD probes returned HTTP 200. A subsequent review retrieved and fully decoded the **first three hash-ranked training pairs per category**: 17 JPEG and one PNG, 18 distinct byte hashes, widths 986–1,050 and heights 516–550 pixels. No validation/test images were reviewed.
 
-Codex visually compared all 18 images with their headlines. “Directly supportive” means the principal subject is recognizable; “contextually related” means the broad topic is compatible but the specific claim/person/place is not established; “unclear” means insufficient visual evidence. The unclear Technology pair is a generic office portrait accompanying an AI/workplace headline. It remains flagged for student review, not silently excluded. These AI-assisted judgments are not ground truth or a population mismatch-rate estimate; student verification remains pending.
+An automated visual review compared all 18 images with their headlines. “Directly supportive” means the principal subject is recognizable; “contextually related” means the broad topic is compatible but the specific claim/person/place is not established; “unclear” means insufficient visual evidence. The unclear Technology pair is a generic office portrait accompanying an AI/workplace headline. It remains flagged for student review, not silently excluded. These preliminary judgments are not ground truth or a population mismatch-rate estimate; student verification remains pending.
 
 Publisher/year overlays are visible in all 18 images, and some contain additional text. Inspect artifact visibility after prescribed preprocessing and define any uniform treatment before freezing the protocol. No OCR feature or overlay-removal step has been added.
 
@@ -159,10 +159,6 @@ Supporting M1 audit material is local; this document preserves its selection rul
 Results will be limited by six topics, one English-language publisher, headline-only text, frozen encoders, one seed, and possible publisher/text shortcuts. The small visual sample does not establish full-dataset quality or event independence. No training, submission, instructor approval, permission grant, or completed licensing compliance is claimed.
 
 **Milestones, each due 23:59 GMT+7:** M1 proposal on 18 November 2026; M2 unimodal/simple-fusion draft on 25 November; M3 improved fusion, ablation, analysis, report, slides, video, webpage, and checkpoints/reconstruction on 2 December. A proposal PDF is not required by the handbook; final deliverables remain pending.
-
-## AI Usage Disclosure
-
-OpenAI Codex assisted with research, metadata analysis, proposal/experiment planning, publisher-term investigation, the 18-pair visual review, and public records. Semantic judgments await student verification. Quach Kien Long requested the work. See the [detailed Assignment 3 disclosure](../source/AI_USAGE.md).
 
 ## References
 

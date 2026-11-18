@@ -8,7 +8,6 @@ The provisional target is 7,500 balanced pairs, split 6,000/750/750. A prelimina
 
 - [Dataset Proposal](../proposal/dataset.md) — source/version/usage terms, preliminary findings, split rules, models, experiments, and compute plan.
 - [Public assignment page](https://longquach45.github.io/DL261-Assignments/assignments/a3.html)
-- [AI Usage Disclosure](AI_USAGE.md)
 
 Supporting M1 audit scripts, manifests, and detailed review records are retained in the ignored local workspace. Their findings are summarized in the proposal.
 

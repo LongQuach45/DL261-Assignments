@@ -43,7 +43,7 @@ Each completed assignment contains its own installation, data preparation, train
 - [Assignment 1 source README](assignments/assignment-1/source/README.md)
 - [Assignment 2 source README](assignments/assignment-2/source/README.md)
 - [Assignment 2 Dataset Proposal](assignments/assignment-2/proposal/dataset.md)
-- [Assignment 3 M1 Dataset Proposal](assignments/assignment-3/proposal/dataset.md) — pending instructor approval
+- [Assignment 3 Dataset Proposal](assignments/assignment-3/proposal/dataset.md) — pending instructor approval
 
 ## AI Usage
 

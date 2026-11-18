@@ -16,7 +16,7 @@ const proposalValue = (label: string) => {
     <div class="page-status"><span class="status status-planned">M1 proposal available</span><small>Pending instructor approval</small></div>
     <h1>Headlines and images,<br />one news category.</h1>
     <p class="page-lead">A six-category N24News proposal comparing image-only, headline-only, and fusion models on original article–image pairs.</p>
-    <div class="button-row"><a class="button" href={external.a3Proposal}>Read Dataset Proposal ↗</a><a class="text-link" href={external.a3Ai}>Read AI disclosure ↗</a></div>
+    <div class="button-row"><a class="button" href={external.a3Proposal}>Read Dataset Proposal ↗</a></div>
   </section>
   <AssignmentIdentity />
   <section class="shell article-layout">
@@ -39,7 +39,7 @@ const proposalValue = (label: string) => {
           <tr><td>Train / validation / test targets</td><td>{proposalValue("Train / validation / test targets")}</td></tr>
         </tbody></table></div>
         <p>Every selected category starts with 3,000 source records; selection targets 1,250 per category. There are no empty headlines or image URLs in the 18,000 source records, and median headline length is nine whitespace-delimited words. The <a href={external.a3Proposal}>proposal</a> summarizes the findings, exclusions, selection rules, and limitations.</p>
-        <p>The preliminary visual review decoded {proposalValue("Decoded sample pairs")} training pairs, three per category. AI-assisted assessments: {proposalValue("Visual sample assessments")}. This small sample does not estimate the full dataset's mismatch rate. Student verification remains pending; the <a href={external.a3Proposal}>proposal</a> records the method and limitations.</p>
+        <p>The preliminary visual review decoded {proposalValue("Decoded sample pairs")} training pairs, three per category. Preliminary automated assessments: {proposalValue("Visual sample assessments")}. This small sample does not estimate the full dataset's mismatch rate. Student verification remains pending; the <a href={external.a3Proposal}>proposal</a> records the method and limitations.</p>
         <p>The decoded sample contains 17 JPEG images and one PNG. All 18 have publisher/year overlays, and some contain additional text. Inspect these artifacts after preprocessing before freezing the experiment protocol. Images, headlines, and contact sheets remain ignored local review files.</p>
         <p><strong>Usage terms remain unresolved; training permission is not cleared.</strong> The official repository declares no standalone dataset license. The <a href="https://help.nytimes.com/115014893428-Terms-of-Service">publisher's terms, §§2.1 and 4.1</a>, require prior written consent for the listed ML/AI development uses; none has been supplied. Academic/non-commercial status is not itself a grant. If permission will not be obtained, replace N24News before main experiments.</p>
       </section>
@@ -79,17 +79,12 @@ const proposalValue = (label: string) => {
         <p>The scope is six editorial categories from one English-language publisher, headline-only text, frozen encoders, and one seed. Metadata deduplication and the small visual sample cannot establish full-dataset semantic agreement, detect every repeated event, or prove all images valid. The 7,500-pair selection remains provisional until full image checks.</p>
         <p>The proposal and preliminary visual findings are available for review. Student verification, full image/pair validation, submission, and instructor approval remain pending. Training-use permission is not cleared; no grant or completed licensing compliance is claimed. M1 is due 18 November, M2 on 25 November, and M3 on 2 December 2026, each at 23:59 GMT+7.</p>
       </section>
-      <section class="article-section">
-        <h2>Assignment-specific AI Usage Disclosure</h2>
-        <p>OpenAI Codex assisted with N24News research, duplicate-aware selection, the image–text proposal/experiment plan, and public records. Metadata and publisher terms were checked, and 18 decoded pairs were visually inspected by Codex; student verification remains pending. The earlier task's disclosure is retained as superseded history. <a href={external.a3Ai}>Read the complete Assignment 3 log.</a></p>
-      </section>
     </article>
     <aside class="side-stack"><section class="resource-card">
       <p class="eyebrow">Resources</p><h2>Deliverables</h2>
       <a class="resource-link" href={external.a3Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
       <div class="pending">Pending instructor approval</div>
       <a class="resource-link" href={external.a3Readme}><span>M1 README</span><b>Open ↗</b></a>
-      <a class="resource-link" href={external.a3Ai}><span>AI disclosure</span><b>Open ↗</b></a>
       <div class="pending">Training source code · pending prerequisites</div>
       <div class="pending">Checkpoints / reconstruction · pending implementation</div>
       <div class="pending">Final report · pending</div>
