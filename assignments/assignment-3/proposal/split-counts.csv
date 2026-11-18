@@ -1,4 +1,0 @@
-split,paired_samples,Food,Health,Science,Sports,Technology,Travel
-train,6000,1000,1000,1000,1000,1000,1000
-validation,750,125,125,125,125,125,125
-test,750,125,125,125,125,125,125

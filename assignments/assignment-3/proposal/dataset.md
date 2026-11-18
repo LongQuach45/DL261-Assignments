@@ -18,41 +18,35 @@
 | Field | Specification |
 |---|---|
 | Dataset | N24News [1], six-category subset |
-| Source | [Official repository](https://github.com/billywzh717/N24News) and its `nytimes_dataset.json` |
-| Version | Snapshot [`047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106`](https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106), dated 29 August 2023; paper published at LREC 2022 |
-| Metadata SHA-256 | `cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c` |
-| License / usage status | **Not cleared for main ML experiments.** The official repository declares no standalone dataset license. The publisher's terms (§§2.1, 4.1) require prior written consent for the listed ML/AI development uses; no grant has been supplied. Academic/non-commercial status, the paper's license, and mirror labels do not establish this permission. See the [source-backed usage review](usage-review.md). |
+| Source/version | [Official repository snapshot](https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106), commit `047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106`, dated 29 August 2023; LREC 2022 paper |
+| Metadata | `nytimes_dataset.json`; SHA-256 `cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c` |
+| License / usage status | **Training permission is not cleared.** No standalone dataset license is declared in the inspected official repository. [Publisher terms §§2.1 and 4.1](https://help.nytimes.com/115014893428-Terms-of-Service) require prior written consent for the listed ML/AI development uses; no grant has been supplied. Academic use, the paper's license, and mirror labels do not establish this permission. |
 | Task | Image–text classification, explicitly listed in handbook §26 |
-| Input | One original article headline and its associated RGB news image |
-| Output | One label: Food, Health, Science, Sports, Technology, or Travel |
+| Input/output | One original article headline plus its associated RGB image → Food, Health, Science, Sports, Technology, or Travel |
 | Prediction unit | One article–image pair |
-| Annotations | Original `section` label; metadata also contains headline, abstract, caption, image/article URLs, and image ID |
-| Formats | UTF-8 JSON metadata and source-image URLs. An 18-pair decoded sample contains 17 JPEG and one PNG; inspect content rather than trusting URL suffixes. |
-| Public artifacts | Article/source-row identifiers, hashes, grouping/selection decisions, aggregate statistics, and audit code; no raw headlines or images |
+| Annotations | Original `section` category; metadata also provides headline, abstract, caption, URLs, and image ID |
+| Formats | UTF-8 JSON and source-image URLs; decoded sample includes JPEG and PNG |
 
-N24News pairs each news article with its associated image, rather than combining independent text and image datasets. The proposed classifier uses the **headline only** as text. Abstracts, captions, article bodies, URLs, filenames, and category metadata are not model inputs. No article-body scraping or generated descriptions are needed.
+The task studies whether images help classify short or ambiguous headlines and when modalities conflict. Both inputs come from the same source article; independent records are never randomly paired. Use **headline-only** text: no generated descriptions, article-body scraping, captions, abstracts, URLs, filenames, or category metadata as model features.
 
-The task asks whether an image helps classify short or ambiguous headlines and when the modalities provide conflicting evidence. Source section labels describe editorial categories, not necessarily every topic visible in an image. Results will apply to this six-category subset of one English-language publisher, not all news.
+If applicable permission will not be obtained, replace N24News before main experiments. Instructor approval is a separate prerequisite.
 
 ## 2. Preliminary distribution and pair quality
 
-The [audit](metadata-audit.json) reads pinned source metadata. Its published checks do not establish image decoding or semantic pair quality.
+The metadata audit uses the pinned source above. Counts are provisional until full image validation.
 
-A separate [preliminary visual review](pair-review.md) retrieved and decoded 18 deterministic training pairs, three per category. All 18 decoded with distinct byte hashes. AI-assisted inspection classified nine as directly supportive, eight as contextually related, and one as unclear; no apparent mismatch was identified in this sample. These judgments are not student-verified ground truth or a dataset-wide mismatch-rate estimate.
-
-| Finding | Verified result |
-|---|---:|
+| Finding | Result |
+|---|---|
 | Full metadata records / categories | 61,218 / 24 |
-| Records across six selected categories | 18,000 |
-| Records per selected category before filtering | 3,000 |
+| Records across selected categories | 18,000 |
 | Empty selected headlines / image URLs | 0 / 0 |
-| Distinct selected image URLs | 17,923 |
-| Distinct selected raw headlines | 17,607 |
-| Headline word length, min / median / max | 1 / 9 / 19 |
-| Single-category representatives after duplicate filtering | 17,532 |
-| Metadata-selected target | **7,500 pairs** |
-
-Headline lengths above are whitespace-delimited word counts across the 18,000 source records, not tokenizer lengths. Nine source caption fields are empty; captions are not used. No empty image URL means no missing URL reference, not proof that the image is retrievable.
+| Distinct image URLs / raw headlines | 17,923 / 17,607 |
+| Headline words, min / median / max | 1 / 9 / 19 |
+| Candidate representatives after filtering | 17,532 |
+| Metadata-selected pairs / categories | 7,500 / 6 |
+| Train / validation / test targets | 6,000 / 750 / 750 |
+| Decoded sample pairs | 18 |
+| Visual sample assessments | 9 directly supportive; 8 contextually related; 1 unclear; 0 apparent mismatches |
 
 | Category | Source records | Candidate representatives | Selected target |
 |---|---:|---:|---:|
@@ -64,128 +58,115 @@ Headline lengths above are whitespace-delimited word counts across the 18,000 so
 | Travel | 3,000 | 2,960 | 1,250 |
 | **Total** | **18,000** | **17,532** | **7,500** |
 
-The metadata-selected subset is balanced and exceeds the handbook default of at least five classes and about 5,000 paired samples. Duplicate filtering excludes one conflicting-label component containing two records and removes 466 redundant records from single-category components.
+The target is balanced and exceeds the default of at least five classes and about 5,000 pairs. Filtering removes one conflicting-label component containing two records and 466 redundant records. Word counts use whitespace across the 18,000 source records; tokenizer lengths remain to be measured. Nine caption fields are empty, but captions are unused. Nonempty image URLs do not establish availability.
 
-[Six dated HTTP HEAD probes](image-probes.json), one deterministic representative per category, returned HTTP 200 with `image/jpeg`. These observations establish response availability for those six URLs at the recorded time only. They do not establish decoding, semantic alignment, or availability of all selected images.
+On 18 November 2026, six image HEAD probes returned HTTP 200. A subsequent review retrieved and fully decoded the **first three hash-ranked training pairs per category**: 17 JPEG and one PNG, 18 distinct byte hashes, widths 986–1,050 and heights 516–550 pixels. No validation/test images were reviewed.
 
-Publisher/year overlays occur in all 18 reviewed images, and some contain additional text. Inspect artifact visibility after the prescribed preprocessing and define any uniform treatment before freezing the protocol; no overlay removal or OCR feature is currently added. A generic office portrait paired with an AI/workplace headline is flagged as unclear for student review, not silently excluded.
+Codex visually compared all 18 images with their headlines. “Directly supportive” means the principal subject is recognizable; “contextually related” means the broad topic is compatible but the specific claim/person/place is not established; “unclear” means insufficient visual evidence. The unclear Technology pair is a generic office portrait accompanying an AI/workplace headline. It remains flagged for student review, not silently excluded. These AI-assisted judgments are not ground truth or a population mismatch-rate estimate; student verification remains pending.
 
-**Pending full image/pair audit:** after usage-permission confirmation, validate all selected images for availability/decoding, dimensions/aspect ratios, exact/perceptual duplicates, semantic alignment, and repeated-event evidence. Measure the full missing-image rate. The 18-pair review supplies preliminary evidence only; no complete dataset audit or experimental result is claimed at M1.
+Publisher/year overlays are visible in all 18 images, and some contain additional text. Inspect artifact visibility after prescribed preprocessing and define any uniform treatment before freezing the protocol. No OCR feature or overlay-removal step has been added.
+
+**Full checks still planned:** image availability/decoding, missing rates, dimensions/aspect ratios, exact/perceptual duplicates, semantic alignment, and repeated events. Supporting scripts, manifests, per-pair observations, hashes, and raw review inputs are retained in the ignored local workspace. No full-dataset integrity result or model result is claimed.
 
 ## 3. Subset, split, and leakage prevention
 
-Categories are fixed before experimentation. Selection uses the following deterministic protocol, reproduced by [audit_metadata.py](audit_metadata.py):
+Categories are fixed before experimentation. Apply this deterministic protocol:
 
-1. Form connected components over the 18,000 source records using **exact article URL**, **exact image URL**, or a headline normalized with Unicode NFKC, case folding, and whitespace collapsing.
-2. Exclude every component containing conflicting category labels. Within each remaining component, keep the record with the smallest SHA-256 of `"42|" + article_url`; break hash ties by image ID.
-3. For each category, sort representatives by that same hash and select the first 1,250.
-4. Assign the first 1,000 to training, the next 125 to validation, and the last 125 to test.
+1. Form connected components using exact article URL, exact image URL, or headlines normalized with Unicode NFKC, case folding, and whitespace collapsing.
+2. Exclude conflicting-label components. Keep the smallest SHA-256 of `"42|" + article_url` in each remaining component, breaking hash ties by image ID.
+3. Rank representatives within each category by that same hash; select the first 1,250.
+4. Assign the first 1,000 to training, next 125 to validation, and last 125 to test.
 
-| Partition | Pairs per category | Total pairs | Use |
+| Partition | Pairs per category | Total | Purpose |
 |---|---:|---:|---|
-| Training | 1,000 | 6,000 | Fit classification/fusion heads |
-| Validation | 125 | 750 | Hyperparameters and checkpoint selection |
+| Training | 1,000 | 6,000 | Fit heads and learned statistics |
+| Validation | 125 | 750 | Hyperparameters and checkpoints |
 | Test | 125 | 750 | Final evaluation after selection |
 | **Total** | **1,250** | **7,500** | |
 
-This is a custom balanced split, not the paper's original experimental split. Seed `42` is embedded in the deterministic hash ranking. The [manifest](manifest.csv) records source-row index (zero-based), image ID, category, component ID, partition, hashes, and `selected_pending_media` status. The [group ledger](groups.csv) preserves selection/reserve/exclusion decisions for all 18,000 records; [exclusions](exclusions.csv) retain filtered identifiers and reasons as status codes.
+This is a custom balanced split, not the paper's original split. Seed `42` is embedded in the hash rank. The leakage unit is the article and its duplicate component. No selected pair shares an exact article URL, image URL, or normalized headline with another selected pair. Derived images/features inherit their article's partition. Keep additional confirmed duplicates and identified repeated-event groups together; metadata alone cannot detect every repeated event.
 
-The leakage-prevention unit is the article plus its duplicate component. No selected pair shares an exact article URL, image URL, or normalized headline with another selected pair. Derived images and cached features inherit their article's split. Group any additional confirmed duplicates or identified repeated-event groups within one partition. Metadata matching alone cannot identify all repeated events, syndicated wording, or visually similar images.
+After objective image exclusions and additional grouping, regenerate selection from remaining candidates and freeze a versioned final manifest **before training**. Record source-row indices, image IDs, component IDs, partitions, hashes, and exclusion reasons. Revise the proposal if scope changes materially or class availability is insufficient. Never alter splits after seeing model performance. Smaller subsets are debugging-only; record size, seed, and purpose.
 
-Before training, apply objective media exclusions and additional grouping; rerun deterministic selection from the remaining candidate pool and freeze a versioned final manifest. Preserve revision reasons and measured counts. If there are insufficient candidates or a material protocol change, revise the proposal and seek instructor review. Do not alter splits after observing model performance. Smaller subsets are debugging-only; record their size, seed, and purpose.
-
-Use no test data for hyperparameters, early stopping, learned statistics, or checkpoint selection. Published pretrained normalization constants are fixed. Final images, cached features, and checkpoints remain outside Git.
+Do not use test data for tuning, early stopping, learned statistics, or checkpoint selection. Final implementation will publish the split/configuration and reconstruction records needed to trace reported results.
 
 ## 4. Preprocessing and alignment
 
 ```text
-Same article record → headline + associated image → duplicate-group selection/split
-                    → tokenizer + RGB preprocessing → paired data loader
-                    → text/image encoders → unimodal head or fusion
-                    → cross-entropy → optimization → category → evaluation
+Same article → headline + image → duplicate-group selection/split
+             → tokenizer + RGB preprocessing → paired data loader
+             → encoders → unimodal head or fusion → cross-entropy
+             → optimization → category → evaluation
 ```
 
-- **Images:** convert to RGB; resize shorter side to 256; center-crop to `224 × 224`; apply ImageNet normalization. Batch shape `(B, 3, 224, 224)`.
-- **Headlines:** use the `distilbert/distilbert-base-uncased` tokenizer [3], maximum 64 tokens, padding, truncation, and attention masks. Input IDs and mask shapes are `(B, L)`, with `L ≤ 64`. Measure token lengths and the truncation rate during preparation.
-- **Alignment:** resolve both inputs from the same pinned source row/image ID. Store IDs through batching and feature caching; never randomly pair inputs.
-- **Controls:** deterministic preprocessing and no augmentation in the core comparison. Missing, unreadable, or invalid raw modalities exclude the pair from the primary benchmark. Do not substitute another article's image or fabricate text.
+- **Image:** RGB; shorter side resized to 256; center crop 224×224; ImageNet normalization. Batch: `(B, 3, 224, 224)`.
+- **Text:** DistilBERT uncased tokenizer [3]; at most 64 tokens; padding, truncation, and attention mask. IDs/mask: `(B, L)`, `L ≤ 64`. Measure token lengths and truncation rate.
+- **Alignment:** resolve both modalities from the same pinned source row/image ID; preserve IDs through batching and feature caching.
+- **Controls:** deterministic preprocessing, no augmentation in the core comparison. Missing/corrupt modalities exclude the pair; never substitute unrelated data.
 
 ## 5. Models and training plan
 
-Use PyTorch training primitives, torchvision's ImageNet ResNet-18 [2], and Hugging Face Transformers' DistilBERT [3]. The group will implement heads, pooling, projections, fusion, and evaluation. Keep both pretrained encoders frozen in evaluation mode, including BatchNorm buffers and dropout; train only heads/projections/gates.
+PyTorch provides training primitives, torchvision provides ImageNet ResNet-18 [2], and Transformers provides DistilBERT [3]. The group will implement pooling, heads, projections, fusion, and evaluation. Both encoders remain frozen in evaluation mode, including BatchNorm buffers/dropout; backbone fine-tuning is outside the core scope.
 
-| Configuration | Planned representation and head |
+| Configuration | Planned method |
 |---|---|
-| Image only | ResNet-18 pooled 512-dimensional features and six-class linear head |
-| Text only | DistilBERT attention-mask-aware mean-pooled 768-dimensional features and six-class linear head |
-| Simple fusion | Concatenate the 512 + 768 features; 256-unit ReLU MLP and six-class classifier |
-| Improved fusion | Project each modality to 256 dimensions; learn a sigmoid gate over the projected pair; classify the gated representation [4] |
-| Gate ablation | Same projection/classifier design as improved fusion; replace the learned gate with equal fixed weights |
+| Image only | ResNet-18 pooled 512-dimensional features; six-class linear head |
+| Text only | Attention-mask-aware mean-pooled 768-dimensional DistilBERT features; six-class linear head |
+| Simple fusion | Intermediate fusion: concatenate features; 256-unit ReLU MLP and classifier |
+| Improved fusion | Intermediate fusion: project each modality to 256 dimensions; learned sigmoid gate and classifier [4] |
+| Gate ablation | Same projection/classifier design with equal fixed weights |
 
-The improved representation is `h = g * h_image + (1 - g) * h_text`, with a 256-dimensional learned gate. The ablation fixes `g = 0.5` and retrains the remaining head components. Report capacity differences; adaptive gating is a planned adaptation, not a claimed reproduction of the original GMU experiments.
+Improved fusion uses `h = g * h_image + (1 - g) * h_text`; the ablation fixes `g = 0.5` and retrains the remaining head. Report parameter/capacity differences. This is an adaptation of gated fusion, not a claim to reproduce the paper's experiments.
 
-Train each unimodal head separately with cross-entropy. Then train each fusion head independently on the same frozen encoder features and source category labels. Each configuration's overall loss is its supervised cross-entropy; no auxiliary or joint encoder loss is used. Backbone fine-tuning is outside the core scope.
+Train each unimodal head separately, then each fusion head independently on the same frozen encoder features. Each configuration uses supervised cross-entropy as its overall loss, with no auxiliary joint-encoder loss.
 
-Initial settings: AdamW, learning rate `1e-3`, weight decay `1e-4`, batch size 32, and up to 20 epochs per configuration. Reset Python, NumPy, CPU/CUDA and data-loader seeds to `42` before each configuration. Select highest validation macro-F1, breaking ties by lower validation loss and then earlier epoch. Fix split, pretrained weights, preprocessing, seed, optimizer, epoch budget, and checkpoint rule across fusion comparisons; document validation-selected changes.
+Initial settings: AdamW, learning rate `1e-3`, weight decay `1e-4`, batch size 32, and up to 20 epochs/configuration. Reset Python, NumPy, CPU/CUDA, and data-loader seeds to `42` per configuration. Select highest validation macro-F1, then lower validation loss, then earlier epoch. Hold split, pretrained weights, preprocessing, seed, optimizer, epoch budget, and selection rule fixed across fusion comparisons.
 
-## 6. Experiments, evaluation, and error analysis
+## 6. Experiments and evaluation
 
-**Primary metrics:** accuracy and macro-F1. Select by validation macro-F1; evaluate selected configurations once on test after model selection. Report per-class precision/recall/F1, confusion matrices, and learning curves.
+**Metrics:** accuracy and macro-F1; select on validation macro-F1 and evaluate selected models once on test. Report per-class precision/recall/F1, confusion matrices, and learning curves.
 
-| Experiment | Hypothesis / changed factor | Fixed factors | Decision criterion |
+| Comparison | Hypothesis / changed factor | Fixed factors | Decision criterion |
 |---|---|---|---|
-| Image vs. text | Visual and headline inputs differ in predictive strength; modality and encoder change | Split, labels, seed, metrics, checkpoint rule | Validation macro-F1 and final test metrics with compute cost; not an isolated architecture test |
-| Unimodal vs. concatenation | Combining features may help ambiguous headlines; available features/head change | Same frozen encoders, manifests, preprocessing, evaluation | Validation macro-F1; report whether test results agree |
-| Concatenation vs. learned gate | Adaptive weighting may help conflicting pairs; fusion design changes | Encoder features, split, seed, optimizer, budget, checkpoint rule | Validation macro-F1, final test metrics and compute; acknowledge capacity differences |
-| Learned vs. fixed gate | Input-dependent weighting contributes beyond equal weighting; remove adaptive gate | Projection/classifier design, encoder features, split, seed, schedule | Validation macro-F1, final test metrics, parameter/time differences |
+| Image vs. text | Modalities differ in predictive strength; modality/encoder change | Split, labels, seed, evaluation, checkpoint rule | Validation macro-F1; test metrics with compute cost; not an isolated architecture test |
+| Unimodal vs. concatenation | Combining features may help ambiguous headlines; features/head change | Same encoders, split, preprocessing, evaluation | Validation macro-F1; whether test findings agree |
+| Concatenation vs. gate | Adaptive weighting may help conflicts; fusion design changes | Same encoder features, split, seed, optimizer, budget, selection | Validation macro-F1, final test metrics, compute/capacity |
+| Learned vs. fixed gate | Adaptive weights contribute beyond equal weighting | Same projections/classifier, encoder features, split, seed, schedule | Validation macro-F1, test metrics, parameter/time differences |
 
-Plan support examples where both modalities agree or one correct modality rescues the other, and conflict cases where unimodal predictions disagree. Examine short/ambiguous headlines, loosely related illustrative images, Science/Technology confusion, overlapping editorial categories, and repeated-event effects. Report counts and representative errors; gate values alone do not prove a causal explanation. Fusion need not outperform either modality.
+Analyze support cases, rescue cases, conflicting predictions, ambiguous headlines, illustrative images, Science/Technology confusion, editorial overlap, and repeated events. Include counts and representative examples; gate values alone do not prove causation. Fusion need not outperform unimodal baselines.
 
-Diagnostic image/text removal will zero the removed projected representation and bypass its gate contribution, retaining the available modality. Label this an inference intervention, not a missing-modality-trained model or replacement for independent unimodal baselines. With both modalities absent, abstain.
+Diagnostic modality removal zeros the removed representation and bypasses its gate contribution. This is an inference intervention, not a missing-modality-trained model or substitute for independent baselines. Both modalities absent → abstain.
 
-Measure total/trainable parameters, feature-extraction time, head-training time, warmed-up model-only and end-to-end inference latency, and peak allocated GPU memory. End-to-end latency includes image preprocessing, tokenization, both encoders, and the head; report batch size, hardware, timing boundaries, and synchronization.
+Measure total/trainable parameters, feature-extraction/head-training time, warmed-up model-only and end-to-end latency, and peak allocated GPU memory. End-to-end cost includes preprocessing, tokenization, encoders, and head; document batch size, timing boundaries, hardware, and GPU synchronization.
 
 ## 7. Compute and reproducibility
 
-| Item | Initial estimate / required record |
+| Item | Initial estimate / record |
 |---|---|
-| Hardware | One GPU with approximately 8 GB memory; actual availability not yet confirmed |
-| Storage | 10 GB free for selected images, metadata, weights, caches, and checkpoints; measure actual usage after preparation |
-| Budget | Five configurations, up to 20 epochs each; batch size 32 |
-| Time | Estimated 1–3 GPU-hours including feature extraction; validate with a pilot after approval and usage-permission confirmation |
+| Hardware/storage | Approximately 8 GB GPU memory and 10 GB free storage; confirm availability and actual usage |
+| Schedule | Five configurations, ≤20 epochs each, batch size 32 |
+| Time | Estimated 1–3 GPU-hours including extraction; pilot after prerequisites |
 | Memory | Frozen encoders, deterministic cached features, microbatch extraction if needed |
-| Environment | Record actual Python, PyTorch, torchvision, Transformers, tokenizer and dependency versions; pin pretrained model revisions/checksums |
-| Traceability | Configs, seeds, final manifest, image hashes, exclusions, logs/run IDs, checkpoint hashes, and repository commit/tag |
+| Environment | Exact Python, PyTorch, torchvision, Transformers/tokenizer versions and dependency lock; pretrained revisions/checksums |
+| Traceability | Configs, seeds, final manifest, image hashes, exclusions, per-epoch logs, run IDs, checkpoint hashes, commit/tag, and reconstruction commands |
 
-To reproduce the preliminary metadata evidence, install Python 3 and GitHub CLI, authenticate with `gh auth login` if needed, and run from the repository root:
+Supporting M1 audit material is local; this document preserves its selection rules and findings. Publish final experiment provenance and reconstruction instructions with the later implementation. No runnable training pipeline exists at M1.
 
-```bash
-python3 assignments/assignment-3/proposal/audit_metadata.py
-```
+## 8. Approval and limitations
 
-This fetches only the pinned JSON and verifies deterministic evidence files. `--write` regenerates evidence; `--probe-images` adds six HTTP HEAD observations, saved separately when combined with `--write`. Historical probe observations are not expected to be invariant. See [audit notes and handbook mapping](README.md).
+**Pending instructor approval. Training permission is not cleared.** Student verification and full-dataset validation remain pending. No permission request was sent or grant supplied. If permission will not be obtained, replace N24News before main experiments. Instructor approval does not substitute for applicable content permissions.
 
-The [18-pair review](pair-review.md) has separate reproduction instructions, cached-image hashes, explicit semantic judgments, and validation limits. Images and headlines used for inspection remain ignored local artifacts.
+Results will be limited by six topics, one English-language publisher, headline-only text, frozen encoders, one seed, and possible publisher/text shortcuts. The small visual sample does not establish full-dataset quality or event independence. No training, submission, instructor approval, permission grant, or completed licensing compliance is claimed.
 
-## 8. Approval, limitations, and milestone boundaries
-
-**Pending instructor approval.** Preliminary 18-pair inspection is complete, with student verification and full-dataset checks pending. **Usage permission is not cleared:** no applicable written grant has been supplied. The [usage review](usage-review.md) records the publisher terms and an unsent request draft. If permission will not be obtained, replace N24News with a dataset whose published terms cover the intended use. Instructor approval does not replace content usage permissions; main experiments must not begin under the current permission status.
-
-The frozen encoders, one seed, single English-language publisher, selected topics, and headline-only input limit generalization. Images may illustrate rather than directly describe a headline; metadata deduplication cannot guarantee event independence or semantic agreement. Publisher overlays may introduce shortcuts. No model result, completed full-dataset audit, submission, permission grant, or instructor approval is claimed.
-
-- **M1 — 18 November 2026:** Dataset Proposal, preliminary metadata evidence, split/model/compute plan, and AI disclosure for group/instructor review.
-- **M2 — 25 November 2026:** image-only, text-only, and simple fusion implementation and quantitative results after prerequisites.
-- **M3 — 2 December 2026:** improved fusion, ablation, qualitative/error/compute analysis, final report, slides, video, assignment page, and checkpoints or reconstruction instructions.
-
-All deadlines are 23:59 GMT+7. The handbook requires the proposal record and approval status, not a formatted proposal PDF. Final deliverables remain pending.
+**Milestones, each due 23:59 GMT+7:** M1 proposal on 18 November 2026; M2 unimodal/simple-fusion draft on 25 November; M3 improved fusion, ablation, analysis, report, slides, video, webpage, and checkpoints/reconstruction on 2 December. A proposal PDF is not required by the handbook; final deliverables remain pending.
 
 ## AI Usage Disclosure
 
-OpenAI Codex assisted with N24News research, metadata auditing, proposal/experiment planning, publisher-terms investigation, an 18-pair visual review, and repository/webpage updates. The earlier audio–visual proposal was superseded at the user's request. Automated checks and AI-assisted judgments do not establish student verification. Quach Kien Long requested the work; final student review remains pending. See the [detailed Assignment 3 record](../source/AI_USAGE.md).
+OpenAI Codex assisted with research, metadata analysis, proposal/experiment planning, publisher-term investigation, the 18-pair visual review, and public records. Semantic judgments await student verification. Quach Kien Long requested the work. See the [detailed Assignment 3 disclosure](../source/AI_USAGE.md).
 
 ## References
 
-1. Wang, Z., Shan, X., Zhang, X., and Yang, J. (2022). *N24News: A New Dataset for Multimodal News Classification*. LREC, 6768–6775. [Paper and citation](https://aclanthology.org/2022.lrec-1.729/); [pinned source](https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106).
-2. He, K., Zhang, X., Ren, S., and Sun, J. (2016). *Deep Residual Learning for Image Recognition*. CVPR. [Paper](https://arxiv.org/abs/1512.03385); [torchvision ResNet-18 weights and preprocessing](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet18.html).
-3. Sanh, V., Debut, L., Chaumond, J., and Wolf, T. (2019). *DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter*. [Paper](https://arxiv.org/abs/1910.01108); [official model/tokenizer card](https://huggingface.co/distilbert/distilbert-base-uncased).
-4. Arevalo, J., Solorio, T., Montes-y-Gomez, M., and Gonzalez, F. A. (2017). *Gated Multimodal Units for Information Fusion*. [arXiv:1702.01992](https://arxiv.org/abs/1702.01992).
+1. Wang, Z., Shan, X., Zhang, X., and Yang, J. (2022). *N24News: A New Dataset for Multimodal News Classification*. LREC, 6768–6775. [Paper](https://aclanthology.org/2022.lrec-1.729/).
+2. He, K., Zhang, X., Ren, S., and Sun, J. (2016). *Deep Residual Learning for Image Recognition*. CVPR. [Paper](https://arxiv.org/abs/1512.03385); [ResNet-18 implementation/weights](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet18.html).
+3. Sanh, V., Debut, L., Chaumond, J., and Wolf, T. (2019). *DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter*. [Paper](https://arxiv.org/abs/1910.01108); [model/tokenizer](https://huggingface.co/distilbert/distilbert-base-uncased).
+4. Arevalo, J., Solorio, T., Montes-y-Gomez, M., and Gonzalez, F. A. (2017). *Gated Multimodal Units for Information Fusion*. [Paper](https://arxiv.org/abs/1702.01992).

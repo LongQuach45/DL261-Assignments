@@ -2,10 +2,13 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AssignmentIdentity from "../../components/AssignmentIdentity.astro";
 import { external } from "../../data/site";
-import audit from "../../../assignments/assignment-3/proposal/metadata-audit.json";
-import imageProbes from "../../../assignments/assignment-3/proposal/image-probes.json";
-import pairReview from "../../../assignments/assignment-3/proposal/pair-review-summary.json";
-const count = (value: number) => value.toLocaleString("en-US");
+import { readFileSync } from "node:fs";
+const proposal = readFileSync("assignments/assignment-3/proposal/dataset.md", "utf8");
+const proposalValue = (label: string) => {
+  const row = proposal.split("\n").find((line) => line.startsWith(`| ${label} |`));
+  if (!row) throw new Error(`Missing proposal summary field: ${label}`);
+  return row.split("|")[2].trim();
+};
 ---
 <BaseLayout title="Assignment 3" description="N24News image–text classification: six-category M1 proposal, preliminary metadata evidence, and planned fusion experiments." current="a3">
   <section class="shell page-hero">
@@ -13,7 +16,7 @@ const count = (value: number) => value.toLocaleString("en-US");
     <div class="page-status"><span class="status status-planned">M1 proposal available</span><small>Pending instructor approval</small></div>
     <h1>Headlines and images,<br />one news category.</h1>
     <p class="page-lead">A six-category N24News proposal comparing image-only, headline-only, and fusion models on original article–image pairs.</p>
-    <div class="button-row"><a class="button" href={external.a3Proposal}>Read Dataset Proposal ↗</a><a class="text-link" href={external.a3Evidence}>Inspect preliminary evidence ↗</a></div>
+    <div class="button-row"><a class="button" href={external.a3Proposal}>Read Dataset Proposal ↗</a><a class="text-link" href={external.a3Ai}>Read AI disclosure ↗</a></div>
   </section>
   <AssignmentIdentity />
   <section class="shell article-layout">
@@ -28,18 +31,17 @@ const count = (value: number) => value.toLocaleString("en-US");
         <h2>Dataset description and EDA</h2>
         <p><a href="https://github.com/billywzh717/N24News">N24News</a> pairs news text and images from The New York Times. The proposal pins source revision <a href="https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106"><code>047a2bc</code></a> and the JSON checksum.</p>
         <div class="table-wrap"><table><caption>Pinned metadata findings · image validation pending</caption><thead><tr><th scope="col">Finding</th><th scope="col">Count</th></tr></thead><tbody>
-          <tr><td>Full source records / categories</td><td>{count(audit.source_records)} / {audit.source_categories}</td></tr>
-          <tr><td>Source records in selected categories</td><td>{count(audit.selected_category_records)}</td></tr>
-          <tr><td>Distinct image URLs / raw headlines</td><td>{count(audit.distinct_selected_image_urls)} / {count(audit.distinct_selected_headlines)}</td></tr>
-          <tr><td>Candidate representatives after duplicate filtering</td><td>{count(audit.candidate_representatives)}</td></tr>
-          <tr><td>Metadata-selected pairs / categories</td><td>{count(audit.metadata_selected_pairs)} / {audit.selected_categories.length}</td></tr>
-          <tr><td>Train / validation / test targets</td><td>{audit.splits.map((split) => count(split.paired_samples)).join(" / ")}</td></tr>
+          <tr><td>Full source records / categories</td><td>{proposalValue("Full metadata records / categories")}</td></tr>
+          <tr><td>Source records in selected categories</td><td>{proposalValue("Records across selected categories")}</td></tr>
+          <tr><td>Distinct image URLs / raw headlines</td><td>{proposalValue("Distinct image URLs / raw headlines")}</td></tr>
+          <tr><td>Candidate representatives after duplicate filtering</td><td>{proposalValue("Candidate representatives after filtering")}</td></tr>
+          <tr><td>Metadata-selected pairs / categories</td><td>{proposalValue("Metadata-selected pairs / categories")}</td></tr>
+          <tr><td>Train / validation / test targets</td><td>{proposalValue("Train / validation / test targets")}</td></tr>
         </tbody></table></div>
-        <p>Every selected category starts with 3,000 source records; selection targets 1,250 per category. There are no empty headlines or image URLs in the 18,000 source records, and median headline length is nine whitespace-delimited words. The <a href={external.a3Evidence}>audit evidence</a> records class counts, exclusions, group IDs, source-row identifiers, and the provisional manifest.</p>
-        <p>{imageProbes.probes.filter((probe) => probe.status === 200).length} sample image HEAD requests returned HTTP 200 on {imageProbes.checked_at_utc.slice(0, 10)} UTC. Headers reported JPEG content types. These observations do not establish image decoding, semantic alignment, or availability of all selected pairs.</p>
-        <p>A separate <a href={external.a3PairReview}>preliminary visual review</a> decoded {pairReview.decoded_pairs} training pairs, three per category. AI-assisted inspection found {pairReview.semantic_assessments.directly_supportive} directly supportive, {pairReview.semantic_assessments.contextually_related} contextually related, and {pairReview.semantic_assessments.unclear} unclear pair. No apparent mismatch was identified in this small sample; it does not estimate the full dataset's mismatch rate. Student verification remains pending.</p>
+        <p>Every selected category starts with 3,000 source records; selection targets 1,250 per category. There are no empty headlines or image URLs in the 18,000 source records, and median headline length is nine whitespace-delimited words. The <a href={external.a3Proposal}>proposal</a> summarizes the findings, exclusions, selection rules, and limitations.</p>
+        <p>The preliminary visual review decoded {proposalValue("Decoded sample pairs")} training pairs, three per category. AI-assisted assessments: {proposalValue("Visual sample assessments")}. This small sample does not estimate the full dataset's mismatch rate. Student verification remains pending; the <a href={external.a3Proposal}>proposal</a> records the method and limitations.</p>
         <p>The decoded sample contains 17 JPEG images and one PNG. All 18 have publisher/year overlays, and some contain additional text. Inspect these artifacts after preprocessing before freezing the experiment protocol. Images, headlines, and contact sheets remain ignored local review files.</p>
-        <p><strong>Usage terms remain unresolved; training permission is not cleared.</strong> The official repository declares no standalone dataset license. The <a href="https://help.nytimes.com/115014893428-Terms-of-Service">publisher's terms, §§2.1 and 4.1</a>, require prior written consent for the listed ML/AI development uses; none has been supplied. Academic/non-commercial status is not itself a grant. The <a href={external.a3UsageReview}>usage review</a> records the finding and an unsent request draft. If permission will not be obtained, replace N24News before main experiments.</p>
+        <p><strong>Usage terms remain unresolved; training permission is not cleared.</strong> The official repository declares no standalone dataset license. The <a href="https://help.nytimes.com/115014893428-Terms-of-Service">publisher's terms, §§2.1 and 4.1</a>, require prior written consent for the listed ML/AI development uses; none has been supplied. Academic/non-commercial status is not itself a grant. If permission will not be obtained, replace N24News before main experiments.</p>
       </section>
       <section class="article-section">
         <h2>Methodology</h2>
@@ -86,9 +88,6 @@ const count = (value: number) => value.toLocaleString("en-US");
       <p class="eyebrow">Resources</p><h2>Deliverables</h2>
       <a class="resource-link" href={external.a3Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
       <div class="pending">Pending instructor approval</div>
-      <a class="resource-link" href={external.a3Evidence}><span>Preliminary evidence</span><b>Open ↗</b></a>
-      <a class="resource-link" href={external.a3PairReview}><span>Visual pair review</span><b>Open ↗</b></a>
-      <a class="resource-link" href={external.a3UsageReview}><span>Usage-permission review</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a3Readme}><span>M1 README</span><b>Open ↗</b></a>
       <a class="resource-link" href={external.a3Ai}><span>AI disclosure</span><b>Open ↗</b></a>
       <div class="pending">Training source code · pending prerequisites</div>

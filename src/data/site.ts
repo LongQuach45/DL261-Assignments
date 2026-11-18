@@ -37,9 +37,6 @@ export const external = {
   a2Video: "https://www.youtube.com/watch?v=HHNRGS3sljo",
   a3Readme: `${site.repository}/blob/main/assignments/assignment-3/source/README.md`,
   a3Proposal: `${site.repository}/blob/main/assignments/assignment-3/proposal/dataset.md`,
-  a3Evidence: `${site.repository}/blob/main/assignments/assignment-3/proposal/README.md`,
-  a3PairReview: `${site.repository}/blob/main/assignments/assignment-3/proposal/pair-review.md`,
-  a3UsageReview: `${site.repository}/blob/main/assignments/assignment-3/proposal/usage-review.md`,
   a3Ai: `${site.repository}/blob/main/assignments/assignment-3/source/AI_USAGE.md`,
   rootAi: `${site.repository}/blob/main/AI_USAGE.md`
 } as const;

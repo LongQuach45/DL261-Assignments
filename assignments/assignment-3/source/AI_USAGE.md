@@ -45,3 +45,14 @@ Only the AI use documented above is asserted. Further tools, member contribution
 - **Student verification:** Pending. AI-assisted semantic judgments are not ground-truth labels, and the small sample cannot establish the full dataset's mismatch rate. Record 2 describes the earlier metadata-only stage; actual decoding/visual review occurred in this record.
 - **Member responsible for final verification:** Quach Kien Long.
 - **Verification sources:** [Official NYT Terms of Service](https://help.nytimes.com/115014893428-Terms-of-Service), [NYT Licensing contact](https://nytlicensing.com/contact/), pinned N24News source/manifest, ignored local review files, and committed `pair-review.csv`, `pair-review-summary.json`, `pair-review.md`, `review_pairs.py`, and `usage-review.md`.
+
+## Record 4: Consolidate M1 public documents
+
+- **Tool/model:** OpenAI Codex; exact model/version not recorded.
+- **Member / stage:** Quach Kien Long; M1 documentation cleanup, 18 November 2026.
+- **Purpose / prompt:** User requested the same compact structure as Assignment 2: keep the Dataset Proposal, source README, and AI disclosure; move supporting material into the ignored local workspace.
+- **Affected sections:** Public proposal/README, website resource links and data loading, compliance checks, and relocation of audit/review files.
+- **Editing and verification:** Preserved byte-identical supporting files under `.local/DL261-A3-local/proposal-support/`, including a copy of the prior proposal. Consolidated preliminary statistics, visual judgments, selection rules, sources, and unresolved permissions into `proposal/dataset.md`. Removed active public evidence links and build dependencies on relocated files. Website checks use the committed proposal, so clean-checkout builds do not need private files.
+- **Historical records:** File references in Records 1–3 describe artifacts at those stages. Supporting files now remain local and in earlier Git commits; no new public links to them are provided. Original disclosure content is retained.
+- **Responsible student reviewer:** Quach Kien Long; student verification remains pending. No experiment, new permission grant, or dataset change occurred.
+- **Verification sources:** Prior committed documents, retained local audit/review material, current proposal, link checks, Astro build, and handbook-content checks.

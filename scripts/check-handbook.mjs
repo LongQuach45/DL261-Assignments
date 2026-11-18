@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = process.cwd();
@@ -72,7 +72,7 @@ for (const field of ["M1 proposal available", "Pending instructor approval", "N2
   if (!a3.includes(field)) throw new Error(`Assignment 3 M1 page is missing: ${field}`);
 }
 const repository = "https://github.com/LongQuach45/DL261-Assignments/blob/main/";
-for (const path of ["assignments/assignment-3/proposal/dataset.md", "assignments/assignment-3/proposal/README.md", "assignments/assignment-3/proposal/pair-review.md", "assignments/assignment-3/proposal/usage-review.md", "assignments/assignment-3/source/README.md", "assignments/assignment-3/source/AI_USAGE.md"]) {
+for (const path of ["assignments/assignment-3/proposal/dataset.md", "assignments/assignment-3/source/README.md", "assignments/assignment-3/source/AI_USAGE.md"]) {
   if (!existsSync(resolve(root, path)) || !a3.includes(`href="${repository}${path}"`)) {
     throw new Error(`Missing Assignment 3 artifact or rendered repository link: ${path}`);
   }
@@ -87,71 +87,26 @@ for (const file of ["dist/index.html", "dist/ai-usage.html"]) {
   }
 }
 
-const evidenceDir = "assignments/assignment-3/proposal";
-const audit = JSON.parse(readFileSync(resolve(root, evidenceDir, "metadata-audit.json"), "utf8"));
-const readCsv = (file) => {
-  const lines = readFileSync(resolve(root, evidenceDir, file), "utf8").trimEnd().split("\n");
-  const header = lines.shift().split(",");
-  return lines.map((line) => {
-    const values = line.split(",");
-    if (values.length !== header.length) throw new Error(`Unexpected evidence CSV layout: ${file}`);
-    return Object.fromEntries(header.map((key, i) => [key, values[i]]));
-  });
-};
-const records = readCsv("manifest.csv");
-const groups = readCsv("groups.csv");
-const exclusions = readCsv("exclusions.csv");
-const classRows = readCsv("class-counts.csv");
-const splitRows = readCsv("split-counts.csv");
-if (records.length !== audit.metadata_selected_pairs || records.length !== 7500) throw new Error("A3 provisional selection count differs");
-if (audit.dataset !== "N24News" || audit.selected_categories.length !== 6) throw new Error("A3 dataset/task metadata differs");
-for (const key of ["image_id", "source_row_index", "group_id", "article_url_sha256", "image_url_sha256", "headline_normalized_sha256"]) {
-  if (new Set(records.map((r) => r[key])).size !== records.length) throw new Error(`A3 duplicate selected ${key}`);
+const proposalPath = "assignments/assignment-3/proposal/dataset.md";
+const proposal = readFileSync(resolve(root, proposalPath), "utf8");
+for (const section of ["1. Dataset and task", "2. Preliminary distribution and pair quality", "3. Subset, split, and leakage prevention", "4. Preprocessing and alignment", "5. Models and training plan", "6. Experiments and evaluation", "7. Compute and reproducibility", "8. Approval and limitations", "AI Usage Disclosure", "References"]) {
+  if (!proposal.includes(`## ${section}`)) throw new Error(`A3 proposal is missing: ${section}`);
 }
-for (const record of records) {
-  if (!audit.selected_categories.includes(record.category) || record.status !== "selected_pending_media") throw new Error("A3 manifest claims unexpected eligibility/category");
-  if (!["train", "validation", "test"].includes(record.split)) throw new Error("A3 manifest has invalid partition");
+for (const field of ["N24News", "047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106", "cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c", "Pending instructor approval", "Training permission is not cleared", "1,250", "6,000", "750", "macro-F1", "Image only", "Text only", "Simple fusion", "Improved fusion", "Gate ablation"]) {
+  if (!proposal.includes(field)) throw new Error(`A3 proposal is missing: ${field}`);
 }
-if (groups.length !== audit.selected_category_records || new Set(groups.map((r) => r.image_id)).size !== groups.length) throw new Error("A3 source grouping coverage differs");
-const selectedIds = new Set(records.map((r) => r.image_id));
-const selectedGroups = groups.filter((r) => r.status === "selected_pending_media");
-if (selectedGroups.length !== records.length || selectedGroups.some((r) => !selectedIds.has(r.image_id))) throw new Error("A3 grouping ledger and manifest differ");
-if (exclusions.length !== audit.duplicate_records_removed + audit.conflicting_label_records) throw new Error("A3 exclusion counts differ");
-for (const split of audit.splits) {
-  const members = records.filter((r) => r.split === split.split);
-  const csv = splitRows.find((r) => r.split === split.split);
-  if (members.length !== split.paired_samples || Number(csv?.paired_samples) !== members.length) throw new Error(`A3 split count differs: ${split.split}`);
-  for (const category of audit.selected_categories) {
-    const n = members.filter((r) => r.category === category).length;
-    if (n !== split[category] || n !== Number(csv[category])) throw new Error(`A3 class count differs: ${split.split}/${category}`);
-  }
+const summaryFields = ["Full metadata records / categories", "Records across selected categories", "Distinct image URLs / raw headlines", "Candidate representatives after filtering", "Metadata-selected pairs / categories", "Train / validation / test targets", "Decoded sample pairs", "Visual sample assessments"];
+for (const field of summaryFields) {
+  const row = proposal.split("\n").find((line) => line.startsWith(`| ${field} |`));
+  if (!row || !a3.includes(row.split("|")[2].trim())) throw new Error(`A3 page/proposal summary differs: ${field}`);
 }
-for (const category of audit.selected_categories) {
-  const csv = classRows.find((r) => r.category === category);
-  if (records.filter((r) => r.category === category).length !== audit.class_counts[category] ||
-      Number(csv?.metadata_selected_pairs) !== audit.class_counts[category] ||
-      Number(csv?.candidate_representatives) !== audit.candidate_counts[category]) throw new Error(`A3 class summary differs: ${category}`);
-}
-if (audit.selected_categories.length < 5 || records.length < 5000) throw new Error("A3 metadata-selected target is below default thresholds");
-if (existsSync(resolve(root, evidenceDir, "actors.json"))) throw new Error("Obsolete A3 actor split artifact remains");
-const probes = JSON.parse(readFileSync(resolve(root, evidenceDir, "image-probes.json"), "utf8"));
-if (probes.source_commit !== audit.source_commit || probes.probes.length !== 6 ||
-    new Set(probes.probes.map((r) => r.category)).size !== 6) throw new Error("A3 source-image probe coverage differs");
-for (const probe of probes.probes) {
-  if (probe.method !== "HEAD" || !selectedIds.has(probe.image_id)) throw new Error("A3 probe is not a selected metadata record");
-}
-if (/CREMA-D|actor-disjoint|7,438|5,965/.test(a3)) throw new Error("A3 page retains the superseded task");
-const pairReview = JSON.parse(readFileSync(resolve(root, evidenceDir, "pair-review-summary.json"), "utf8"));
-const reviewRows = readCsv("pair-review.csv");
-if (pairReview.source_commit !== audit.source_commit || reviewRows.length !== pairReview.sample_pairs || reviewRows.length !== 18) throw new Error("A3 preliminary visual sample provenance differs");
-const expectedReview = audit.selected_categories.flatMap((category) => records.filter((r) => r.category === category && r.split === "train").slice(0, 3));
-for (const [i, row] of reviewRows.entries()) {
-  if (row.image_id !== expectedReview[i].image_id || row.split !== "train" || row.decoded !== "true") throw new Error("A3 reviewed pair does not match deterministic training sample");
-}
-for (const [label, n] of Object.entries(pairReview.semantic_assessments)) {
-  if (reviewRows.filter((r) => r.semantic_assessment === label).length !== n) throw new Error(`A3 semantic sample count differs: ${label}`);
-}
+const publicProposalFiles = readdirSync(resolve(root, "assignments/assignment-3/proposal"));
+if (publicProposalFiles.length !== 1 || publicProposalFiles[0] !== "dataset.md") throw new Error("A3 proposal directory should contain only dataset.md");
 if (!a3.includes("18 training pairs") || !a3.includes("training permission is not cleared")) throw new Error("A3 page omits visual review or permission limitation");
+if (/CREMA-D|actor-disjoint|7,438|5,965/.test(a3)) throw new Error("A3 page retains the superseded task");
+for (const path of ["/proposal/README.md", "/proposal/pair-review", "/proposal/usage-review", "/proposal/metadata-audit", "/proposal/manifest.csv", "/proposal/groups.csv", "/proposal/audit_metadata.py"]) {
+  if (a3.includes(path)) throw new Error(`Obsolete public A3 evidence link: ${path}`);
+}
 
 for (const file of pages) {
   const html = readFileSync(resolve(root, file), "utf8");
