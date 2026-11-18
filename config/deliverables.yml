@@ -52,9 +52,9 @@ assignments:
     reproducibility_metadata: "assignments/assignment-2/source/reproducibility.json"
   a3:
     title: "Multimodal Deep Learning"
-    task: "Image–text news classification"
-    dataset: "N24News six-category subset"
-    usage_permissions: "Not cleared — publisher prior written consent required; none supplied"
+    task: "Image–text product classification"
+    dataset: "Amazon Berkeley Objects, five-class subset"
+    usage_permissions: "CC BY 4.0; attribution to Amazon.com and dataset creators"
     page: "https://longquach45.github.io/DL261-Assignments/assignments/a3.html"
     source: "assignments/assignment-3/source"
     dataset_proposal: "assignments/assignment-3/proposal/dataset.md"

@@ -2,13 +2,11 @@
 
 **Group:** MobyDick · **Milestone:** M1 proposal available · **Approval:** Pending instructor approval
 
-Proposed task: image–text news classification using N24News headlines and their associated images. Six categories: Food, Health, Science, Sports, Technology, and Travel.
+Image–text product classification on a five-class Amazon Berkeley Objects subset: Chair, Grocery, Rug, Shoes, and Sofa. The metadata-defined scope contains **6,353 pairs**, split **5,161 / 596 / 596** by product-family groups, with seed 42.
 
-The provisional target is 7,500 balanced pairs, split 6,000/750/750. A preliminary 18-pair review is complete; student verification and full image validation remain pending. **Training-use permission is not cleared.**
-
-- [Dataset Proposal](../proposal/dataset.md) — source/version/usage terms, preliminary findings, split rules, models, experiments, and compute plan.
+- [Dataset Proposal](../proposal/dataset.md) — source, CC BY 4.0 license, illustration, preliminary findings, split, models, experiments, and compute plan.
 - [Public assignment page](https://longquach45.github.io/DL261-Assignments/assignments/a3.html)
 
-Supporting M1 audit scripts, manifests, and detailed review records are retained in the ignored local workspace. Their findings are summarized in the proposal.
+Images and metadata are provided by Amazon.com under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); dataset creators are credited in the proposal. Supporting M1 audits and manifests remain in the ignored local workspace.
 
-Main experiments await instructor approval, applicable permission, and full data checks. If permission will not be obtained, replace N24News first. Training/evaluation code, dependency lock, checkpoints/reconstruction instructions, report, slides, and video are pending; no training commands or measured model results are available at M1.
+Main experiments await instructor approval. Training/evaluation code, locked dependencies, checkpoints or reconstruction instructions, final report, slides, and video are pending. No measured model results or training commands are available at M1.

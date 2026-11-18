@@ -75,7 +75,7 @@ if (!a2.includes(">Approved</span>")) {
 }
 
 const a3 = readFileSync(resolve(root, "dist/assignments/a3.html"), "utf8");
-for (const field of ["M1 proposal available", "Pending instructor approval", "N24News", "7,500", "6,000 / 750 / 750", "Usage terms remain unresolved", "DistilBERT", "No experimental results", "Final report · pending", "Slides · pending", "YouTube video · pending"]) {
+for (const field of ["M1 proposal available", "Pending instructor approval", "Amazon Berkeley Objects", "6,353", "5,161 / 596 / 596", "CC BY 4.0", "DistilBERT", "No experimental results", "Final report · pending", "Slides · pending", "YouTube video · pending"]) {
   if (!a3.includes(field)) throw new Error(`Assignment 3 M1 page is missing: ${field}`);
 }
 const repository = "https://github.com/LongQuach45/DL261-Assignments/blob/main/";
@@ -99,24 +99,36 @@ for (const file of ["dist/index.html", "dist/ai-usage.html"]) {
 
 const proposalPath = "assignments/assignment-3/proposal/dataset.md";
 const proposal = readFileSync(resolve(root, proposalPath), "utf8");
-for (const section of ["1. Dataset and task", "2. Preliminary distribution and pair quality", "3. Subset, split, and leakage prevention", "4. Preprocessing and alignment", "5. Models and training plan", "6. Experiments and evaluation", "7. Compute and reproducibility", "8. Approval and limitations", ...(!a3DisclosureDeferred ? ["AI Usage Disclosure"] : []), "References"]) {
+for (const section of ["1. Dataset and task", "2. Selected subset", "3. Distribution analysis and limitations", "4. Split and leakage prevention", "5. Preprocessing pipeline", "6. Models and controlled experiment", "7. Evaluation and error analysis", "8. Compute and reproducibility", ...(!a3DisclosureDeferred ? ["AI Usage Disclosure"] : []), "References"]) {
   if (!proposal.includes(`## ${section}`)) throw new Error(`A3 proposal is missing: ${section}`);
 }
-for (const field of ["N24News", "047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106", "cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c", "Pending instructor approval", "Training permission is not cleared", "1,250", "6,000", "750", "macro-F1", "Image only", "Text only", "Simple fusion", "Improved fusion", "Gate ablation"]) {
+for (const field of ["Amazon Berkeley Objects", "CC BY 4.0", "LICENSE-CC-BY-4.0.txt", "Pending instructor approval", "StratifiedGroupKFold", "macro-F1", "Image only", "Text only", "Simple fusion", "Improved fusion", "Gate ablation"]) {
   if (!proposal.includes(field)) throw new Error(`A3 proposal is missing: ${field}`);
 }
-const summaryFields = ["Full metadata records / categories", "Records across selected categories", "Distinct image URLs / raw headlines", "Candidate representatives after filtering", "Metadata-selected pairs / categories", "Train / validation / test targets", "Decoded sample pairs", "Visual sample assessments"];
-for (const field of summaryFields) {
-  const row = proposal.split("\n").find((line) => line.startsWith(`| ${field} |`));
-  if (!row || !a3.includes(row.split("|")[2].trim())) throw new Error(`A3 page/proposal summary differs: ${field}`);
+const cells = (label) => {
+  const row = proposal.split("\n").find((line) => line.startsWith(`| ${label} |`));
+  if (!row) throw new Error(`Missing proposal table row: ${label}`);
+  return row.split("|").slice(1, -1).map((cell) => cell.trim());
+};
+const number = (cell) => Number(cell.replaceAll(",", ""));
+const classes = ["Chair", "Grocery", "Rug", "Shoes", "Sofa"];
+const totals = [0, 0, 0, 0];
+for (const label of classes) {
+  const row = cells(label);
+  const values = row.slice(1).map(number);
+  if (values.length !== 4 || values.some((n) => !Number.isInteger(n) || n <= 0) || values[0] !== values[1] + values[2] + values[3]) throw new Error(`Inconsistent A3 class counts: ${label}`);
+  values.forEach((value, i) => totals[i] += value);
+  for (const value of row) if (!a3.includes(`>${value}<`)) throw new Error(`A3 page/proposal table differs: ${label}/${value}`);
 }
-const publicProposalFiles = readdirSync(resolve(root, "assignments/assignment-3/proposal"));
-if (publicProposalFiles.length !== 1 || publicProposalFiles[0] !== "dataset.md") throw new Error("A3 proposal directory should contain only dataset.md");
-if (!a3.includes("18 training pairs") || !a3.includes("training permission is not cleared")) throw new Error("A3 page omits visual review or permission limitation");
-if (/CREMA-D|actor-disjoint|7,438|5,965/.test(a3)) throw new Error("A3 page retains the superseded task");
-for (const path of ["/proposal/README.md", "/proposal/pair-review", "/proposal/usage-review", "/proposal/metadata-audit", "/proposal/manifest.csv", "/proposal/groups.csv", "/proposal/audit_metadata.py"]) {
-  if (a3.includes(path)) throw new Error(`Obsolete public A3 evidence link: ${path}`);
-}
+if (totals[0] < 5000 || classes.length < 5) throw new Error("A3 subset does not meet default classification thresholds");
+const split = cells("Train / validation / test")[1].split(" / ").map(number);
+if (split.some((value, i) => value !== totals[i + 1])) throw new Error("A3 summary split differs from class table");
+if (number(cells("Selected pairs / product-family groups")[1].split(" / ")[0]) !== totals[0]) throw new Error("A3 paired count differs from class table");
+const files = readdirSync(resolve(root, "assignments/assignment-3/proposal")).filter((name) => !name.startsWith(".")).sort();
+if (files.join(",") !== "abo-samples.jpg,dataset.md") throw new Error("A3 proposal should contain only the proposal and illustration");
+if (!proposal.includes("](abo-samples.jpg)") || !a3.includes("Two real catalog images") || !a3.includes("Images © Amazon.com")) throw new Error("A3 illustration or attribution missing");
+const image = readFileSync(resolve(root, "assignments/assignment-3/proposal/abo-samples.jpg"));
+if (image[0] !== 0xff || image[1] !== 0xd8) throw new Error("A3 illustration is not a JPEG");
 
 for (const file of pages) {
   const html = readFileSync(resolve(root, file), "utf8");
@@ -124,4 +136,4 @@ for (const file of pages) {
   if (/assignment-[23]-dataset-proposal\.pdf|Formatted proposal PDF/.test(html)) throw new Error(`Obsolete proposal PDF reference in ${file}`);
 }
 
-console.log(a3DisclosureDeferred ? "Site checks passed; Assignment 3 disclosure publication deferred by configuration." : "Handbook page checks passed.");
+console.log("Site content checks passed.");

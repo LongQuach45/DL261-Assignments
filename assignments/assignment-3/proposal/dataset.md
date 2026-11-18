@@ -1,168 +1,168 @@
 # Assignment 3 Dataset Proposal
 
 **Course:** CO3133 — Deep Learning and Its Applications, Semester 261<br>
-**Institution:** Ho Chi Minh City University of Technology – VNU-HCM, Faculty of Computer Science and Engineering<br>
-**Instructor:** Le Thanh Sach · **Group:** MobyDick<br>
-**Milestone:** M1 Proposal · **Due:** 18 November 2026, 23:59 GMT+7<br>
+**Track:** Image–text classification<br>
+**Dataset:** Amazon Berkeley Objects, five-class subset<br>
 **Status:** Pending instructor approval
 
-| Member | Student ID |
-|---|---|
-| Le Quoc Binh | 2352117 |
-| Quach Kien Long | 2352698 |
-| Le Thanh Lam | 2252421 |
-| To Nha Vy | 2353360 |
+This proposal defines the dataset and experiment scope. Main experiments begin after instructor approval.
+
+![Representative ABO catalog images from the five selected classes](abo-samples.jpg)
+
+*Images © Amazon.com, from the [official ABO dataset](https://amazon-berkeley-objects.s3.us-east-1.amazonaws.com/index.html), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Ten training examples, two per class, resized and arranged with class labels for illustration. Dataset creators are credited in [1].*
 
 ## 1. Dataset and task
 
 | Field | Specification |
 |---|---|
-| Dataset | N24News [1], six-category subset |
-| Source/version | [Official repository snapshot](https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106), commit `047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106`, dated 29 August 2023; LREC 2022 paper |
-| Metadata | `nytimes_dataset.json`; SHA-256 `cc7a3422e948a84fffcfe2f9f8c6162ec076a45f712188a6e31be382a9150e9c` |
-| Usage/license | No explicit dataset license is stated in the official N24News repository; underlying content remains subject to the [publisher's terms](https://help.nytimes.com/115014893428-Terms-of-Service). |
-| Task | Image–text classification, explicitly listed in handbook §26 |
-| Input/output | One original article headline plus its associated RGB image → Food, Health, Science, Sports, Technology, or Travel |
-| Prediction unit | One article–image pair |
-| Annotations | Original `section` category; metadata also provides headline, abstract, caption, URLs, and image ID |
-| Formats | UTF-8 JSON and source-image URLs; decoded sample includes JPEG and PNG |
+| Source | [Official Amazon Berkeley Objects release](https://amazon-berkeley-objects.s3.us-east-1.amazonaws.com/index.html) [1] |
+| Version | Official release accompanying the CVPR 2022 paper; metadata snapshot accessed 18 November 2026 |
+| Usage/license | **CC BY 4.0** for listings and images. Credit Amazon.com and the dataset creators, link the license, and identify changes to reused material. [Official license](https://amazon-berkeley-objects.s3.us-east-1.amazonaws.com/LICENSE-CC-BY-4.0.txt). |
+| Task | Single-label multimodal product-type classification |
+| Input | One main catalog image and the original English title of the same product |
+| Output | Chair, Grocery, Rug, Shoes, or Sofa |
+| Prediction unit | One canonical product, identified by `item_id` |
+| Annotation | Original `product_type` label; image joined through `main_image_id` |
+| Formats | Gzip-compressed JSON Lines for listings; CSV image metadata; JPEG/PNG catalog images |
+| Loss | Class-weighted cross-entropy; weights computed from training counts only and shared by all configurations |
 
-The task studies whether images help classify short or ambiguous headlines and when modalities conflict. Both inputs come from the same source article; independent records are never randomly paired. Use **headline-only** text: no generated descriptions, article-body scraping, captions, abstracts, URLs, filenames, or category metadata as model features.
+ABO contains 147,702 product listings and 398,212 unique catalog images. Metadata includes multilingual names, product types, brands, model identifiers, and image IDs. The published license covers both listing metadata and images; the [AWS registry](https://registry.opendata.aws/amazon-berkeley-objects/) records the 2023 update to CC BY 4.0.
 
-If applicable permission will not be obtained, replace N24News before main experiments. Instructor approval is a separate prerequisite.
+Image and text are linked by the same product record. No generated descriptions or independently matched images are used. Category fields, identifiers, brand/model grouping keys, and image labels added to the illustration are not supplied as model features. Only the original title and image are inputs.
 
-## 2. Preliminary distribution and pair quality
+**Citation:**
 
-The metadata audit uses the pinned source above. Counts are provisional until full image validation.
+> Collins, Jasmine, et al. “ABO: Dataset and Benchmarks for Real-World 3D Object Understanding.” *CVPR*, 2022.
+
+```bibtex
+@inproceedings{collins2022abo,
+  title = {ABO: Dataset and Benchmarks for Real-World 3D Object Understanding},
+  author = {Collins, Jasmine and Goel, Shubham and Deng, Kenan and Luthra, Achleshwar
+    and Xu, Leon and Gundogdu, Erhan and Zhang, Xi and Yago Vicente, Tomas F.
+    and Dideriksen, Thomas and Arora, Himanshu and Guillaumin, Matthieu and Malik, Jitendra},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year = {2022}
+}
+```
+
+## 2. Selected subset
+
+Use records with an `en_US` title, a main-image reference present in the image metadata, and one consistent product-type label. Collapse marketplace copies by `item_id`, preferring `amazon.com`, then lexicographic domain order. Exclude item IDs with inconsistent labels across usable records.
+
+The five categories are fixed before experimentation. There are 10,052 canonical candidate products in these categories. Group related products before selection; exclude mixed-category family components and cap Grocery at 3,000 using complete groups. This yields:
+
+| Class | Pairs | Train | Validation | Test |
+|---|---:|---:|---:|---:|
+| Chair | 926 | 740 | 93 | 93 |
+| Grocery | 3,000 | 2,480 | 260 | 260 |
+| Rug | 639 | 511 | 64 | 64 |
+| Shoes | 1,507 | 1,205 | 151 | 151 |
+| Sofa | 281 | 225 | 28 | 28 |
+| **Total** | **6,353** | **5,161** | **596** | **596** |
+
+The scope exceeds the default of five classes and about 5,000 paired samples; it also has over 5,000 training pairs. Results apply only to this subset. Smaller subsets are debugging-only; record their size, seed, and purpose.
+
+## 3. Distribution analysis and limitations
+
+The preliminary audit checks all 16 listing shards and the image metadata. Detailed audit material and the provisional manifest are retained locally.
 
 | Finding | Result |
 |---|---|
-| Full metadata records / categories | 61,218 / 24 |
-| Records across selected categories | 18,000 |
-| Empty selected headlines / image URLs | 0 / 0 |
-| Distinct image URLs / raw headlines | 17,923 / 17,607 |
-| Headline words, min / median / max | 1 / 9 / 19 |
-| Candidate representatives after filtering | 17,532 |
-| Metadata-selected pairs / categories | 7,500 / 6 |
-| Train / validation / test targets | 6,000 / 750 / 750 |
-| Decoded sample pairs | 18 |
-| Visual sample assessments | 9 directly supportive; 8 contextually related; 1 unclear; 0 apparent mismatches |
+| Source product listings / catalog images | 147,702 / 398,212 |
+| Canonical candidate pairs in five classes | 10,052 |
+| Mixed-category family groups excluded | 120 groups / 1,171 records |
+| Selected pairs / product-family groups | 6,353 / 3,369 |
+| Train / validation / test | 5,161 / 596 / 596 |
+| Missing main-image metadata in candidate pool | 0 |
+| Title words, min / median / max | 1 / 11 / 24 |
+| Sample pairs retrieved and decoded | 10 / 10 |
 
-| Category | Source records | Candidate representatives | Selected target |
-|---|---:|---:|---:|
-| Food | 3,000 | 2,616 | 1,250 |
-| Health | 3,000 | 2,997 | 1,250 |
-| Science | 3,000 | 2,998 | 1,250 |
-| Sports | 3,000 | 2,984 | 1,250 |
-| Technology | 3,000 | 2,977 | 1,250 |
-| Travel | 3,000 | 2,960 | 1,250 |
-| **Total** | **18,000** | **17,532** | **7,500** |
+Counts above establish metadata pairing, not full image integrity. Original-image metadata spans widths 166–3,000 and heights 70–2,560 pixels. The ten inspected downscaled examples are JPEG images with widths 118–256 and heights 95–256 pixels.
 
-The target is balanced and exceeds the default of at least five classes and about 5,000 pairs. Filtering removes one conflicting-label component containing two records and 466 redundant records. Word counts use whitespace across the 18,000 source records; tokenizer lengths remain to be measured. Nine caption fields are empty, but captions are unused. Nonempty image URLs do not establish availability.
+The illustration uses the first two SHA-256-ranked training products per class. Visual inspection found the broad product subjects consistent with their titles; two examples are multi-object room/seating scenes where the target is less isolated. These preliminary observations are not verified fine-grained product identities or a dataset-wide mismatch rate. Full image decoding, actual missing rates, aspect-ratio distributions, exact/perceptual duplicates, and representative label/pair-quality review remain part of data preparation.
 
-On 18 November 2026, six image HEAD probes returned HTTP 200. A subsequent review retrieved and fully decoded the **first three hash-ranked training pairs per category**: 17 JPEG and one PNG, 18 distinct byte hashes, widths 986–1,050 and heights 516–550 pixels. No validation/test images were reviewed.
+The selected classes are imbalanced: Grocery has 3,000 pairs and Sofa 281. Titles may explicitly name the product type, making the text-only baseline strong. Report lexical shortcuts, packaging text, background/context cues, brand bias, and ambiguous room scenes. The 28 Sofa test pairs give less precise per-class estimates than larger classes; do not generalize to all ABO products or shopping domains.
 
-An automated visual review compared all 18 images with their headlines. “Directly supportive” means the principal subject is recognizable; “contextually related” means the broad topic is compatible but the specific claim/person/place is not established; “unclear” means insufficient visual evidence. The unclear Technology pair is a generic office portrait accompanying an AI/workplace headline. It remains flagged for student review, not silently excluded. These preliminary judgments are not ground truth or a population mismatch-rate estimate; student verification remains pending.
+## 4. Split and leakage prevention
 
-Publisher/year overlays are visible in all 18 images, and some contain additional text. Inspect artifact visibility after prescribed preprocessing and define any uniform treatment before freezing the protocol. No OCR feature or overlay-removal step has been added.
+The split unit is a connected product-family group. Connect canonical products sharing any catalog image ID, a normalized identical title, or an exact brand plus specific model-name/model-number value. Normalize with Unicode NFKC, case folding, and whitespace collapsing. Ignore empty/generic model values and values equal to the brand. Exclude family components spanning multiple target categories.
 
-**Full checks still planned:** image availability/decoding, missing rates, dimensions/aspect ratios, exact/perceptual duplicates, semantic alignment, and repeated events. Supporting scripts, manifests, per-pair observations, hashes, and raw review inputs are retained in the ignored local workspace. No full-dataset integrity result or model result is claimed.
+Rank each group by SHA-256 of `"42|" + group_id`, where `group_id` hashes its sorted product IDs. Keep all non-Grocery groups; add Grocery groups in rank order while their cumulative count is at most 3,000. Retain complete groups.
 
-## 3. Subset, split, and leakage prevention
+Apply `StratifiedGroupKFold(n_splits=10, shuffle=True, random_state=42)` to the product-ID-sorted selection. Fold 0 is test, fold 1 validation, and the other eight are training. The measured split is 5,161/596/596; grouping takes priority over exact 80/10/10 proportions. The provisional allocation was generated with scikit-learn 1.9.1. All five classes occur in every partition; no family group spans partitions.
 
-Categories are fixed before experimentation. Apply this deterministic protocol:
+Store product/marketplace IDs, main-image IDs, group IDs, folds, split, and exclusion reasons in a versioned manifest. All images, marketplace copies, and cached features of a retained product inherit its split. Before training, quarantine further invalid records and keep additional confirmed duplicate groups together; revise/freeze the final manifest before any experiment. Review material changes with the instructor.
 
-1. Form connected components using exact article URL, exact image URL, or headlines normalized with Unicode NFKC, case folding, and whitespace collapsing.
-2. Exclude conflicting-label components. Keep the smallest SHA-256 of `"42|" + article_url` in each remaining component, breaking hash ties by image ID.
-3. Rank representatives within each category by that same hash; select the first 1,250.
-4. Assign the first 1,000 to training, next 125 to validation, and last 125 to test.
+Fit learned statistics and loss weights using training data only. Do not use test data for tuning, early stopping, checkpoint selection, or deciding which categories to retain. Use the same manifest for every configuration.
 
-| Partition | Pairs per category | Total | Purpose |
-|---|---:|---:|---|
-| Training | 1,000 | 6,000 | Fit heads and learned statistics |
-| Validation | 125 | 750 | Hyperparameters and checkpoints |
-| Test | 125 | 750 | Final evaluation after selection |
-| **Total** | **1,250** | **7,500** | |
-
-This is a custom balanced split, not the paper's original split. Seed `42` is embedded in the hash rank. The leakage unit is the article and its duplicate component. No selected pair shares an exact article URL, image URL, or normalized headline with another selected pair. Derived images/features inherit their article's partition. Keep additional confirmed duplicates and identified repeated-event groups together; metadata alone cannot detect every repeated event.
-
-After objective image exclusions and additional grouping, regenerate selection from remaining candidates and freeze a versioned final manifest **before training**. Record source-row indices, image IDs, component IDs, partitions, hashes, and exclusion reasons. Revise the proposal if scope changes materially or class availability is insufficient. Never alter splits after seeing model performance. Smaller subsets are debugging-only; record size, seed, and purpose.
-
-Do not use test data for tuning, early stopping, learned statistics, or checkpoint selection. Final implementation will publish the split/configuration and reconstruction records needed to trace reported results.
-
-## 4. Preprocessing and alignment
+## 5. Preprocessing pipeline
 
 ```text
-Same article → headline + image → duplicate-group selection/split
-             → tokenizer + RGB preprocessing → paired data loader
-             → encoders → unimodal head or fusion → cross-entropy
-             → optimization → category → evaluation
+Product record → validate title/image pair → family-group split
+               → RGB preprocessing + tokenizer → paired DataLoader
+               → image/text encoders → unimodal head or fusion
+               → cross-entropy → optimization → prediction → evaluation
 ```
 
-- **Image:** RGB; shorter side resized to 256; center crop 224×224; ImageNet normalization. Batch: `(B, 3, 224, 224)`.
-- **Text:** DistilBERT uncased tokenizer [3]; at most 64 tokens; padding, truncation, and attention mask. IDs/mask: `(B, L)`, `L ≤ 64`. Measure token lengths and truncation rate.
-- **Alignment:** resolve both modalities from the same pinned source row/image ID; preserve IDs through batching and feature caching.
-- **Controls:** deterministic preprocessing, no augmentation in the core comparison. Missing/corrupt modalities exclude the pair; never substitute unrelated data.
+- Convert images to RGB; resize with preserved aspect ratio and pad on white to `224 × 224`, then apply ImageNet normalization. Image tensor: `(B, 3, 224, 224)`.
+- Use the original `en_US` title with the DistilBERT uncased tokenizer [3], maximum 64 tokens, attention masks, padding, and truncation. IDs/masks: `(B, L)`, `L ≤ 64`. Measure token lengths and truncation rates.
+- Pair both modalities through the same canonical product/main-image identifiers.
+- Use deterministic preprocessing and no augmentation for the core comparison. Validate image formats from decoded content, not file suffixes.
+- Exclude missing/corrupt inputs from the paired benchmark; never replace them with unrelated records. Validation/test perform no gradient updates.
 
-## 5. Models and training plan
+## 6. Models and controlled experiment
 
-PyTorch provides training primitives, torchvision provides ImageNet ResNet-18 [2], and Transformers provides DistilBERT [3]. The group will implement pooling, heads, projections, fusion, and evaluation. Both encoders remain frozen in evaluation mode, including BatchNorm buffers/dropout; backbone fine-tuning is outside the core scope.
+Use PyTorch training primitives, torchvision ResNet-18 [2], and Transformers DistilBERT [3]. The group will implement pooling, projections, heads, fusion, training, and evaluation.
 
 | Configuration | Planned method |
 |---|---|
-| Image only | ResNet-18 pooled 512-dimensional features; six-class linear head |
-| Text only | Attention-mask-aware mean-pooled 768-dimensional DistilBERT features; six-class linear head |
+| Image only | Frozen ImageNet ResNet-18; pooled 512-dimensional features and five-class linear head |
+| Text only | Frozen DistilBERT; attention-mask-aware mean-pooled 768-dimensional features and five-class linear head |
 | Simple fusion | Intermediate fusion: concatenate features; 256-unit ReLU MLP and classifier |
-| Improved fusion | Intermediate fusion: project each modality to 256 dimensions; learned sigmoid gate and classifier [4] |
-| Gate ablation | Same projection/classifier design with equal fixed weights |
+| Improved fusion | Intermediate fusion: project both modalities to 256 dimensions; learned sigmoid gate and classifier [4] |
+| Gate ablation | Same projection/classifier design, with equal fixed modality weights |
 
-Improved fusion uses `h = g * h_image + (1 - g) * h_text`; the ablation fixes `g = 0.5` and retrains the remaining head. Report parameter/capacity differences. This is an adaptation of gated fusion, not a claim to reproduce the paper's experiments.
+Train unimodal heads separately, then fusion heads on the same frozen encoder features. Keep both encoders in evaluation mode, including BatchNorm buffers/dropout. Backbone fine-tuning is outside the core scope. Each configuration's overall loss is supervised cross-entropy with training-only weights `N_train / (5 × n_class)`; there is no auxiliary encoder loss.
 
-Train each unimodal head separately, then each fusion head independently on the same frozen encoder features. Each configuration uses supervised cross-entropy as its overall loss, with no auxiliary joint-encoder loss.
+Gated fusion uses `h = g * h_image + (1 - g) * h_text`. Its controlled ablation fixes `g = 0.5` and retrains the remaining head; report the parameter-count difference.
 
-Initial settings: AdamW, learning rate `1e-3`, weight decay `1e-4`, batch size 32, and up to 20 epochs/configuration. Reset Python, NumPy, CPU/CUDA, and data-loader seeds to `42` per configuration. Select highest validation macro-F1, then lower validation loss, then earlier epoch. Hold split, pretrained weights, preprocessing, seed, optimizer, epoch budget, and selection rule fixed across fusion comparisons.
-
-## 6. Experiments and evaluation
-
-**Metrics:** accuracy and macro-F1; select on validation macro-F1 and evaluate selected models once on test. Report per-class precision/recall/F1, confusion matrices, and learning curves.
+Initial settings: AdamW, learning rate `1e-3`, weight decay `1e-4`, batch size 32, and at most 20 epochs per configuration. Reset Python, NumPy, CPU/CUDA, and DataLoader seeds to `42` before each run. Select highest validation macro-F1, then lower validation loss, then earlier epoch.
 
 | Comparison | Hypothesis / changed factor | Fixed factors | Decision criterion |
 |---|---|---|---|
-| Image vs. text | Modalities differ in predictive strength; modality/encoder change | Split, labels, seed, evaluation, checkpoint rule | Validation macro-F1; test metrics with compute cost; not an isolated architecture test |
-| Unimodal vs. concatenation | Combining features may help ambiguous headlines; features/head change | Same encoders, split, preprocessing, evaluation | Validation macro-F1; whether test findings agree |
-| Concatenation vs. gate | Adaptive weighting may help conflicts; fusion design changes | Same encoder features, split, seed, optimizer, budget, selection | Validation macro-F1, final test metrics, compute/capacity |
-| Learned vs. fixed gate | Adaptive weights contribute beyond equal weighting | Same projections/classifier, encoder features, split, seed, schedule | Validation macro-F1, test metrics, parameter/time differences |
+| Image vs. text | Modalities differ in predictive strength; modality and encoder change | Split, labels, metrics, seed, selection | Validation macro-F1 and final test metrics with compute cost; not an isolated architecture test |
+| Unimodal vs. concatenation | Combined features may help ambiguous titles; inputs/head change | Same encoders, preprocessing, split, evaluation | Validation macro-F1; whether test findings agree |
+| Concatenation vs. gated fusion | Adaptive weighting may help conflicting evidence; fusion changes | Encoder features, split, seed, loss weights, optimizer, budget, selection | Validation macro-F1, final test metrics, capacity/compute |
+| Learned vs. fixed gate | Adaptive weights contribute beyond equal weighting; gate changes | Projection/classifier design, features, split, seed, schedule | Validation macro-F1, final test metrics, parameter/time differences |
 
-Analyze support cases, rescue cases, conflicting predictions, ambiguous headlines, illustrative images, Science/Technology confusion, editorial overlap, and repeated events. Include counts and representative examples; gate values alone do not prove causation. Fusion need not outperform unimodal baselines.
+## 7. Evaluation and error analysis
 
-Diagnostic modality removal zeros the removed representation and bypasses its gate contribution. This is an inference intervention, not a missing-modality-trained model or substitute for independent baselines. Both modalities absent → abstain.
+**Primary metrics:** accuracy and macro-F1. Report per-class precision/recall/F1, confusion matrices, learning curves, correct/difficult-correct/failed examples, and the fixed test-set support per class. Evaluate selected checkpoints once on test after model selection.
 
-Measure total/trainable parameters, feature-extraction/head-training time, warmed-up model-only and end-to-end latency, and peak allocated GPU memory. End-to-end cost includes preprocessing, tokenization, encoders, and head; document batch size, timing boundaries, hardware, and GPU synchronization.
+Compare unimodal and multimodal results, including cases where both modalities agree, one rescues the other, or they conflict. Analyze room scenes with several products, visually similar furniture, short/ambiguous titles, category words, packaging text, and minority-class errors. Fusion is not required to outperform either modality; explain outcomes with evidence.
 
-## 7. Compute and reproducibility
+Missing-modality diagnostics zero the removed projected representation and bypass its gate contribution. These are inference interventions, not independently trained baselines or a missing-modality-trained model. Both modalities absent → abstain.
 
-| Item | Initial estimate / record |
+**Secondary measurements:** total/trainable parameters, feature-extraction and head-training time, warmed-up model-only and end-to-end latency, and peak allocated GPU memory. End-to-end cost includes preprocessing, tokenization, encoders, and head; record batch size, hardware, timing boundaries, and synchronization.
+
+## 8. Compute and reproducibility
+
+| Item | Plan |
 |---|---|
-| Hardware/storage | Approximately 8 GB GPU memory and 10 GB free storage; confirm availability and actual usage |
-| Schedule | Five configurations, ≤20 epochs each, batch size 32 |
-| Time | Estimated 1–3 GPU-hours including extraction; pilot after prerequisites |
-| Memory | Frozen encoders, deterministic cached features, microbatch extraction if needed |
-| Environment | Exact Python, PyTorch, torchvision, Transformers/tokenizer versions and dependency lock; pretrained revisions/checksums |
-| Traceability | Configs, seeds, final manifest, image hashes, exclusions, per-epoch logs, run IDs, checkpoint hashes, commit/tag, and reconstruction commands |
+| Resolution/batch | `224 × 224` RGB; up to 64 text tokens; batch size 32 |
+| Hardware | One GPU with approximately 8 GB memory; record actual hardware |
+| Schedule | Five configurations, up to 20 epochs each |
+| Runs/time | Approximately 1–3 GPU-hours including feature extraction; estimate to validate with a pilot |
+| Storage | 10 GB budget for metadata, selected images, weights, caches, and checkpoints; no 3D/turntable data required |
+| Memory control | Frozen encoders, deterministic cached features, microbatch extraction if needed |
+| Provenance | Source metadata hashes, manifest, image hashes, software/dependency versions, pretrained revisions, configs, seeds, epoch logs, run IDs, checkpoint hashes, and commit/tag |
+| Reconstruction | Publish preparation, train/evaluate, checkpoint-reconstruction commands and final provenance with implementation |
 
-Supporting M1 audit material is local; this document preserves its selection rules and findings. Publish final experiment provenance and reconstruction instructions with the later implementation. No runnable training pipeline exists at M1.
-
-## 8. Approval and limitations
-
-**Pending instructor approval. Training permission is not cleared.** Student verification and full-dataset validation remain pending. No permission request was sent or grant supplied. If permission will not be obtained, replace N24News before main experiments. Instructor approval does not substitute for applicable content permissions.
-
-Results will be limited by six topics, one English-language publisher, headline-only text, frozen encoders, one seed, and possible publisher/text shortcuts. The small visual sample does not establish full-dataset quality or event independence. No training, submission, instructor approval, permission grant, or completed licensing compliance is claimed.
-
-**Milestones, each due 23:59 GMT+7:** M1 proposal on 18 November 2026; M2 unimodal/simple-fusion draft on 25 November; M3 improved fusion, ablation, analysis, report, slides, video, webpage, and checkpoints/reconstruction on 2 December. A proposal PDF is not required by the handbook; final deliverables remain pending.
+Main implementation begins only after **Approved** or **Approved with conditions**. Record any instructor conditions. Final report, slides, video, and checkpoints/reconstruction instructions will accompany the later milestones; no model results or approval are claimed here.
 
 ## References
 
-1. Wang, Z., Shan, X., Zhang, X., and Yang, J. (2022). *N24News: A New Dataset for Multimodal News Classification*. LREC, 6768–6775. [Paper](https://aclanthology.org/2022.lrec-1.729/).
-2. He, K., Zhang, X., Ren, S., and Sun, J. (2016). *Deep Residual Learning for Image Recognition*. CVPR. [Paper](https://arxiv.org/abs/1512.03385); [ResNet-18 implementation/weights](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet18.html).
-3. Sanh, V., Debut, L., Chaumond, J., and Wolf, T. (2019). *DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter*. [Paper](https://arxiv.org/abs/1910.01108); [model/tokenizer](https://huggingface.co/distilbert/distilbert-base-uncased).
-4. Arevalo, J., Solorio, T., Montes-y-Gomez, M., and Gonzalez, F. A. (2017). *Gated Multimodal Units for Information Fusion*. [Paper](https://arxiv.org/abs/1702.01992).
+1. Collins, J., Goel, S., Deng, K., Luthra, A., Xu, L., Gundogdu, E., Zhang, X., Yago Vicente, T. F., Dideriksen, T., Arora, H., Guillaumin, M., and Malik, J. “ABO: Dataset and Benchmarks for Real-World 3D Object Understanding.” *CVPR*, 2022. [Paper](https://arxiv.org/abs/2110.06199); [dataset and attribution](https://amazon-berkeley-objects.s3.us-east-1.amazonaws.com/index.html).
+2. He, K., Zhang, X., Ren, S., and Sun, J. “Deep Residual Learning for Image Recognition.” *CVPR*, 2016. [Paper](https://arxiv.org/abs/1512.03385); [ResNet-18](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet18.html).
+3. Sanh, V., Debut, L., Chaumond, J., and Wolf, T. “DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter.” 2019. [Paper](https://arxiv.org/abs/1910.01108); [model/tokenizer](https://huggingface.co/distilbert/distilbert-base-uncased).
+4. Arevalo, J., Solorio, T., Montes-y-Gomez, M., and Gonzalez, F. A. “Gated Multimodal Units for Information Fusion.” 2017. [Paper](https://arxiv.org/abs/1702.01992).

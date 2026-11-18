@@ -23,7 +23,7 @@ npm run verify
 ├── assignments/
 │   ├── assignment-1/     # Fashion-MNIST architecture comparison
 │   ├── assignment-2/     # Food-101 specialized image classification
-│   └── assignment-3/     # N24News image–text M1 proposal; approval pending
+│   └── assignment-3/     # ABO image–text M1 proposal; approval pending
 ├── config/deliverables.yml
 ├── src/                  # Astro pages, components, metadata, and styles
 ├── scripts/check-handbook.mjs

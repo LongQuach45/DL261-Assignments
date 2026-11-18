@@ -1,91 +1,98 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AssignmentIdentity from "../../components/AssignmentIdentity.astro";
+import MetricCard from "../../components/MetricCard.astro";
+import ResultTable from "../../components/ResultTable.astro";
+import Figure from "../../components/Figure.astro";
 import { external } from "../../data/site";
+import illustration from "../../../assignments/assignment-3/proposal/abo-samples.jpg";
 import { readFileSync } from "node:fs";
 const proposal = readFileSync("assignments/assignment-3/proposal/dataset.md", "utf8");
-const proposalValue = (label: string) => {
+const proposalRow = (label: string) => {
   const row = proposal.split("\n").find((line) => line.startsWith(`| ${label} |`));
-  if (!row) throw new Error(`Missing proposal summary field: ${label}`);
-  return row.split("|")[2].trim();
+  if (!row) throw new Error(`Missing proposal field: ${label}`);
+  return row.split("|").slice(1, -1).map((cell) => cell.trim());
 };
+const proposalValue = (label: string) => proposalRow(label)[1];
+const [pairCount, familyCount] = proposalValue("Selected pairs / product-family groups").split(" / ");
+const subsetRows = ["Chair", "Grocery", "Rug", "Shoes", "Sofa"].map((label) => {
+  const row = proposalRow(label);
+  return { Class: row[0], Pairs: row[1], Train: row[2], Validation: row[3], Test: row[4] };
+});
+const total = subsetRows.reduce((sum, row) => sum + Number(row.Pairs.replaceAll(",", "")), 0).toLocaleString("en-US");
 ---
-<BaseLayout title="Assignment 3" description="N24News image–text classification: six-category M1 proposal, preliminary metadata evidence, and planned fusion experiments." current="a3">
+<BaseLayout title="Assignment 3" description="Amazon Berkeley Objects image–text product classification for CO3133 Assignment 3." current="a3">
   <section class="shell page-hero">
     <p class="eyebrow">Assignment 3 · Image–text classification</p>
     <div class="page-status"><span class="status status-planned">M1 proposal available</span><small>Pending instructor approval</small></div>
-    <h1>Headlines and images,<br />one news category.</h1>
-    <p class="page-lead">A six-category N24News proposal comparing image-only, headline-only, and fusion models on original article–image pairs.</p>
-    <div class="button-row"><a class="button" href={external.a3Proposal}>Read Dataset Proposal ↗</a></div>
+    <h1>Multimodal Deep Learning</h1>
+    <p class="page-lead">Product classification using paired ABO catalog images and English titles: unimodal baselines, simple fusion, and learned gated fusion under a shared evaluation protocol.</p>
   </section>
   <AssignmentIdentity />
+  <section class="shell"><div class="metric-grid">
+    <MetricCard label="Dataset scope" value={total} detail="Paired products in five selected classes" accent={true} />
+    <MetricCard label="Fixed split" value={proposalValue("Train / validation / test")} detail="Train / validation / test · product-family groups · seed 42" />
+    <MetricCard label="Milestone" value="M1" detail="Dataset Proposal · instructor approval pending" />
+  </div></section>
   <section class="shell article-layout">
     <article>
-      <div class="notice"><strong>M1 proposal record · Pending instructor approval.</strong><p>Preliminary metadata and an 18-pair visual review are available. Training-use permission is not cleared; student verification, full image validation, and instructor approval remain pending. No main experiments have begun.</p></div>
       <section class="article-section">
         <h2>Problem statement</h2>
-        <p>Classify an original news headline and its associated RGB image into Food, Health, Science, Sports, Technology, or Travel. The prediction unit is one article–image pair. Image–text classification is explicitly listed in handbook Section 26.</p>
-        <p>The project will examine whether images help short or ambiguous headlines and when their evidence conflicts. Only the headline is supplied as text; article bodies, captions, abstracts, URLs, filenames, and category metadata are excluded from model inputs.</p>
+        <p>Given a product's main catalog image and original English title, predict Chair, Grocery, Rug, Shoes, or Sofa. Each prediction concerns one canonical product. The study will compare image-only and text-only baselines with concatenation and gated fusion, evaluating predictive quality alongside compute cost.</p>
       </section>
       <section class="article-section">
         <h2>Dataset description and EDA</h2>
-        <p><a href="https://github.com/billywzh717/N24News">N24News</a> pairs news text and images from The New York Times. The proposal pins source revision <a href="https://github.com/billywzh717/N24News/tree/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106"><code>047a2bc</code></a> and the JSON checksum.</p>
-        <div class="table-wrap"><table><caption>Pinned metadata findings · image validation pending</caption><thead><tr><th scope="col">Finding</th><th scope="col">Count</th></tr></thead><tbody>
-          <tr><td>Full source records / categories</td><td>{proposalValue("Full metadata records / categories")}</td></tr>
-          <tr><td>Source records in selected categories</td><td>{proposalValue("Records across selected categories")}</td></tr>
-          <tr><td>Distinct image URLs / raw headlines</td><td>{proposalValue("Distinct image URLs / raw headlines")}</td></tr>
-          <tr><td>Candidate representatives after duplicate filtering</td><td>{proposalValue("Candidate representatives after filtering")}</td></tr>
-          <tr><td>Metadata-selected pairs / categories</td><td>{proposalValue("Metadata-selected pairs / categories")}</td></tr>
-          <tr><td>Train / validation / test targets</td><td>{proposalValue("Train / validation / test targets")}</td></tr>
-        </tbody></table></div>
-        <p>Every selected category starts with 3,000 source records; selection targets 1,250 per category. There are no empty headlines or image URLs in the 18,000 source records, and median headline length is nine whitespace-delimited words. The <a href={external.a3Proposal}>proposal</a> summarizes the findings, exclusions, selection rules, and limitations.</p>
-        <p>The preliminary visual review decoded {proposalValue("Decoded sample pairs")} training pairs, three per category. Preliminary automated assessments: {proposalValue("Visual sample assessments")}. This small sample does not estimate the full dataset's mismatch rate. Student verification remains pending; the <a href={external.a3Proposal}>proposal</a> records the method and limitations.</p>
-        <p>The decoded sample contains 17 JPEG images and one PNG. All 18 have publisher/year overlays, and some contain additional text. Inspect these artifacts after preprocessing before freezing the experiment protocol. Images, headlines, and contact sheets remain ignored local review files.</p>
-        <p><strong>Usage terms remain unresolved; training permission is not cleared.</strong> The official repository declares no standalone dataset license. The <a href="https://help.nytimes.com/115014893428-Terms-of-Service">publisher's terms, §§2.1 and 4.1</a>, require prior written consent for the listed ML/AI development uses; none has been supplied. Academic/non-commercial status is not itself a grant. If permission will not be obtained, replace N24News before main experiments.</p>
+        <p>Amazon Berkeley Objects (ABO) provides 147,702 product listings and 398,212 catalog images. Images and metadata are released under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Both modalities are joined through the same product record and main-image identifier.</p>
+        <ResultTable caption="ABO five-class subset and grouped split" rows={subsetRows} columns={[{key:"Class",label:"Class"},{key:"Pairs",label:"Pairs"},{key:"Train",label:"Train"},{key:"Validation",label:"Validation"},{key:"Test",label:"Test"}]} />
+        <p>The metadata audit identifies {proposalValue("Canonical candidate pairs in five classes")} canonical candidates. It excludes {proposalValue("Mixed-category family groups excluded")} and caps Grocery at 3,000 while preserving complete groups. The selection contains {pairCount} pairs in {familyCount} family groups; no group spans partitions.</p>
+        <div class="result-grid">
+          <Figure src={illustration} alt="Two real catalog images for each selected ABO class: Chair, Grocery, Rug, Shoes, and Sofa" caption="Ten training examples, two per class. Images © Amazon.com, ABO, CC BY 4.0; resized and arranged with class labels for illustration." />
+        </div>
+        <p>The ten illustration pairs were retrieved, decoded, and inspected alongside their titles. Two images contain multiple room/seating objects, illustrating target ambiguity. Original metadata spans widths 166–3,000 and heights 70–2,560 pixels; sampled downscaled images span 118–256 by 95–256 pixels. Title lengths range from 1 to 24 words, with median 11.</p>
+        <p>Grocery is the largest selected class; Sofa has 281 pairs and 28 test examples. Titles may directly name the product type. Full image validation, perceptual-duplicate review, and token-length/truncation analysis remain part of preparation.</p>
+        <p>Source: <a href="https://amazon-berkeley-objects.s3.us-east-1.amazonaws.com/index.html">official ABO dataset</a>, introduced by <a href="https://arxiv.org/abs/2110.06199">Collins et al. (CVPR 2022)</a>. Credit for source data belongs to Amazon.com and the dataset creators. Version, license, scope, and approval are documented in the <a href={external.a3Proposal}>Dataset Proposal</a>.</p>
       </section>
       <section class="article-section">
         <h2>Methodology</h2>
-        <p>Use RGB images resized/cropped to 224×224 with ImageNet normalization, and original headlines tokenized with DistilBERT at a maximum of 64 tokens with attention masks. Both inputs come from the same source article record. Keep both pretrained encoders frozen in evaluation mode and train only heads, projections, and gates.</p>
-        <div class="table-wrap"><table><caption>Planned models · no training performed</caption><thead><tr><th scope="col">Configuration</th><th scope="col">Method</th></tr></thead><tbody>
-          <tr><td>Image only</td><td>ImageNet ResNet-18, 512-dimensional features, six-class head</td></tr>
-          <tr><td>Text only</td><td>DistilBERT, masked mean-pooled 768-dimensional features, six-class head</td></tr>
-          <tr><td>Simple fusion</td><td>Concatenated frozen features and 256-unit ReLU MLP</td></tr>
-          <tr><td>Improved fusion</td><td>256-dimensional modality projections with learned gated weighting</td></tr>
+        <p>Images are converted to RGB, resized with preserved aspect ratio, padded on white to 224×224, and ImageNet-normalized. English titles use the DistilBERT uncased tokenizer with at most 64 tokens and attention masks. Only the original image/title enter the model; category fields, identifiers, and illustration labels do not.</p>
+        <div class="table-wrap"><table><caption>Planned configurations</caption><thead><tr><th scope="col">Configuration</th><th scope="col">Method</th></tr></thead><tbody>
+          <tr><td>Image only</td><td>Frozen ImageNet ResNet-18, 512-dimensional features, five-class head</td></tr>
+          <tr><td>Text only</td><td>Frozen DistilBERT, masked mean-pooled 768-dimensional features, five-class head</td></tr>
+          <tr><td>Simple fusion</td><td>Concatenated features, 256-unit ReLU MLP and classifier</td></tr>
+          <tr><td>Improved fusion</td><td>256-dimensional modality projections, learned sigmoid gate and classifier</td></tr>
           <tr><td>Gate ablation</td><td>Same projections/classifier with equal fixed modality weights</td></tr>
         </tbody></table></div>
-        <p>Each configuration uses supervised cross-entropy. Train unimodal heads separately, then fusion heads on the same frozen encoder features. Backbone fine-tuning is outside the core scope. Missing raw modalities exclude a pair from the primary benchmark; diagnostic modality removal is reported separately.</p>
+        <p>Keep pretrained encoders in evaluation mode, including BatchNorm buffers/dropout; train only heads, projections, and gates. Train unimodal heads separately, then fusion heads using the same frozen encoder features. All configurations use cross-entropy with identical training-derived class weights. Missing raw modalities exclude a pair from the benchmark; diagnostic modality removal is separate.</p>
       </section>
       <section class="article-section">
         <h2>Experimental setup</h2>
-        <p>Build connected components using exact article URLs, exact image URLs, or normalized headlines. Exclude conflicting-label components and retain one representative per remaining group. Rank candidates by SHA-256 of <code>42|article_url</code>; select 1,250 per category and assign 1,000/125/125 to training/validation/test. The current targets are <strong>6,000 / 750 / 750</strong>.</p>
-        <p>Before training, check selected images for availability, decoding, exact/perceptual duplicates, semantic alignment, and repeated events. Record exclusions and any regrouping, then freeze a revised deterministic manifest. Known repeated records/events stay together. Metadata alone cannot guarantee event independence.</p>
-        <p>Initial settings: AdamW, learning rate 0.001, weight decay 0.0001, batch size 32, and at most 20 epochs per configuration. Reset seed 42 for each run. Select by validation macro-F1, then lower validation loss and earlier epoch. Reserve test evaluation until selection is complete.</p>
-        <p>Planning estimate: approximately 8 GB GPU memory, 10 GB free storage, and 1–3 GPU-hours including feature extraction. Confirm actual hardware and pilot runtime after prerequisites. Record exact dependencies, pretrained revisions, configs, logs, run IDs, checkpoint hashes, and commit/tag.</p>
+        <p>Connect products sharing an image, normalized identical title, or specific brand/model key. Canonicalize marketplace copies by product ID, excluding inconsistent labels, and keep each retained family in one split. Ten-fold stratified group allocation with seed 42 assigns fold 0 to test, fold 1 to validation, and the remaining folds to training: <strong>{proposalValue("Train / validation / test")}</strong>.</p>
+        <p>Initial settings: AdamW, learning rate 0.001, weight decay 0.0001, batch size 32, maximum 20 epochs per configuration. Reset random seeds for each run. Select the highest validation macro-F1 checkpoint, then lower validation loss and earlier epoch. Keep manifests, preprocessing, weights, loss weighting, optimizer, budget, and selection rules fixed across fusion comparisons.</p>
+        <p>Budget approximately 8 GB GPU memory, 10 GB storage, and 1–3 GPU-hours including feature extraction; confirm with a pilot. Record actual hardware/software, pretrained revisions, configs, seeds, epoch logs, run IDs, checkpoint hashes, and commit/tag. Main experiments begin after instructor approval.</p>
       </section>
       <section class="article-section">
         <h2>Results</h2>
-        <p>No experimental results are available at M1. Planned outputs include accuracy, macro-F1, per-class metrics, confusion matrices, learning curves, qualitative examples, parameter counts, feature-extraction/head-training times, inference latency, and peak memory. Dataset statistics above are preliminary metadata findings.</p>
+        <p>No experimental results are available at M1. Planned outputs include accuracy, macro-F1, per-class metrics, confusion matrices, learning curves, prediction examples, parameters, feature-extraction/head-training time, inference latency, and peak memory. Dataset statistics above are preliminary data-audit findings.</p>
       </section>
       <section class="article-section">
         <h2>Comparison and discussion</h2>
-        <p>Compare image-only and text-only baselines with concatenation and gated fusion. The gate ablation isolates adaptive versus equal weighting using the same projected representations and classifier design. State hypotheses, changed/fixed factors, validation decision criteria, capacity differences, and compute costs. Fusion is not assumed to outperform either modality.</p>
+        <p>Compare unimodal baselines, concatenation, and gated fusion. The controlled ablation changes learned gating to equal fixed weights while retaining the projection/classifier design and training protocol. State hypotheses, changed/fixed factors, metrics, and decision criteria. Account for capacity differences and compute cost; multimodal performance need not exceed the stronger unimodal baseline.</p>
       </section>
       <section class="article-section">
         <h2>Error analysis</h2>
-        <p>After execution, report cases where both modalities support the label, one rescues the other, or their predictions conflict. Examine ambiguous headlines, illustrative images, Science/Technology confusion, overlapping editorial categories, and repeated events. Include example counts and diagnostic modality removal without treating gate values as causal proof.</p>
+        <p>Inspect agreement, rescue, and conflict cases across modalities. Analyze multi-object room scenes, similar furniture, title/category words, packaging text, minority-class errors, and brand/background shortcuts. Report counts and examples. Missing-modality inference interventions are labelled separately from trained unimodal baselines; gate values alone are not causal evidence.</p>
       </section>
       <section class="article-section">
         <h2>Limitations and conclusion</h2>
-        <p>The scope is six editorial categories from one English-language publisher, headline-only text, frozen encoders, and one seed. Metadata deduplication and the small visual sample cannot establish full-dataset semantic agreement, detect every repeated event, or prove all images valid. The 7,500-pair selection remains provisional until full image checks.</p>
-        <p>The proposal and preliminary visual findings are available for review. Student verification, full image/pair validation, submission, and instructor approval remain pending. Training-use permission is not cleared; no grant or completed licensing compliance is claimed. M1 is due 18 November, M2 on 25 November, and M3 on 2 December 2026, each at 23:59 GMT+7.</p>
+        <p>The scope covers five product types, English titles, one seed, and frozen encoders. Classes are imbalanced, titles can be highly predictive, and room scenes can include several product types. Preliminary sample review does not establish full-dataset integrity. The smaller Sofa test support limits per-class precision of estimates.</p>
+        <p>The Dataset Proposal is available for instructor review. Training, report, slides, video, and checkpoints or reconstruction instructions are planned deliverables.</p>
       </section>
     </article>
     <aside class="side-stack"><section class="resource-card">
       <p class="eyebrow">Resources</p><h2>Deliverables</h2>
-      <a class="resource-link" href={external.a3Proposal}><span>Dataset proposal</span><b>Open ↗</b></a>
-      <div class="pending">Pending instructor approval</div>
-      <a class="resource-link" href={external.a3Readme}><span>M1 README</span><b>Open ↗</b></a>
-      <div class="pending">Training source code · pending prerequisites</div>
+      <a class="resource-link" href={external.a3Readme}><span>M1 source README</span><b>Open ↗</b></a>
+      <a class="resource-link" href={external.a3Proposal}><span>Dataset proposal <span class="status status-planned">Pending approval</span></span><b>Open ↗</b></a>
+      <div class="pending">Training source code · pending</div>
       <div class="pending">Checkpoints / reconstruction · pending implementation</div>
       <div class="pending">Final report · pending</div>
       <div class="pending">Slides · pending</div>
